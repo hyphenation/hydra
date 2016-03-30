@@ -41,7 +41,7 @@ class Hydra
     end
   end
 
-  def dump
-    pp @root
+  def dump(device = $stdout)
+    device.pp @root
   end
 end

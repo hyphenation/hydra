@@ -23,4 +23,16 @@ describe Hydra do
       expect(hydra.count).to eq 3
     end
   end
+
+  describe '.dump' do
+    let(:device) { double(:output).as_null_object }
+
+    it "dumps a string", focus: true do
+      hydra = Hydra.new
+      hydra.ingest(['apple', 'orange', 'lemon'])
+      expect(device).to receive :pp
+      hydra.dump(device)
+    end
+  end
+  # TODO ingest with numbers, ingest_file (with %’s?), etc.
 end
