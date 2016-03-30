@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-# TODO Spec out .dump
 describe Hydra do
   describe '.count' do
     it "counts" do
