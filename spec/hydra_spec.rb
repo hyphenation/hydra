@@ -18,14 +18,14 @@ end
 
 describe Hydra do
   let(:hydra)  { Hydra.new }
-  describe '.count' do
+  describe '#count' do
     it "counts" do
       hydra.ingest(['a', 'b', 'c'])
       expect(hydra.count).to eq 3
     end
   end
 
-  describe '.ingest' do
+  describe '#ingest' do
     it "works with a single word" do
       hydra.ingest('bac')
       expect(hydra.count).to eq 1
@@ -37,14 +37,14 @@ describe Hydra do
     end
   end
 
-  describe '.digest' do
+  describe '#digest' do
     it "returns the list of words" do
       hydra.ingest(['orange', 'yellow', 'red'])
       expect(hydra.digest).to eq ['orange', 'red', 'yellow']
     end
   end
 
-  describe '.dump' do
+  describe '#dump' do
     let(:device) { double(:output).as_null_object }
 
     it "dumps a string" do
