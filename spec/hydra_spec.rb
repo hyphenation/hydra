@@ -3,13 +3,13 @@ require 'spec_helper'
 describe Knuckle do
   describe '#digit' do
     it "returns a digit" do
-      knuckle = Knuckle.new(digit: 3)
+      knuckle = Knuckle.new('r', 3)
       expect(knuckle.digit).to eq 3
     end
 
     describe '#letter' do
       it "returns a letter" do
-        knuckle = Knuckle.new(letter: 'r')
+        knuckle = Knuckle.new('r')
         expect(knuckle.letter).to eq 'r'
       end
     end

@@ -2,9 +2,9 @@ require 'byebug'
 require 'pp'
 
 class Knuckle
-  def initialize(params)
-    @digit = params[:digit]
-    @letter = params[:letter]
+  def initialize(letter, digit = 0)
+    @digit = digit
+    @letter = letter
   end
 
   def digit
