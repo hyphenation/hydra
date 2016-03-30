@@ -37,6 +37,13 @@ describe Hydra do
     end
   end
 
+  describe '.digest' do
+    it "returns the list of words" do
+      hydra.ingest(['orange', 'yellow', 'red'])
+      expect(hydra.digest).to eq ['orange', 'red', 'yellow']
+    end
+  end
+
   describe '.dump' do
     let(:device) { double(:output).as_null_object }
 

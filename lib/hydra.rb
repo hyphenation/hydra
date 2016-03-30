@@ -56,6 +56,21 @@ class Hydra
     end
   end
 
+  def self.digest_rec(prefix, node)
+    node.map do |limb|
+      head, tail = limb.first, limb.last
+      if head == 0
+        [prefix]
+      else
+        digest_rec(prefix + head, tail)
+      end
+    end.flatten
+  end
+
+  def digest
+    Hydra.digest_rec('', @root)
+  end
+
   def dump(device = $stdout)
     device.pp @root
   end
