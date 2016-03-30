@@ -1,6 +1,21 @@
 require 'byebug'
 require 'pp'
 
+class Knuckle
+  def initialize(params)
+    @digit = params[:digit]
+    @letter = params[:letter]
+  end
+
+  def digit
+    @digit
+  end
+
+  def letter
+    @letter
+  end
+end
+
 class Hydra
   def initialize
     @root = { }
