@@ -68,7 +68,7 @@ class Hydra
   end
 
   def digest
-    Hydra.digest_rec('', @root)
+    Hydra.digest_rec('', @root).sort
   end
 
   def dump(device = $stdout)
