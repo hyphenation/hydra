@@ -17,7 +17,7 @@ class Knuckle
 end
 
 class Hydra
-  class ConflictingPattern < Exception # TODO Check best practice for class to raise
+  class ConflictingPattern < StandardError
   end
 
   def initialize
