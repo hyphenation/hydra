@@ -86,10 +86,21 @@ describe Hydra do
   end
 
   describe '#delete' do
-    pending "deletes one digitless pattern" do
+    it "deletes one digitless pattern" do
       hydra.ingest ['b2a1c']
       hydra.delete('bac')
       expect(hydra.count).to eq 0
+    end
+
+    pending "deletes one full-fleged pattern" do
+      hydra.ingest ['b2a1c']
+      hydra.delete('b2a1c')
+      expect(hydra.count).to eq 0
+    end
+
+    pending "raises and exception if the digits didn’t match" do
+      hydra.ingest 'b2a1c'
+      expect(hydra.delete 'ba4c3').to raise_exception Hydra::PatternNotFound
     end
   end
 
