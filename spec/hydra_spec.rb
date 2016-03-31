@@ -25,8 +25,8 @@ describe Hydra do
     end
 
     it "indexes" do
-      hydra.ingest 'a'
-      expect(hydra['a'][0]).to eq [0]
+      hydra.ingest 'ab'
+      expect(hydra['a']).to be_a Hydra
     end
   end
 

@@ -65,7 +65,7 @@ class Hydra
   def self.count_rec(node)
     node.inject(0) do |sum, head|
       head, tail = head.first, head.last
-      sum += 1 if head == 0
+      sum += 1 if tail.gethead
       sum + if tail.is_a? Hydra then count_rec(tail) else 0 end
     end
   end
@@ -88,13 +88,13 @@ class Hydra
       tail = word[1..-1]
       node[head] ||= Hydra.new
       if tail == ""
-        node[head][0] = digits
+        node[head].sethead(digits)
       else
         ingest_rec(node[head], tail, digits)
       end
     else
       node ||= Hydra.new
-      node[0] = digits
+      node.sethead(digits)
     end
   end
 
@@ -113,18 +113,20 @@ class Hydra
   end
 
   def self.digest_rec(prefix, node)
+    words = []
+    if node.gethead
+      words << Hydra.make_pattern(prefix, node.gethead)
+    end
     node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = node[head]
-      if head == 0
-        [Hydra.make_pattern(prefix, tail)]
-      else
-        digest_rec(prefix + head, tail)
-      end
-    end.flatten
+      words += digest_rec(prefix + head, tail)
+    end
+
+    words
   end
 
   def digest
-    Hydra.digest_rec('', @root)
+    Hydra.digest_rec('', self)
   end
 
   def regest_rec(prefix, suffix, node, delete = false, predigits = [])
@@ -133,7 +135,7 @@ class Hydra
       suffix.gsub! /\d/, ''
     end
 
-    digits = node[0]
+    digits = node.gethead
     if suffix == '' && digits
       node.chophead if delete
       raise Hydra::ConflictingPattern if @mode == :strict && predigits != digits
@@ -147,19 +149,19 @@ class Hydra
   end
 
   def search(word)
-    regest_rec('', word, @root)
+    regest_rec('', word, self)
   end
 
   def delete(word)
-    regest_rec('', word, @root, true, [])
+    regest_rec('', word, self, true, [])
   end
 
   def regest(word, delete = true)
-    regest_rec('', word, @root, delete, [])
+    regest_rec('', word, self, delete, [])
   end
 
   def dump(device = $stdout)
-    PP.pp @root, device
+    PP.pp self, device
     count
   end
 
