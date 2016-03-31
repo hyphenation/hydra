@@ -44,6 +44,19 @@ describe Hydra do
     end
   end
 
+  describe '#sethead' do
+    it "sets the head" do
+      hydra.sethead [1, 2, 3]
+    end
+  end
+
+  describe '#gethead' do
+    it "gets the head" do
+      hydra.sethead [1, 2, 3]
+      expect(hydra.gethead).to eq [1, 2, 3]
+    end
+  end
+
   describe '#count' do
     it "counts" do
       hydra.ingest(['a', 'b', 'c'])

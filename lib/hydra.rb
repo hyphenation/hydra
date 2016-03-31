@@ -38,6 +38,14 @@ class Hydra
     @limbs.inject(init, &block)
   end
 
+  def sethead(digits)
+    @head = digits
+  end
+
+  def gethead
+    @head
+  end
+
   def self.isdigit(char)
     char >= '0' && char <= '9'
   end
