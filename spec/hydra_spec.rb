@@ -64,6 +64,11 @@ describe Hydra do
       hydra.ingest('1ab2c3')
       expect(hydra.digest).to eq ['1ab2c3']
     end
+
+    it "works on a more complex example" do
+      hydra.ingest(['1abc', 'a2b', 'a3bc4d'])
+      expect(hydra.digest).to eq ['a2b', '1abc', 'a3bc4d']
+    end
   end
 
   describe '#dump' do

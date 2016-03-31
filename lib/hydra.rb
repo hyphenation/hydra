@@ -72,7 +72,7 @@ class Hydra
   end
 
   def self.digest_rec(prefix, node)
-    node.keys.sort.map do |head|
+    node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = node[head]
       if head == 0
         pattern = ''
