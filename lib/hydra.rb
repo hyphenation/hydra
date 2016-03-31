@@ -38,6 +38,10 @@ class Hydra
     @limbs[index] = value
   end
 
+  def ensure_limb(letter)
+    @limbs[letter] = Hydra.new unless @limbs[letter]
+  end
+
   def inject init, &block
     @limbs.inject(init, &block)
   end
