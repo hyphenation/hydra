@@ -72,8 +72,8 @@ class Hydra
   end
 
   def self.digest_rec(prefix, node)
-    node.map do |limb|
-      head, tail = limb.first, limb.last
+    node.keys.sort.map do |head|
+      tail = node[head]
       if head == 0
         pattern = ''
         tail.each_with_index do |digit, index|
@@ -87,7 +87,7 @@ class Hydra
   end
 
   def digest
-    Hydra.digest_rec('', @root).sort
+    Hydra.digest_rec('', @root)
   end
 
   def dump(device = $stdout)
