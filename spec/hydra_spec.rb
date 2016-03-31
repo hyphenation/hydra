@@ -74,4 +74,5 @@ describe Hydra do
     end
   end
   # TODO ingest with dots, ingest_file (with %’s?), etc.
+  # TODO Apply hydra!
 end
