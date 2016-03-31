@@ -131,7 +131,8 @@ class Hydra
 
   def self.get_digits(pattern)
     digits = []
-    pattern.each_byte do |char|
+    pattern.length.times do |i|
+      char = pattern[i]
       if Hydra.isdigit(char)
         digits << char.to_i
       else
