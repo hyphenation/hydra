@@ -73,5 +73,5 @@ describe Hydra do
       hydra.dump(device)
     end
   end
-  # TODO ingest with numbers, ingest_file (with %’s?), etc.
+  # TODO ingest with dots, ingest_file (with %’s?), etc.
 end
