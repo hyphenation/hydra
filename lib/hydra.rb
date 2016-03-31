@@ -79,11 +79,7 @@ class Hydra
     node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = node[head]
       if head == 0
-        pattern = ''
-        tail.each_with_index do |digit, index|
-          # TODO Make that into a make_pattern
-          pattern += if digit > 0 then digit.to_s else '' end + prefix[index].to_s
-        end
+        pattern = Hydra.make_pattern(prefix, tail)
         [pattern]
       else
         digest_rec(prefix + head, tail)
@@ -115,5 +111,13 @@ class Hydra
   def dump(device = $stdout)
     PP.pp @root, device
     count
+  end
+
+  def self.make_pattern(word, digits)
+    pattern = ''
+    digits.each_with_index do |digit, index|
+      pattern += if digit > 0 then digit.to_s else '' end + word[index].to_s
+    end
+    pattern
   end
 end
