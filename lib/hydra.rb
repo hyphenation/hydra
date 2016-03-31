@@ -24,7 +24,7 @@ class Hydra
   def self.count_rec(node)
     node.inject(0) do |sum, head|
       head, tail = head.first, head.last
-      sum += 1 if head.letter == 0
+      sum += 1 if head == 0
       sum + if tail.is_a? Hash then count_rec(tail) else 0 end
     end
   end
@@ -34,13 +34,12 @@ class Hydra
   end
 
   def self.ingest_rec(node, word)
-    head = Knuckle.new(word[0])
+    head = word[0]
     if head
       tail = word[1..-1]
       node[head] ||= { }
       if tail == ""
-        zero_knuckle = Knuckle.new(0)
-        node[head][zero_knuckle] = true
+        node[head][0] = true
       else
         ingest_rec(node[head], tail)
       end
@@ -60,10 +59,10 @@ class Hydra
   def self.digest_rec(prefix, node)
     node.map do |limb|
       head, tail = limb.first, limb.last
-      if head.letter == 0
+      if head == 0
         [prefix]
       else
-        digest_rec(prefix + head.letter, tail)
+        digest_rec(prefix + head, tail)
       end
     end.flatten
   end
