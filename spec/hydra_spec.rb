@@ -140,6 +140,18 @@ describe Hydra do
     end
   end
 
+  describe '.get_digits' do
+    it "extracts the digits from a pattern" do
+      expect(Hydra.get_digits('b2a1c')).to eq [0, 2, 1]
+    end
+  end
+
+  describe '.get_word' do # For completeness!
+    it "extracts the word from a pattern" do
+      expect(Hydra.get_word('b2a1c')).to eq "bac"
+    end
+  end
+
   describe '#ingest_file' do # TODO Allow TeX-style comments?
     it "ingests a whole file of patterns", focus: true do
       hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))

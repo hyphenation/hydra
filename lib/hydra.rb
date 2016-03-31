@@ -128,4 +128,20 @@ class Hydra
     end
     pattern
   end
+
+  def self.get_digits(pattern)
+    digits = []
+    pattern.each_byte do |char|
+      if Hydra.isdigit(char)
+        digits << char.to_i
+      else
+        digits << 0
+      end
+    end
+    digits
+  end
+
+  def self.get_word(pattern)
+    pattern.gsub /\d/, ''
+  end
 end
