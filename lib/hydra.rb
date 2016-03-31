@@ -22,11 +22,20 @@ class Hydra
 
   def initialize
     @root = { }
+    @limbs = @root
     @mode = :lax
   end
 
   def strict_mode
     @mode = :strict
+  end
+
+  def [] index
+    @limbs[index]
+  end
+
+  def inject init, &block
+    @limbs.inject(init, &block)
   end
 
   def self.isdigit(char)

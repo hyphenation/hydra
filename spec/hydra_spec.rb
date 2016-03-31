@@ -18,6 +18,32 @@ end
 
 describe Hydra do
   let(:hydra)  { Hydra.new }
+
+  describe '#[]' do
+    it "works" do
+      hydra['a']
+    end
+
+    it "indexes" do
+      hydra.ingest 'a'
+      expect(hydra['a'][0]).to eq [0]
+    end
+  end
+
+  describe '#inject' do
+    it "works" do
+      hydra.inject(0) { |t, x| }
+    end
+
+    it "injects" do
+      hydra.ingest ['a', 'b', 'c']
+      retvalue = hydra.inject(0) do |sum, limb|
+        sum + 1
+      end
+      expect(retvalue).to eq 3
+    end
+  end
+
   describe '#count' do
     it "counts" do
       hydra.ingest(['a', 'b', 'c'])
