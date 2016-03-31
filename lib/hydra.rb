@@ -81,6 +81,7 @@ class Hydra
       if head == 0
         pattern = ''
         tail.each_with_index do |digit, index|
+          # TODO Make that into a make_pattern
           pattern += if digit > 0 then digit.to_s else '' end + prefix[index].to_s
         end
         [pattern]
@@ -92,6 +93,23 @@ class Hydra
 
   def digest
     Hydra.digest_rec('', @root)
+  end
+
+  def search_rec(prefix, suffix, node)
+    if suffix == '' && node[0]
+      make_pattern(prefix, node[0])
+    else
+      head, tail = suffix[0], suffix[1..-1]
+      if node[head]
+        search_rec(prefix + head, tail, node[head])
+      else
+        nil
+      end
+    end
+  end
+
+  def search(word)
+    search_rec(word, '', @root)
   end
 
   def dump(device = $stdout)

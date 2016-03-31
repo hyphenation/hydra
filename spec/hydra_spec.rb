@@ -74,7 +74,7 @@ describe Hydra do
   # Plan: #search → #delete (more complex search)
   # → #regest (search with option to delete)
   describe '#search' do
-    it "searches one digitless pattern" do
+    pending "searches one digitless pattern" do
       hydra.ingest ['b2a1c']
       expect(hydra.search('bac')).to eq "b2a1c"
     end
@@ -117,6 +117,12 @@ describe Hydra do
   end
   # TODO ingest with dots, etc.
   # TODO Apply hydra!
+
+  describe '.make_pattern' do
+    it "makes a pattern from a word and an array of digits" do
+      expect(Hydra.make_pattern('bac', [0, 2, 1])).to eq "b2a1c"
+    end
+  end
 
   describe '#ingest_file' do # TODO Allow TeX-style comments?
     it "ingests a whole file of patterns", focus: true do
