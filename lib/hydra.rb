@@ -91,6 +91,7 @@ class Hydra
   end
 
   def search_rec(prefix, suffix, node, delete = false)
+    suffix.gsub! /\d/, ''
     digits = node[0]
     if suffix == '' && digits
       node.delete(0) if delete
