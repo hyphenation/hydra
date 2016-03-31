@@ -1,5 +1,4 @@
 require 'byebug'
-require 'pp'
 
 class Knuckle
   def initialize(letter, digit = 0)
@@ -95,6 +94,6 @@ class Hydra
   end
 
   def dump(device = $stdout)
-    device.pp @root
+    device.puts @root.inspect
   end
 end

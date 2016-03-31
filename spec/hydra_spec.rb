@@ -76,7 +76,7 @@ describe Hydra do
 
     it "dumps a string" do
       hydra.ingest(['apple', 'orange', 'lemon'])
-      expect(device).to receive :pp
+      expect(device).to receive :puts
       hydra.dump(device)
     end
   end
