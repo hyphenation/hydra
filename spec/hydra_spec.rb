@@ -74,9 +74,14 @@ describe Hydra do
   # Plan: #search → #delete (more complex search)
   # → #regest (search with option to delete)
   describe '#search' do
-    pending "searches one digitless pattern" do
+    it "searches one digitless pattern" do
       hydra.ingest ['b2a1c']
       expect(hydra.search('bac')).to eq "b2a1c"
+    end
+
+    it "doesn’t do anything if no pattern is found" do
+      hydra.ingest ['a', 'b', 'c']
+      expect(hydra.search('def')).to be_nil
     end
   end
 

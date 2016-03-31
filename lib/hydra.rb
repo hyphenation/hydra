@@ -92,7 +92,7 @@ class Hydra
 
   def search_rec(prefix, suffix, node)
     if suffix == '' && node[0]
-      make_pattern(prefix, node[0])
+      Hydra.make_pattern(prefix, node[0])
     else
       head, tail = suffix[0], suffix[1..-1]
       if node[head]
@@ -104,7 +104,7 @@ class Hydra
   end
 
   def search(word)
-    search_rec(word, '', @root)
+    search_rec('', word, @root)
   end
 
   def dump(device = $stdout)
