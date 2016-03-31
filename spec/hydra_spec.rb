@@ -27,11 +27,11 @@ describe Hydra do
 
   describe '.isdigit', isdigit: true do
     it "says 3 is a digit" do
-      expect(Hydra.isdigit('3')).to be_true
+      expect(Hydra.isdigit('3')).to be_truthy
     end
 
     it "says a isn’t a digit" do
-      expect(Hydra.isdigit('a')).to be_false
+      expect(Hydra.isdigit('a')).to be_falsey
     end
   end
 
