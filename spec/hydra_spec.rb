@@ -50,6 +50,8 @@ describe Hydra do
       hydra.ingest('1a2b3c4')
       expect(hydra.count).to eq 1
     end
+
+    # TODO Test with conflicting patterns
   end
 
   describe '#digest' do
