@@ -37,10 +37,10 @@ describe Hydra do
 
     it "injects" do
       hydra.ingest ['a', 'b', 'c']
-      retvalue = hydra.inject(0) do |sum, limb|
-        sum + 1
+      retvalue = hydra.inject(1) do |sum, limb|
+        sum + 2
       end
-      expect(retvalue).to eq 3
+      expect(retvalue).to eq 7
     end
   end
 
