@@ -69,6 +69,13 @@ describe Hydra do
     end
   end
 
+  describe '#keys' do
+    it "returns the keys of the root" do
+      hydra.ingest ['a', 'b', 'c', 'cd', 'cde']
+      expect(hydra.keys).to eq ['a', 'b', 'c']
+    end
+  end
+
   describe '#count' do
     it "counts" do
       hydra.ingest(['a', 'b', 'c'])

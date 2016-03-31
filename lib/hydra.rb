@@ -50,6 +50,10 @@ class Hydra
     @head
   end
 
+  def keys
+    @limbs.keys
+  end
+
   def self.isdigit(char)
     char >= '0' && char <= '9'
   end
