@@ -74,7 +74,7 @@ describe Hydra do
   # Plan: #search → #delete (more complex search)
   # → #regest (search with option to delete)
   describe '#search' do
-    it "searches one digitless pattern" do
+    it "searches one digitless pattern", focus: true do
       hydra.ingest ['b2a1c']
       expect(hydra.search('bac')).to eq "b2a1c"
     end
@@ -84,9 +84,9 @@ describe Hydra do
       expect(hydra.search('def')).to be_nil
     end
 
-    pending "raises an exception if the digits didn’t match" do
+    pending "raises an exception if the digits didn’t match", focus: true do
       hydra.ingest 'b2a1c'
-      expect(hydra.delete 'ba4c3').to raise_exception Hydra::PatternNotFound
+      expect(hydra.search 'ba4c3').to raise_exception Hydra::PatternNotFound
     end
   end
 
@@ -97,7 +97,7 @@ describe Hydra do
       expect(hydra.count).to eq 0
     end
 
-    it "deletes one full-fledged pattern", focus: true do
+    it "deletes one full-fledged pattern" do
       hydra.ingest ['b2a1c']
       hydra.delete('b2a1c')
       expect(hydra.count).to eq 0
@@ -155,7 +155,7 @@ describe Hydra do
   end
 
   describe '#ingest_file' do # TODO Allow TeX-style comments?
-    it "ingests a whole file of patterns", focus: true do
+    it "ingests a whole file of patterns" do
       hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))
       expect(hydra.count).to eq 1660
     end

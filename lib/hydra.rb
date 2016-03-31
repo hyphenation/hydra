@@ -102,7 +102,7 @@ class Hydra
     digits = node[0]
     if suffix == '' && digits
       node.delete(0) if delete
-      raise Hydra::PatternNotFound if !delete && predigits == digits
+      # raise Hydra::PatternNotFound if !delete && predigits != digits
       Hydra.make_pattern(prefix, digits)
     else
       head, tail = suffix[0], suffix[1..-1]
