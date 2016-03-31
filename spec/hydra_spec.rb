@@ -25,6 +25,16 @@ describe Hydra do
     end
   end
 
+  describe '.isdigit', isdigit: true do
+    it "says 3 is a digit" do
+      expect(Hydra.isdigit('3')).to be_true
+    end
+
+    it "says a isn’t a digit" do
+      expect(Hydra.isdigit('a')).to be_false
+    end
+  end
+
   describe '#ingest' do
     it "works with a single word" do
       hydra.ingest('bac')
@@ -35,12 +45,22 @@ describe Hydra do
       hydra.ingest(['democrat', 'democracy', 'democratic'])
       expect(hydra.count).to eq 3
     end
+
+    it "works with an actual pattern", ingest: true do
+      hydra.ingest('1a2b3c4')
+      expect(hydra.count).to eq 1
+    end
   end
 
   describe '#digest' do
     it "returns the list of words" do
       hydra.ingest(['orange', 'yellow', 'red'])
       expect(hydra.digest).to eq ['orange', 'red', 'yellow']
+    end
+
+    it "returns a pattern", digest: true do
+      hydra.ingest('1ab2c3')
+      expect(hydra.digest).to eq ['1ab2c3']
     end
   end
 
