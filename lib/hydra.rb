@@ -64,36 +64,33 @@ class Hydra
     Hydra.count_rec(@root)
   end
 
-  def ingest_rec(word, digits)
-    head = word[0]
-    if Hydra.isdigit(head)
-      digits << head.to_i
-      word = word[1..-1]
-      head = word[0]
-    else
-      digits << 0
-    end
-
-    if head
-      tail = word[1..-1]
-      grow_limb(head)
-      if tail == ""
-        grow_head(head, digits)
-      else
-        getlimb(head).ingest_rec(tail, digits)
-      end
-    else
-      sethead(digits)
-    end
-  end
-
-  def ingest(words)
+  def ingest(words, digits = [])
     if words.is_a? Enumerable
       words.each do |word|
         ingest(word)
       end
     elsif words.is_a? String
-      ingest_rec(words, [])
+      word = words
+      head = word[0]
+      if Hydra.isdigit(head)
+        digits << head.to_i
+        word = word[1..-1]
+        head = word[0]
+      else
+        digits << 0
+      end
+
+      if head
+        tail = word[1..-1]
+        grow_limb(head)
+        if tail == ""
+          grow_head(head, digits)
+        else
+          getlimb(head).ingest(tail, digits)
+        end
+      else
+        sethead(digits)
+      end
     end
   end
 
@@ -101,24 +98,24 @@ class Hydra
     ingest(File.read(filename).split)
   end
 
-  def digest_rec(prefix)
+  def digest(prefix = '')
     words = []
     if gethead
       words << Hydra.make_pattern(prefix, gethead)
     end
     keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = getlimb(head)
-      words += tail.digest_rec(prefix + head)
+      words += tail.digest(prefix + head)
     end
 
     words
   end
 
-  def digest
-    digest_rec('')
+  def digest_old
+    digest
   end
 
-  def regest_rec(prefix, suffix, delete = false, predigits = [])
+  def regest_rec(suffix, delete = false, prefix = '', predigits = [])
     if prefix == ''
       predigits = Hydra.get_digits(suffix)
       suffix.gsub! /\d/, ''
@@ -132,21 +129,21 @@ class Hydra
     else
       head, tail = suffix[0], suffix[1..-1]
       if getlimb(head)
-        getlimb(head).regest_rec(prefix + head, tail, delete, predigits)
+        getlimb(head).regest_rec(tail, delete, prefix + head, predigits)
       end
     end
   end
 
   def search(word)
-    regest_rec('', word)
+    regest_rec(word, false, '')
   end
 
   def delete(word)
-    regest_rec('', word, true, [])
+    regest_rec(word, true, '', [])
   end
 
   def regest(word, delete = true)
-    regest_rec('', word, delete, [])
+    regest_rec(word, delete, '', [])
   end
 
   def dump(device = $stdout)
