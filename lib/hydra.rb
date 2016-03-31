@@ -130,14 +130,16 @@ class Hydra
   end
 
   def self.get_digits(pattern)
-    digits = []
-    pattern.length.times do |i|
+    i, digits = 0, []
+    while i < pattern.length
       char = pattern[i]
       if Hydra.isdigit(char)
         digits << char.to_i
+        i += 1
       else
         digits << 0
       end
+      i += 1
     end
     digits
   end
