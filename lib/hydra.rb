@@ -111,6 +111,9 @@ class Hydra
     search_rec('', word, @root, true)
   end
 
+  def regest(word, delete = true)
+  end
+
   def dump(device = $stdout)
     PP.pp @root, device
     count
