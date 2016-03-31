@@ -46,7 +46,7 @@ describe Hydra do
       expect(hydra.count).to eq 3
     end
 
-    it "works with an actual pattern", ingest: true do
+    it "works with an actual pattern" do
       hydra.ingest('1a2b3c4')
       expect(hydra.count).to eq 1
     end
@@ -60,7 +60,7 @@ describe Hydra do
       expect(hydra.digest).to eq ['orange', 'red', 'yellow']
     end
 
-    it "returns a pattern", digest: true do
+    it "returns a pattern" do
       hydra.ingest('1ab2c3')
       expect(hydra.digest).to eq ['1ab2c3']
     end
