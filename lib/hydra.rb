@@ -46,13 +46,12 @@ class Hydra
     @head = digits
   end
 
-  def chophead
-    # @head = nil
-    @limbs.delete(0)
-  end
-
   def gethead
     @head
+  end
+
+  def chophead
+    @head = nil
   end
 
   def keys
@@ -67,7 +66,7 @@ class Hydra
     node.inject(0) do |sum, head|
       head, tail = head.first, head.last
       sum += 1 if head == 0
-      sum + if tail.is_a? Hash then count_rec(tail) else 0 end
+      sum + if tail.is_a? Hydra then count_rec(tail) else 0 end
     end
   end
 
@@ -87,14 +86,14 @@ class Hydra
 
     if head
       tail = word[1..-1]
-      node[head] ||= { }
+      node[head] ||= Hydra.new
       if tail == ""
         node[head][0] = digits
       else
         ingest_rec(node[head], tail, digits)
       end
     else
-      node ||= { }
+      node ||= Hydra.new
       node[0] = digits
     end
   end
@@ -136,7 +135,7 @@ class Hydra
 
     digits = node[0]
     if suffix == '' && digits
-      node.delete(0) if delete
+      node.chophead if delete
       raise Hydra::ConflictingPattern if @mode == :strict && predigits != digits
       Hydra.make_pattern(prefix, digits)
     else
