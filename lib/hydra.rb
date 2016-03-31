@@ -43,6 +43,10 @@ class Hydra
     @limbs[letter].sethead(digits)
   end
 
+  def getlimb(letter)
+    @limbs[letter]
+  end
+
   def inject init, &block
     @limbs.inject(init, &block)
   end

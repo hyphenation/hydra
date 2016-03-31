@@ -49,6 +49,18 @@ describe Hydra do
     end
   end
 
+  describe '#getlimb' do
+    it "returns the limb" do
+      hydra.ingest 'abc'
+      expect(hydra.getlimb('a')).to be_a Hydra
+    end
+
+    it "returns nil for non-existing limbs" do
+      hydra.ingest 'def'
+      expect(hydra.getlimb('g')).to be_nil
+    end
+  end
+
   describe '#inject' do
     it "works" do
       hydra.inject(0) { |t, x| }
