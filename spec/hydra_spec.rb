@@ -92,7 +92,7 @@ describe Hydra do
       expect(hydra.count).to eq 0
     end
 
-    it "deletes one full-fleged pattern", focus: true do
+    it "deletes one full-fledged pattern", focus: true do
       hydra.ingest ['b2a1c']
       hydra.delete('b2a1c')
       expect(hydra.count).to eq 0
