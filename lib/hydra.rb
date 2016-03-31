@@ -97,9 +97,9 @@ class Hydra
       tail = word[1..-1]
       node.grow_limb(head)
       if tail == ""
-        node[head].sethead(digits)
+        node.grow_head(head, digits)
       else
-        ingest_rec(node[head], tail, digits)
+        ingest_rec(node.getlimb(head), tail, digits)
       end
     else
       node ||= Hydra.new
@@ -127,7 +127,7 @@ class Hydra
       words << Hydra.make_pattern(prefix, node.gethead)
     end
     node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
-      tail = node[head]
+      tail = node.getlimb(head)
       words += digest_rec(prefix + head, tail)
     end
 
@@ -151,8 +151,8 @@ class Hydra
       Hydra.make_pattern(prefix, digits)
     else
       head, tail = suffix[0], suffix[1..-1]
-      if node[head]
-        regest_rec(prefix + head, tail, node[head], delete, predigits)
+      if node.getlimb(head)
+        regest_rec(prefix + head, tail, node.getlimb(head), delete, predigits)
       end
     end
   end
