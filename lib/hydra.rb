@@ -90,8 +90,12 @@ class Hydra
     Hydra.digest_rec('', @root)
   end
 
-  def search_rec(prefix, suffix, node, delete = false)
-    suffix.gsub! /\d/, ''
+  def regest_rec(prefix, suffix, node, predigits = [], delete = false)
+    if prefix == ''
+      predigits = Hydra.get_digits(suffix)
+      suffix.gsub! /\d/, ''
+    end
+
     digits = node[0]
     if suffix == '' && digits
       node.delete(0) if delete
@@ -99,21 +103,21 @@ class Hydra
     else
       head, tail = suffix[0], suffix[1..-1]
       if node[head]
-        search_rec(prefix + head, tail, node[head], delete)
+        regest_rec(prefix + head, tail, node[head], predigits, delete)
       end
     end
   end
 
   def search(word)
-    search_rec('', word, @root)
+    regest_rec('', word, @root)
   end
 
   def delete(word)
-    search_rec('', word, @root, true)
+    regest_rec('', word, @root, [], true)
   end
 
   def regest(word, delete = true)
-    search_rec('', word, @root, delete)
+    regest_rec('', word, @root, [], delete)
   end
 
   def dump(device = $stdout)
