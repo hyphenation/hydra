@@ -81,7 +81,7 @@ describe Hydra do
   end
 
   describe '#delete' do
-    it "deletes one digitless pattern" do
+    pending "deletes one digitless pattern" do
       hydra.ingest ['b2a1c']
       hydra.delete('bac')
       expect(hydra.count).to eq 0
@@ -89,12 +89,12 @@ describe Hydra do
   end
 
   describe '#regest' do
-    it "works as #search" do
+    pending "works as #search" do
       hydra.ingest ['b2a1c']
       expect(hydra.regest('bac')).to eq "b21ac"
     end
 
-    it "works a #delete" do
+    pending "works a #delete" do
       hydra.ingest ['b2a1c']
       hydra.delete 'bac'
       expect(hydra.count).to eq 0
