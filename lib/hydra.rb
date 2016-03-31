@@ -90,7 +90,7 @@ class Hydra
 
     if head
       tail = word[1..-1]
-      node[head] ||= Hydra.new
+      node.grow_limb(head)
       if tail == ""
         node[head].sethead(digits)
       else
