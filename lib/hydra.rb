@@ -1,12 +1,6 @@
 require 'byebug'
 require 'pp'
 
-class IO
-  def pp(any)
-    Kernel.pp(any, self)
-  end
-end
-
 class Knuckle
   def initialize(letter, digit = 0)
     @digit = digit
@@ -101,6 +95,7 @@ class Hydra
   end
 
   def dump(device = $stdout)
-    device.pp @root
+    PP.pp @root, device
+    count
   end
 end

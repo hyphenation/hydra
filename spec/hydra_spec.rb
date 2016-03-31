@@ -1,16 +1,5 @@
 require 'spec_helper'
 
-describe IO do
-  describe '#pp' do
-    it "pretty-prints" do
-      fd = IO.sysopen('/dev/null', 'w')
-      io = IO.new(fd, 'w')
-      expect(Kernel).to receive :pp
-      io.pp "foo bar baz quux"
-    end
-  end
-end
-
 describe Knuckle do
   describe '#digit' do
     it "returns a digit" do
@@ -87,8 +76,13 @@ describe Hydra do
 
     it "dumps a string" do
       hydra.ingest(['apple', 'orange', 'lemon'])
-      expect(device).to receive :pp
+      expect(PP).to receive :pp # TODO specify arguments
       hydra.dump(device)
+    end
+
+    it "returns the count" do
+      hydra.ingest(['a', 'b', 'c', 'd', 'e'])
+      expect(hydra.dump(device)).to eq 5
     end
   end
   # TODO ingest with dots, etc.
