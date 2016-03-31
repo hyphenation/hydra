@@ -69,6 +69,14 @@ describe Hydra do
     end
   end
 
+  describe '#chophead' do
+    it "chops off the head" do
+      hydra.ingest ['a', 'b', 'c']
+      hydra['a'].chophead
+      expect(hydra.count).to eq 2
+    end
+  end
+
   describe '#keys' do
     it "returns the keys of the root" do
       hydra.ingest ['a', 'b', 'c', 'cd', 'cde']

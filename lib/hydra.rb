@@ -46,6 +46,11 @@ class Hydra
     @head = digits
   end
 
+  def chophead
+    # @head = nil
+    @limbs.delete(0)
+  end
+
   def gethead
     @head
   end
