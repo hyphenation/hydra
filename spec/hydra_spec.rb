@@ -84,7 +84,7 @@ describe Hydra do
       expect(hydra.search('def')).to be_nil
     end
 
-    pending "raises and exception if the digits didn’t match" do
+    pending "raises an exception if the digits didn’t match" do
       hydra.ingest 'b2a1c'
       expect(hydra.delete 'ba4c3').to raise_exception Hydra::PatternNotFound
     end
