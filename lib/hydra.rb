@@ -111,10 +111,6 @@ class Hydra
     words
   end
 
-  def digest_old
-    digest
-  end
-
   def regest(suffix, delete = false, prefix = '', predigits = [])
     if prefix == ''
       predigits = Hydra.get_digits(suffix)
@@ -135,15 +131,11 @@ class Hydra
   end
 
   def search(word)
-    regest(word, false, '')
+    regest(word)
   end
 
   def delete(word)
-    regest(word, true, '', [])
-  end
-
-  def regest_old(word, delete = false)
-    regest(word, delete, '', [])
+    regest(word, true)
   end
 
   def dump(device = $stdout)
