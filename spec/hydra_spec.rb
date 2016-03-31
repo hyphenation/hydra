@@ -44,7 +44,7 @@ describe Hydra do
 
   describe '#grow_limb' do
     it "ensures there is a limb" do
-      hydra.ensure_limb('a')
+      hydra.grow_limb('a')
       expect(hydra['a']).to be_a Hydra
     end
   end
