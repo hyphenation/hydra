@@ -17,7 +17,7 @@ class Knuckle
 end
 
 class Hydra
-  class PatternNotFound < Exception # TODO Check best practice for class to raise
+  class ConflictingPattern < Exception # TODO Check best practice for class to raise
   end
 
   def initialize
@@ -93,7 +93,7 @@ class Hydra
     Hydra.digest_rec('', @root)
   end
 
-  def regest_rec(prefix, suffix, node, predigits = [], delete = false)
+  def regest_rec(prefix, suffix, node, delete = false, predigits = [])
     if prefix == ''
       predigits = Hydra.get_digits(suffix)
       suffix.gsub! /\d/, ''
@@ -107,7 +107,7 @@ class Hydra
     else
       head, tail = suffix[0], suffix[1..-1]
       if node[head]
-        regest_rec(prefix + head, tail, node[head], predigits, delete)
+        regest_rec(prefix + head, tail, node[head], delete, predigits)
       end
     end
   end
@@ -117,11 +117,11 @@ class Hydra
   end
 
   def delete(word)
-    regest_rec('', word, @root, [], true)
+    regest_rec('', word, @root, true, [])
   end
 
   def regest(word, delete = true)
-    regest_rec('', word, @root, [], delete)
+    regest_rec('', word, @root, delete, [])
   end
 
   def dump(device = $stdout)

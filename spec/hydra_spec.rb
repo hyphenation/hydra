@@ -86,7 +86,7 @@ describe Hydra do
 
     pending "raises an exception if the digits didn’t match", focus: true do
       hydra.ingest 'b2a1c'
-      expect(hydra.search 'ba4c3').to raise_exception Hydra::PatternNotFound
+      expect(hydra.search 'ba4c3').to raise_exception Hydra::ConflictingPattern
     end
   end
 
