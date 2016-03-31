@@ -5,10 +5,10 @@ class Hydra
   class ConflictingPattern < StandardError
   end
 
-  def initialize
+  def initialize(mode = :lax)
     @root = { }
     @limbs = @root
-    @mode = :lax
+    @mode = mode
   end
 
   def strict_mode
@@ -16,7 +16,7 @@ class Hydra
   end
 
   def grow_limb(letter)
-    @limbs[letter] = Hydra.new unless @limbs[letter]
+    @limbs[letter] = Hydra.new(@mode) unless @limbs[letter]
   end
 
   def grow_head(letter, digits)
