@@ -38,7 +38,7 @@ class Hydra
     @limbs[index] = value
   end
 
-  def ensure_limb(letter)
+  def grow_limb(letter)
     @limbs[letter] = Hydra.new unless @limbs[letter]
   end
 
