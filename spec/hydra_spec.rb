@@ -1,21 +1,5 @@
 require 'spec_helper'
 
-describe Knuckle do
-  describe '#digit' do
-    it "returns a digit" do
-      knuckle = Knuckle.new('r', 3)
-      expect(knuckle.digit).to eq 3
-    end
-
-    describe '#letter' do
-      it "returns a letter" do
-        knuckle = Knuckle.new('r')
-        expect(knuckle.letter).to eq 'r'
-      end
-    end
-  end
-end
-
 describe Hydra do
   let(:hydra)  { Hydra.new }
 

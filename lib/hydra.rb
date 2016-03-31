@@ -1,21 +1,6 @@
 require 'byebug'
 require 'pp'
 
-class Knuckle
-  def initialize(letter, digit = 0)
-    @digit = digit
-    @letter = letter
-  end
-
-  def digit
-    @digit
-  end
-
-  def letter
-    @letter
-  end
-end
-
 class Hydra
   class ConflictingPattern < StandardError
   end
