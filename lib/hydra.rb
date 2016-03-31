@@ -79,8 +79,7 @@ class Hydra
     node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = node[head]
       if head == 0
-        pattern = Hydra.make_pattern(prefix, tail)
-        [pattern]
+        [Hydra.make_pattern(prefix, tail)]
       else
         digest_rec(prefix + head, tail)
       end
