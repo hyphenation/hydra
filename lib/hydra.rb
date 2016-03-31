@@ -99,8 +99,6 @@ class Hydra
       head, tail = suffix[0], suffix[1..-1]
       if node[head]
         search_rec(prefix + head, tail, node[head], delete)
-      else
-        nil
       end
     end
   end
