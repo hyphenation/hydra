@@ -19,21 +19,10 @@ end
 describe Hydra do
   let(:hydra)  { Hydra.new }
 
-  describe '#[]' do
-    it "works" do
-      hydra['a']
-    end
-
-    it "indexes" do
-      hydra.ingest 'ab'
-      expect(hydra['a']).to be_a Hydra
-    end
-  end
-
   describe '#grow_limb' do
     it "ensures there is a limb" do
       hydra.grow_limb('a')
-      expect(hydra['a']).to be_a Hydra
+      expect(hydra.getlimb('a')).to be_a Hydra
     end
   end
 
@@ -45,7 +34,7 @@ describe Hydra do
 
     it "has a correctly labelled limb" do
       hydra.grow_head('b', [2])
-      expect(hydra['b']).to be_a Hydra
+      expect(hydra.getlimb('b')).to be_a Hydra
     end
   end
 
@@ -91,7 +80,7 @@ describe Hydra do
   describe '#chophead' do
     it "chops off the head" do
       hydra.ingest ['a', 'b', 'c']
-      hydra['a'].chophead
+      hydra.getlimb('a').chophead
       expect(hydra.count).to eq 2
     end
   end

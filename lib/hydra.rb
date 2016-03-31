@@ -30,10 +30,6 @@ class Hydra
     @mode = :strict
   end
 
-  def [] index
-    @limbs[index]
-  end
-
   def grow_limb(letter)
     @limbs[letter] = Hydra.new unless @limbs[letter]
   end
