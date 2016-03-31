@@ -38,6 +38,11 @@ class Hydra
     @limbs[letter] = Hydra.new unless @limbs[letter]
   end
 
+  def grow_head(letter, digits)
+    grow_limb(letter)
+    @limbs[letter].sethead(digits)
+  end
+
   def inject init, &block
     @limbs.inject(init, &block)
   end

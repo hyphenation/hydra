@@ -37,6 +37,18 @@ describe Hydra do
     end
   end
 
+  describe '#grow_head' do
+    it "grows a limb with a head" do
+      hydra.grow_head('a', [1])
+      expect(hydra.count).to eq 1
+    end
+
+    it "has a correctly labelled limb" do
+      hydra.grow_head('b', [2])
+      expect(hydra['b']).to be_a Hydra
+    end
+  end
+
   describe '#inject' do
     it "works" do
       hydra.inject(0) { |t, x| }
