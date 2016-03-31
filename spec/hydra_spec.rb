@@ -104,7 +104,11 @@ describe Hydra do
       expect(hydra.count).to eq 0
     end
 
-    # TODO Check for conflicting patterns?
+    it "raises" do
+      hydra.strict_mode
+      hydra.ingest 'b2a1c'
+      expect { hydra.delete 'ba4c3' }.to raise_exception Hydra::ConflictingPattern
+    end
   end
 
   describe '#regest' do
