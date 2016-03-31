@@ -83,6 +83,11 @@ describe Hydra do
       hydra.ingest ['a', 'b', 'c']
       expect(hydra.search('def')).to be_nil
     end
+
+    pending "raises and exception if the digits didn’t match" do
+      hydra.ingest 'b2a1c'
+      expect(hydra.delete 'ba4c3').to raise_exception Hydra::PatternNotFound
+    end
   end
 
   describe '#delete' do
@@ -98,10 +103,7 @@ describe Hydra do
       expect(hydra.count).to eq 0
     end
 
-    pending "raises and exception if the digits didn’t match" do
-      hydra.ingest 'b2a1c'
-      expect(hydra.delete 'ba4c3').to raise_exception Hydra::PatternNotFound
-    end
+    # TODO Check for conflicting patterns?
   end
 
   describe '#regest' do
