@@ -142,7 +142,7 @@ class Hydra
     regest_rec(word, true, '', [])
   end
 
-  def regest(word, delete = true)
+  def regest(word, delete = false)
     regest_rec(word, delete, '', [])
   end
 

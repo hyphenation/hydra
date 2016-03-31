@@ -172,12 +172,18 @@ describe Hydra do
   describe '#regest' do
     it "works as #search" do
       hydra.ingest ['b2a1c']
-      expect(hydra.regest('bac', false)).to eq "b2a1c"
+      expect(hydra.regest('bac')).to eq "b2a1c"
+    end
+
+    it "doesn’t delete by default" do
+      hydra.ingest ['foo9bar']
+      hydra.regest('foobar')
+      expect(hydra.count).to eq 1
     end
 
     it "works as #delete" do
       hydra.ingest ['b2a1c']
-      hydra.regest 'bac'
+      hydra.regest 'bac', true
       expect(hydra.count).to eq 0
     end
   end
