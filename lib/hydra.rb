@@ -34,6 +34,10 @@ class Hydra
     @limbs[index]
   end
 
+  def []= index, value
+    @limbs[index] = value
+  end
+
   def inject init, &block
     @limbs.inject(init, &block)
   end

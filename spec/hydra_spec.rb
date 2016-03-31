@@ -30,6 +30,18 @@ describe Hydra do
     end
   end
 
+  describe '#[]=' do
+    it "works too" do
+      hydra['a'] = Hydra.new
+    end
+
+    it "assigns an index" do
+      hydra['a'] = []
+      hydra['a'][0] = [1, 2, 3]
+      expect(hydra['a'][0]).to eq [1, 2, 3]
+    end
+  end
+
   describe '#inject' do
     it "works" do
       hydra.inject(0) { |t, x| }
