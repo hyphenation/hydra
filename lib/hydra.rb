@@ -40,7 +40,7 @@ class Hydra
   def self.ingest_rec(node, word, digits)
     head = word[0]
     if Hydra.isdigit(head)
-      digits << head
+      digits << head.to_i
       word = word[1..-1]
       head = word[0]
     else
@@ -51,10 +51,13 @@ class Hydra
       tail = word[1..-1]
       node[head] ||= { }
       if tail == ""
-        node[head][0] = true
+        node[head][0] = digits
       else
         ingest_rec(node[head], tail, digits)
       end
+    else
+      node ||= { }
+      node[0] = digits
     end
   end
 
@@ -72,7 +75,11 @@ class Hydra
     node.map do |limb|
       head, tail = limb.first, limb.last
       if head == 0
-        [prefix]
+        pattern = ''
+        tail.each_with_index do |digit, index|
+          pattern += if digit > 0 then digit.to_s else '' end + prefix[index].to_s
+        end
+        [pattern]
       else
         digest_rec(prefix + head, tail)
       end
