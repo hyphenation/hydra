@@ -64,7 +64,7 @@ class Hydra
     Hydra.count_rec(@root)
   end
 
-  def self.ingest_rec(node, word, digits)
+  def ingest_rec(word, digits)
     head = word[0]
     if Hydra.isdigit(head)
       digits << head.to_i
@@ -76,15 +76,14 @@ class Hydra
 
     if head
       tail = word[1..-1]
-      node.grow_limb(head)
+      grow_limb(head)
       if tail == ""
-        node.grow_head(head, digits)
+        grow_head(head, digits)
       else
-        ingest_rec(node.getlimb(head), tail, digits)
+        getlimb(head).ingest_rec(tail, digits)
       end
     else
-      node ||= Hydra.new
-      node.sethead(digits)
+      sethead(digits)
     end
   end
 
@@ -94,7 +93,7 @@ class Hydra
         ingest(word)
       end
     elsif words.is_a? String
-      Hydra.ingest_rec(self, words, [])
+      ingest_rec(words, [])
     end
   end
 
@@ -102,52 +101,52 @@ class Hydra
     ingest(File.read(filename).split)
   end
 
-  def self.digest_rec(prefix, node)
+  def digest_rec(prefix)
     words = []
-    if node.gethead
-      words << Hydra.make_pattern(prefix, node.gethead)
+    if gethead
+      words << Hydra.make_pattern(prefix, gethead)
     end
-    node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
-      tail = node.getlimb(head)
-      words += digest_rec(prefix + head, tail)
+    keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
+      tail = getlimb(head)
+      words += tail.digest_rec(prefix + head)
     end
 
     words
   end
 
   def digest
-    Hydra.digest_rec('', self)
+    digest_rec('')
   end
 
-  def regest_rec(prefix, suffix, node, delete = false, predigits = [])
+  def regest_rec(prefix, suffix, delete = false, predigits = [])
     if prefix == ''
       predigits = Hydra.get_digits(suffix)
       suffix.gsub! /\d/, ''
     end
 
-    digits = node.gethead
+    digits = gethead
     if suffix == '' && digits
-      node.chophead if delete
+      chophead if delete
       raise Hydra::ConflictingPattern if @mode == :strict && predigits != digits
       Hydra.make_pattern(prefix, digits)
     else
       head, tail = suffix[0], suffix[1..-1]
-      if node.getlimb(head)
-        regest_rec(prefix + head, tail, node.getlimb(head), delete, predigits)
+      if getlimb(head)
+        getlimb(head).regest_rec(prefix + head, tail, delete, predigits)
       end
     end
   end
 
   def search(word)
-    regest_rec('', word, self)
+    regest_rec('', word)
   end
 
   def delete(word)
-    regest_rec('', word, self, true, [])
+    regest_rec('', word, true, [])
   end
 
   def regest(word, delete = true)
-    regest_rec('', word, self, delete, [])
+    regest_rec('', word, delete, [])
   end
 
   def dump(device = $stdout)
