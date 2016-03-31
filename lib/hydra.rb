@@ -21,6 +21,10 @@ class Hydra
     @root = { }
   end
 
+  def self.isdigit(char)
+    char >= '0' && char <= '9'
+  end
+
   def self.count_rec(node)
     node.inject(0) do |sum, head|
       head, tail = head.first, head.last
@@ -33,15 +37,23 @@ class Hydra
     Hydra.count_rec(@root)
   end
 
-  def self.ingest_rec(node, word)
+  def self.ingest_rec(node, word, digits)
     head = word[0]
+    if Hydra.isdigit(head)
+      digits << head
+      word = word[1..-1]
+      head = word[0]
+    else
+      digits << 0
+    end
+
     if head
       tail = word[1..-1]
       node[head] ||= { }
       if tail == ""
         node[head][0] = true
       else
-        ingest_rec(node[head], tail)
+        ingest_rec(node[head], tail, digits)
       end
     end
   end
@@ -52,7 +64,7 @@ class Hydra
         ingest(word)
       end
     elsif words.is_a? String
-      Hydra.ingest_rec(@root, words)
+      Hydra.ingest_rec(@root, words, [])
     end
   end
 
