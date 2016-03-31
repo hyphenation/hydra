@@ -108,7 +108,7 @@ class Hydra
         ingest(word)
       end
     elsif words.is_a? String
-      Hydra.ingest_rec(@root, words, [])
+      Hydra.ingest_rec(self, words, [])
     end
   end
 
