@@ -71,6 +71,10 @@ class Hydra
     end
   end
 
+  def ingest_file(filename)
+    ingest(File.read(filename).split)
+  end
+
   def self.digest_rec(prefix, node)
     node.keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = node[head]

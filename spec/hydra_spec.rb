@@ -80,6 +80,13 @@ describe Hydra do
       hydra.dump(device)
     end
   end
-  # TODO ingest with dots, ingest_file (with %’s?), etc.
+  # TODO ingest with dots, etc.
   # TODO Apply hydra!
+
+  describe '#ingest_file' do # TODO Allow TeX-style comments?
+    it "ingests a whole file of patterns", focus: true do
+      hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))
+      expect(hydra.count).to eq 1660
+    end
+  end
 end
