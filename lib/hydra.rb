@@ -115,7 +115,7 @@ class Hydra
     digest
   end
 
-  def regest_rec(suffix, delete = false, prefix = '', predigits = [])
+  def regest(suffix, delete = false, prefix = '', predigits = [])
     if prefix == ''
       predigits = Hydra.get_digits(suffix)
       suffix.gsub! /\d/, ''
@@ -129,21 +129,21 @@ class Hydra
     else
       head, tail = suffix[0], suffix[1..-1]
       if getlimb(head)
-        getlimb(head).regest_rec(tail, delete, prefix + head, predigits)
+        getlimb(head).regest(tail, delete, prefix + head, predigits)
       end
     end
   end
 
   def search(word)
-    regest_rec(word, false, '')
+    regest(word, false, '')
   end
 
   def delete(word)
-    regest_rec(word, true, '', [])
+    regest(word, true, '', [])
   end
 
-  def regest(word, delete = false)
-    regest_rec(word, delete, '', [])
+  def regest_old(word, delete = false)
+    regest(word, delete, '', [])
   end
 
   def dump(device = $stdout)
