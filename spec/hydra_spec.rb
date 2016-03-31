@@ -105,12 +105,12 @@ describe Hydra do
   end
 
   describe '#regest' do
-    pending "works as #search" do
-      hydra.ingest ['b2a1c'], false
-      expect(hydra.regest('bac')).to eq "b21ac"
+    it "works as #search" do
+      hydra.ingest ['b2a1c']
+      expect(hydra.regest('bac', false)).to eq "b2a1c"
     end
 
-    pending "works as #delete" do
+    it "works as #delete" do
       hydra.ingest ['b2a1c']
       hydra.regest 'bac'
       expect(hydra.count).to eq 0

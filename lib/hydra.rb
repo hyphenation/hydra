@@ -112,6 +112,7 @@ class Hydra
   end
 
   def regest(word, delete = true)
+    search_rec('', word, @root, delete)
   end
 
   def dump(device = $stdout)
