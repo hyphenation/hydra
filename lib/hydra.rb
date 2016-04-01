@@ -27,10 +27,6 @@ class Hydra
     @limbs[letter]
   end
 
-  def inject init, &block
-    @limbs.inject(init, &block)
-  end
-
   def sethead(digits)
     @head = digits
   end
@@ -52,7 +48,7 @@ class Hydra
   end
 
   def count
-    inject(0) do |sum, head|
+    @limbs.inject(0) do |sum, head|
       head, tail = head.first, head.last
       sum += 1 if tail.gethead
       sum + if tail.is_a? Hydra then tail.count else 0 end

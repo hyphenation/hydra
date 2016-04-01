@@ -34,20 +34,6 @@ describe Hydra do
     end
   end
 
-  describe '#inject' do
-    it "works" do
-      hydra.inject(0) { |t, x| }
-    end
-
-    it "injects" do
-      hydra.ingest ['a', 'b', 'c']
-      retvalue = hydra.inject(1) do |sum, limb|
-        sum + 2
-      end
-      expect(retvalue).to eq 7
-    end
-  end
-
   describe '#sethead' do
     it "sets the head" do
       hydra.sethead [1, 2, 3]
