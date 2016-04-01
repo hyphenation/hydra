@@ -55,10 +55,10 @@ describe Hydra do
     end
   end
 
-  describe '#keys' do
-    it "returns the keys of the root" do
+  describe '#letters' do
+    it "returns the letters starting the different necks" do
       hydra.ingest ['a', 'b', 'c', 'cd', 'cde']
-      expect(hydra.keys).to eq ['a', 'b', 'c']
+      expect(hydra.letters).to eq ['a', 'b', 'c']
     end
   end
 

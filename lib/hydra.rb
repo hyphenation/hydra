@@ -130,7 +130,7 @@ class Hydra
     @head = nil
   end
 
-  def keys
+  def letters
     @necks.keys
   end
 
@@ -179,7 +179,7 @@ class Hydra
     if gethead
       words << Pattern.new(prefix, gethead).to_s
     end
-    keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |letter|
+    letters.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |letter|
       neck = getneck(letter)
       words += neck.digest(prefix + letter)
     end
