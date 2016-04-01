@@ -95,6 +95,11 @@ describe Hydra do
       expect(hydra.count).to eq 1
     end
 
+    it "works with pattern that are prefix of each other" do
+      hydra.ingest ['ba1', 'ba2r']
+      expect(hydra.digest).to eq ['ba1', 'ba2r']
+    end
+
     # TODO Test with conflicting patterns
   end
 
