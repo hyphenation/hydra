@@ -139,10 +139,10 @@ class Hydra
   end
 
   def count
-    @necks.inject(0) do |sum, head|
-      head, tail = head.first, head.last
-      sum += 1 if tail.gethead
-      sum + if tail.is_a? Hydra then tail.count else 0 end
+    @necks.inject(0) do |sum, neck|
+      base, neck = neck.first, neck.last
+      sum += 1 if neck.gethead
+      sum + if neck.is_a? Hydra then neck.count else 0 end
     end
   end
 
@@ -179,9 +179,9 @@ class Hydra
     if gethead
       words << Pattern.new(prefix, gethead).to_s
     end
-    keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
-      tail = getneck(head)
-      words += tail.digest(prefix + head)
+    keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |letter|
+      neck = getneck(letter)
+      words += neck.digest(prefix + letter)
     end
 
     words
@@ -203,9 +203,9 @@ class Hydra
       raise ConflictingPattern if @mode == :strict && predigits != digits
       Pattern.new(prefix, digits).to_s
     else
-      head, tail = suffix[0], suffix[1..-1]
-      if getneck(head)
-        getneck(head).regest(tail, delete, prefix + head, predigits)
+      letter, neck = suffix[0], suffix[1..-1]
+      if getneck(letter)
+        getneck(letter).regest(neck, delete, prefix + letter, predigits)
       end
     end
   end
