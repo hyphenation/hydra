@@ -8,7 +8,6 @@ class Pattern
       @digits = digits
     else
       @pattern = word
-      break_up(@pattern)
     end
   end
 
@@ -23,26 +22,28 @@ class Pattern
     @pattern
   end
 
-  def break_up(pattern)
+  def break_up
     @word, i, @digits = '', 0, []
-    while i < pattern.length
-      char = pattern[i]
+    while i < @pattern.length
+      char = @pattern[i]
       if Hydra.isdigit(char)
         @digits << char.to_i
         i += 1
       else
         @digits << 0
       end
-      @word += pattern[i] if pattern[i]
+      @word += @pattern[i] if @pattern[i]
       i += 1
     end
   end
 
   def get_digits
+    break_up unless @digits
     @digits
   end
 
   def get_word
+    break_up unless @word
     @word
   end
 end
