@@ -211,8 +211,8 @@ describe Pattern do
     it "works with patterns with trailing digits" do
       pattern = Pattern.new('ab2')
       expect(pattern).to be_a Pattern
-      expect(pattern.get_word).to eq [0, 0, 2]
-      expect(pattern.get_digits).to eq 'ab'
+      expect(pattern.get_word).to eq 'ab'
+      expect(pattern.get_digits).to eq [0, 0, 2]
     end
   end
 
