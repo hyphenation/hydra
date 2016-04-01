@@ -6,8 +6,10 @@ class Pattern
     if digits
       @word = word
       @digits = digits
-    else
+    elsif word
       @pattern = word
+    else
+      @word = ''
     end
     @index = 0
   end
@@ -63,6 +65,10 @@ class Pattern
   def grow!(letter)
     breakup unless @word
     @word += letter
+  end
+
+  def set_digits(digits)
+    @digits = digits
   end
 
   def currletter

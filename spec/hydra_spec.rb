@@ -326,5 +326,12 @@ describe Pattern do
         expect(pattern.get_word.length).to eq 2
       end
     end
+
+    describe '#set_digits' do
+      it "sets the digits" do
+        pattern.set_digits [1, 2, 3]
+        expect(pattern.get_digits).to eq [1, 2 , 3]
+      end
+    end
   end
 end
