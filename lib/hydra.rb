@@ -69,7 +69,7 @@ class Pattern
 
   def fork(letter)
     breakup unless @word # Shouldn’t be necessary
-    Pattern.new(String.new(@word + letter), [])
+    Pattern.new(@word + letter, [])
   end
 
   def copy(digits)
