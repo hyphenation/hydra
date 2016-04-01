@@ -44,7 +44,7 @@ class Pattern
     @digits[n]
   end
 
-  def end
+  def end?
     breakup unless @word
     @index == @word.length - 1
   end
@@ -154,7 +154,7 @@ class Hydra
       letter = pattern.currletter
       if letter
         ensure_neck(letter)
-        if pattern.end
+        if pattern.end?
           setatlas(letter, pattern.get_digits)
         else
           pattern.shift

@@ -247,16 +247,16 @@ describe Pattern do
       end
     end
 
-    describe '#end' do
+    describe '#end?' do
       it "tells when we’re on the last character of the pattern" do
         pattern = Pattern.new '1f2i4n3'
         2.times { pattern.shift }
-        expect(pattern.end).to be_truthy
+        expect(pattern.end?).to be_truthy
       end
 
       it "returns false just after pattern is initialized" do
         pattern = Pattern.new '1vé2g3'
-        expect(pattern.end).to be_falsey
+        expect(pattern.end?).to be_falsey
       end
     end
 
