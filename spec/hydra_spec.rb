@@ -322,8 +322,8 @@ describe Pattern do
     describe '#grow!' do
       it "just grows" do
         pattern = Pattern.new 'f'
-        
-        expect{pattern.grow!('g')}.to change(pattern, :get_word, :length).by 1
+        pattern.grow!('g')
+        expect(pattern.get_word.length).to eq 2
       end
     end
   end
