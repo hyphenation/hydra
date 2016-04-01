@@ -202,7 +202,7 @@ describe Hydra do
 
     it "works with the original hyphen.tex" do
       hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
-      expect(hydra.count).to be_a 4447
+      expect(hydra.count).to eq 4447
     end
   end
 end
