@@ -34,6 +34,16 @@ class Pattern
     @index = 0
   end
 
+  def letter(n)
+    breakup unless @word
+    @word[n]
+  end
+
+  def digit(n)
+    breakup unless @digits
+    @digits[n]
+  end
+
   def to_s
     combine unless @pattern
     @pattern
@@ -123,6 +133,7 @@ class Hydra
       end
     elsif words.is_a? String
       word = words
+      pattern = Pattern.new(word[0])
       head = word[0]
       if Hydra.isdigit(head)
         digits << head.to_i

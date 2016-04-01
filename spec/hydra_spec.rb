@@ -233,6 +233,20 @@ describe Pattern do
       end
     end
 
+    describe '#letter' do
+      it "returns the nth letter" do
+        pattern = Pattern.new('foo9bar')
+        expect(pattern.letter(3)).to eq 'b'
+      end
+    end
+
+    describe '#digit' do
+      it "returns the nth digit" do
+        pattern = Pattern.new('foo9bar')
+        expect(pattern.digit(3)).to eq 9
+      end
+    end
+
     let(:pattern) { Pattern.new('bac', [0, 2, 1]) }
 
     describe '#to_s' do
