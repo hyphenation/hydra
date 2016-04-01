@@ -220,18 +220,18 @@ class Hydra
     end.flatten
   end
 
-  def regest(pattern, delete = false)
+  def regest(pattern, mode = :search)
     digits = gethead
     if pattern.end?
       if digits
-        chophead if delete
+        chophead if mode == :delete
         raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
         Pattern.new(pattern.get_word, digits).to_s
       end
     else
       letter = pattern.currletter
       if getneck(letter)
-        getneck(letter).regest(pattern.shift, delete)
+        getneck(letter).regest(pattern.shift, mode)
       end
     end
   end
@@ -241,7 +241,7 @@ class Hydra
   end
 
   def delete(pattern)
-    regest(Pattern.new(pattern), true)
+    regest(Pattern.new(pattern), :delete)
   end
 
   def dump(device = $stdout)

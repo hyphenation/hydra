@@ -172,7 +172,7 @@ describe Hydra do
     it "works as #delete" do
       hydra.ingest ['b2a1c']
       pattern = Pattern.dummy 'bac'
-      hydra.regest pattern, true
+      hydra.regest pattern, :delete
       expect(hydra.count).to eq 0
     end
   end
