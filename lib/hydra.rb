@@ -179,10 +179,9 @@ class Hydra
     if gethead
       words << Pattern.new(prefix, gethead).to_s
     end
-    letters.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |letter|
-      neck = getneck(letter)
-      words += neck.digest(prefix + letter)
-    end
+    words += letters.sort.map do |letter|
+      getneck(letter).digest(prefix + letter)
+    end.flatten
 
     words
   end
