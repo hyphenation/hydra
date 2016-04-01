@@ -207,6 +207,13 @@ describe Pattern do
     it "makes a pattern from a word and an array of digits" do
       expect(Pattern.new('bac', [0, 2, 1])).to be_a Pattern
     end
+
+    it "works with patterns with trailing digits" do
+      pattern = Pattern.new('ab2')
+      expect(pattern).to be_a Pattern
+      expect(pattern.get_word).to [0, 0, 2]
+      expect(pattern.get_digits).to 'ab'
+    end
   end
 
   describe '.dummy' do
