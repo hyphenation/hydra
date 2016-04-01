@@ -76,6 +76,15 @@ class Pattern
     Pattern.new(String.new(@word), digits)
   end
 
+  def freeze(digits) # FIXME Actually freeze!
+    @digits = digits
+    self
+  end
+
+  def freeze!(digits)
+    @digits = digits
+  end
+
   def currletter
     breakup unless @word
     @word[@index]
@@ -197,7 +206,7 @@ class Hydra
   end
 
   def digest(pattern = Pattern.new)
-    if gethead then [pattern.copy(gethead).to_s] else [] end + letters.sort.map do |letter|
+    if gethead then [pattern.freeze(gethead).to_s] else [] end + letters.sort.map do |letter|
       getneck(letter).digest(pattern.fork(letter))
     end.flatten
   end

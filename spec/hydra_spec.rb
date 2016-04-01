@@ -351,5 +351,22 @@ describe Pattern do
         expect(new_pattern.get_digits).to eq [4, 5, 6]
       end
     end
+
+    describe '#freeze' do
+      it "freezes the pattern and sets the digits" do
+        pattern.freeze [1, 2, 3]
+        expect(pattern.get_digits).to eq [1, 2 , 3]
+      end
+
+      it "returns the pattern" do
+        expect(pattern.freeze [4, 5, 6]).to be_a Pattern
+      end
+    end
+
+    describe '#freeze!' do
+      it "just sets the digits" do
+        expect(pattern.freeze! [4, 5, 6]).to eq [4, 5, 6]
+      end
+    end
   end
 end
