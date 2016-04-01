@@ -183,6 +183,11 @@ describe Hydra do
       expect(hydra.match('foobar')).to eq ['foo1']
     end
 
+    it "works with patterns that are prefixes of each other" do
+      hydra.ingest ['fo2', 'foo1']
+      expect(hydra.match('foobar')).to eq ['fo2', 'foo1']
+    end
+
     it "looks for matching patterns" do
       hydra = Hydra.new
       matching_patterns = ['fo1', 'o2o', 'o1b', 'ba1', 'ba2r']

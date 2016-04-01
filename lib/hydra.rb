@@ -225,27 +225,27 @@ class Hydra
     end.flatten
   end
 
-  def regest(pattern, mode = :search)
+  def regest(pattern, mode = :search, matches = [])
     digits = gethead
 
     if mode == :match
       if digits
-        return Pattern.new(pattern.truncate(pattern.index), digits).to_s
-      else
-        return getneck(pattern.currletter).regest(pattern.shift, :match) if getneck(pattern.currletter)
+        matches << Pattern.new(pattern.truncate(pattern.index), digits).to_s
       end
-    end
 
-    if pattern.end?
-      if digits
-        chophead if mode == :delete
-        raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
-        Pattern.new(pattern.get_word, digits).to_s
-      end
+      getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
     else
-      letter = pattern.currletter
-      if getneck(letter)
-        getneck(letter).regest(pattern.shift, mode)
+      if pattern.end?
+        if digits
+          chophead if mode == :delete
+          raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
+          Pattern.new(pattern.get_word, digits).to_s
+        end
+      else
+        letter = pattern.currletter
+        if getneck(letter)
+          getneck(letter).regest(pattern.shift, mode)
+        end
       end
     end
   end
@@ -259,10 +259,13 @@ class Hydra
   end
 
   def match(word)
+    matches = []
     e = word.length - 1
-    (e + 1).times.map do |n|
-      regest(Pattern.dummy(word[n..e]), :match)
-    end.compact
+    (e + 1).times.each do |n|
+      regest(Pattern.dummy(word[n..e]), :match, matches)
+    end
+
+    matches.flatten.compact
   end
 
   def dump(device = $stdout)
