@@ -158,18 +158,21 @@ describe Hydra do
   describe '#regest' do
     it "works as #search" do
       hydra.ingest ['b2a1c']
-      expect(hydra.regest('bac')).to eq "b2a1c"
+      pattern = Pattern.new 'bac', []
+      expect(hydra.regest(pattern)).to eq "b2a1c"
     end
 
     it "doesn’t delete by default" do
       hydra.ingest ['foo9bar']
-      hydra.regest('foobar')
+      pattern = Pattern.new 'foobar', []
+      hydra.regest(pattern)
       expect(hydra.count).to eq 1
     end
 
     it "works as #delete" do
       hydra.ingest ['b2a1c']
-      hydra.regest 'bac', true
+      pattern = Pattern.new 'bac', []
+      hydra.regest pattern, true
       expect(hydra.count).to eq 0
     end
   end
@@ -203,6 +206,14 @@ describe Pattern do
   describe '#new' do
     it "makes a pattern from a word and an array of digits" do
       expect(Pattern.new('bac', [0, 2, 1])).to be_a Pattern
+    end
+  end
+
+  describe '.dummy' do
+    it "creates a dummy pattern from a word" do
+      pattern = Pattern.dummy 'abc'
+      expect(pattern.get_word).to eq 'abc'
+      expect(pattern.get_digits).to eq [0, 0, 0]
     end
   end
 
@@ -259,15 +270,29 @@ describe Pattern do
       end
     end
 
-    describe '#end?' do
+    describe '#last?' do
       it "tells when we’re on the last character of the pattern" do
         pattern = Pattern.new '1f2i4n3'
         2.times { pattern.shift }
-        expect(pattern.end?).to be_truthy
+        expect(pattern.last?).to be_truthy
       end
 
       it "returns false just after pattern is initialized" do
         pattern = Pattern.new '1vé2g3'
+        expect(pattern.last?).to be_falsey
+      end
+    end
+
+    describe '#end?' do
+      it "tells whether we’re at the end of the pattern" do
+        pattern = Pattern.new 'end3'
+        3.times { pattern.shift }
+        expect(pattern.end?).to be_truthy
+      end
+
+      it "returns false otherwise" do
+        pattern = Pattern.new 'Schluß'
+        3.times { pattern.shift }
         expect(pattern.end?).to be_falsey
       end
     end

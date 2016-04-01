@@ -14,6 +14,10 @@ class Pattern
     @index = 0
   end
 
+  def self.dummy(word)
+    new word, word.length.times.map { 0 } # I’m sure there is syntactic sugar for that ...
+  end
+
   def get_digits
     breakup unless @digits
     @digits
@@ -51,9 +55,14 @@ class Pattern
     @digits[n]
   end
 
-  def end?
+  def last?
     breakup unless @word
     @index == @word.length - 1
+  end
+
+  def end?
+    breakup unless @word
+    @index == @word.length
   end
 
   def grow(letter)
@@ -211,35 +220,26 @@ class Hydra
     end.flatten
   end
 
-  def regest(suffix, delete = false, prefix = '', predigits = [])
-    if prefix == ''
-      if @mode == :strict
-        predigits = Pattern.new(suffix).get_digits
-      else
-        predigits = []
-      end
-      suffix.gsub! /\d/, ''
-    end
-
+  def regest(pattern, delete = false)
     digits = gethead
-    if suffix == '' && digits
+    if pattern.end? && digits
       chophead if delete
-      raise ConflictingPattern if @mode == :strict && predigits != digits
-      Pattern.new(prefix, digits).to_s
+      raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
+      pattern.to_s
     else
-      letter, neck = suffix[0], suffix[1..-1]
+      letter = pattern.currletter
       if getneck(letter)
-        getneck(letter).regest(neck, delete, prefix + letter, predigits)
+        getneck(letter).regest(pattern.shift, delete)
       end
     end
   end
 
-  def search(word)
-    regest(word)
+  def search(pattern)
+    regest(Pattern.new(pattern))
   end
 
-  def delete(word)
-    regest(word, true)
+  def delete(pattern)
+    regest(Pattern.new(pattern), true)
   end
 
   def dump(device = $stdout)
