@@ -140,7 +140,7 @@ class Hydra
 
   def count
     @necks.inject(0) do |sum, neck|
-      letter, neck = neck.first, neck.last
+      neck = neck.last
       sum += 1 if neck.gethead
       sum + if neck.is_a? Hydra then neck.count else 0 end
     end
