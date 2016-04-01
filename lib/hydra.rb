@@ -141,16 +141,17 @@ class Hydra
     end
   end
 
-  def ingest(words, digits = [])
+  def ingest(words, digits = [], pattern = nil)
     if words.is_a? Enumerable
       words.each do |word|
         ingest(word)
       end
     elsif words.is_a? String
       word = words
-      pattern = Pattern.new(word[0])
+      pattern = Pattern.new(word) unless pattern
       head = word[0]
       if Hydra.isdigit(head)
+        raise unless head.to_i == pattern.currdigit
         digits << head.to_i
         word = word[1..-1]
         head = word[0]
@@ -159,14 +160,17 @@ class Hydra
       end
 
       if head
+        raise unless head == pattern.currletter
+        pattern.shift
         tail = word[1..-1]
         ensure_neck(head)
         if tail == ""
           setatlas(head, digits)
         else
-          getneck(head).ingest(tail, digits)
+          getneck(head).ingest(tail, digits, pattern)
         end
       else
+        byebug unless digits == pattern.get_digits
         sethead(digits)
       end
     end
