@@ -68,7 +68,7 @@ class Pattern
   end
 
   def copy(digits)
-    Pattern.new(@word, digits)
+    Pattern.new(String.new(@word), digits)
   end
 
   def currletter
