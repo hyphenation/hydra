@@ -248,7 +248,7 @@ describe Pattern do
     end
 
     describe '#end' do
-      it "tells when we’re at the end of the pattern" do
+      it "tells when we’re on the last character of the pattern" do
         pattern = Pattern.new '1f2i4n3'
         2.times { pattern.shift }
         expect(pattern.end).to be_truthy
