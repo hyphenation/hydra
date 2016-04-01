@@ -327,6 +327,20 @@ describe Pattern do
       end
     end
 
+    describe '#fork' do
+      it "forks the pattern on a letter" do
+        pattern = Pattern.new
+        pattern.grow 'f'; pattern.grow 'o'; pattern.grow 'o'
+        expect(pattern.fork('b').get_word).to eq "foob"
+      end
+
+      it "returns a new pattern" do
+        pattern = Pattern.new
+        pattern2 = pattern.fork('b')
+        expect(pattern2.object_id).to_not eq pattern.object_id
+      end
+    end
+
     describe '#copy' do
       it "returns a new pattern with the same word" do
         expect(pattern.copy([1, 2, 3])).to be_a Pattern
@@ -335,14 +349,6 @@ describe Pattern do
       it "sets the digits" do
         new_pattern = pattern.copy [4, 5, 6]
         expect(new_pattern.get_digits).to eq [4, 5, 6]
-      end
-
-      it "properly copies", copy: true do
-        p1 = Pattern.new
-        p1.grow 'foo'
-        p2 = p1.copy [0, 0, 0]
-        p2.grow 'bar'
-        expect(p2.to_s).to eq 'foobar'
       end
     end
   end

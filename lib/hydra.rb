@@ -67,6 +67,11 @@ class Pattern
     @word += letter
   end
 
+  def fork(letter)
+    breakup unless @word # Shouldn’t be necessary
+    Pattern.new(String.new(@word + letter), [])
+  end
+
   def copy(digits)
     Pattern.new(String.new(@word), digits)
   end
@@ -193,7 +198,7 @@ class Hydra
 
   def digest(pattern = Pattern.new)
     if gethead then [pattern.copy(gethead).to_s] else [] end + letters.sort.map do |letter|
-      getneck(letter).digest(pattern.grow(letter))
+      getneck(letter).digest(pattern.fork(letter))
     end.flatten
   end
 
