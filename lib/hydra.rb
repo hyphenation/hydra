@@ -153,12 +153,11 @@ class Hydra
 
       letter = pattern.currletter
       if letter
-        pattern.shift
         ensure_neck(letter)
         if pattern.end
-          byebug
           setatlas(letter, pattern.get_digits)
         else
+          pattern.shift
           getneck(letter).ingest(pattern)
         end
       else
