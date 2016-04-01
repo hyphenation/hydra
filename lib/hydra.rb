@@ -6,8 +6,7 @@ class Hydra
   end
 
   def initialize(mode = :lax)
-    @root = { }
-    @limbs = @root
+    @limbs = { }
     @mode = mode
   end
 
@@ -52,16 +51,12 @@ class Hydra
     char >= '0' && char <= '9'
   end
 
-  def self.count_rec(node)
-    node.inject(0) do |sum, head|
+  def count
+    inject(0) do |sum, head|
       head, tail = head.first, head.last
       sum += 1 if tail.gethead
-      sum + if tail.is_a? Hydra then count_rec(tail) else 0 end
+      sum + if tail.is_a? Hydra then tail.count else 0 end
     end
-  end
-
-  def count
-    Hydra.count_rec(@root)
   end
 
   def ingest(words, digits = [])
