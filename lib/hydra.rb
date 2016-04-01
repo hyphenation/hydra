@@ -20,20 +20,18 @@ class Pattern
   end
 
   def break_up(pattern)
-    word, i, digits = '', 0, []
+    @word, i, @digits = '', 0, []
     while i < pattern.length
       char = pattern[i]
       if Hydra.isdigit(char)
-        digits << char.to_i
+        @digits << char.to_i
         i += 1
       else
-        digits << 0
+        @digits << 0
       end
-      word += pattern[i] if pattern[i]
+      @word += pattern[i] if pattern[i]
       i += 1
     end
-    @word = word
-    @digits = digits
   end
 
   def get_digits
