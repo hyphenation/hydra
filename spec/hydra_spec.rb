@@ -199,6 +199,11 @@ describe Hydra do
       hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))
       expect(hydra.count).to eq 1660
     end
+
+    it "works with the original hyphen.tex" do
+      hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
+      expect(hydra.count).to be_a 4447
+    end
   end
 end
 
