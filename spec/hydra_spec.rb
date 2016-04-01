@@ -315,15 +315,15 @@ describe Pattern do
       end
 
       it "returns the pattern" do
-        expect(pattern.grow('taller')).to be_a Pattern
+        expect(pattern.grow('taller')).to be_a Pattern # Adding more than one letter: not recommended!
       end
     end
 
     describe '#grow!' do
       it "just grows" do
         pattern = Pattern.new 'f'
-        pattern.grow! 'g'
-        expect(pattern.get_word.length).to eq 2
+        
+        expect{pattern.grow!('g')}.to change(pattern, :get_word, :length).by 1
       end
     end
   end
