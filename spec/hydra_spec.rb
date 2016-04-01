@@ -247,6 +247,19 @@ describe Pattern do
       end
     end
 
+    describe '#end' do
+      it "tells when we’re at the end of the pattern" do
+        pattern = Pattern.new '1f2i4n3'
+        2.times { pattern.shift }
+        expect(pattern.end).to be_truthy
+      end
+
+      it "returns false just after pattern is initialized" do
+        pattern = Pattern.new '1vé2g3'
+        expect(pattern.end).to be_falsey
+      end
+    end
+
     let(:pattern) { Pattern.new('bac', [0, 2, 1]) }
 
     describe '#to_s' do

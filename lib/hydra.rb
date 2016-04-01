@@ -44,6 +44,11 @@ class Pattern
     @digits[n]
   end
 
+  def end
+    breakup unless @word
+    @index == @word.length - 1
+  end
+
   def to_s
     combine unless @pattern
     @pattern
