@@ -49,6 +49,16 @@ class Pattern
     @index == @word.length - 1
   end
 
+  def currletter
+    breakup unless @word
+    @word[@index]
+  end
+
+  def currdigit
+    breakup unless @digits
+    @digits[@index]
+  end
+
   def to_s
     combine unless @pattern
     @pattern

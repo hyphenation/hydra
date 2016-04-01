@@ -260,6 +260,21 @@ describe Pattern do
       end
     end
 
+    describe '#currletter' do
+      it "returns the current letter" do
+        pattern = Pattern.new 'a1n2a1n2a'
+        3.times { pattern.shift }
+        expect(pattern.currletter).to eq 'n'
+      end
+    end
+
+    describe '#currdigit' do
+      it "returns the current digit" do
+        pattern = Pattern.new '3foo'
+        expect(pattern.currdigit).to eq 3
+      end
+    end
+
     let(:pattern) { Pattern.new('bac', [0, 2, 1]) }
 
     describe '#to_s' do
