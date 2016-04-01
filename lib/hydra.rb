@@ -175,15 +175,9 @@ class Hydra
   end
 
   def digest(prefix = '')
-    words = []
-    if gethead
-      words << Pattern.new(prefix, gethead).to_s
-    end
-    words += letters.sort.map do |letter|
+    if gethead then [Pattern.new(prefix, gethead).to_s] else [] end + letters.sort.map do |letter|
       getneck(letter).digest(prefix + letter)
     end.flatten
-
-    words
   end
 
   def regest(suffix, delete = false, prefix = '', predigits = [])
