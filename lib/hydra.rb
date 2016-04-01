@@ -259,7 +259,10 @@ class Hydra
   end
 
   def match(word)
-    regest(Pattern.dummy(word), :match)
+    e = word.length - 1
+    (e + 1).times.map do |n|
+      regest(Pattern.dummy(word[n..e]), :match)
+    end.compact
   end
 
   def dump(device = $stdout)

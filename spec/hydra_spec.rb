@@ -180,8 +180,21 @@ describe Hydra do
   describe '#match' do
     it "return a simple match" do
       hydra.ingest ['foo1', 'boo2']
-      expect(hydra.match('foobar')).to eq 'foo1'
+      expect(hydra.match('foobar')).to eq ['foo1']
     end
+
+    it "looks for matching patterns" do
+      hydra = Hydra.new
+      matching_patterns = ['fo1', 'o2o', 'o1b', 'ba1', 'ba2r']
+      non_matching_patterns = ['ba2', 'of3', 'mo2o']
+      hydra.ingest matching_patterns
+      hydra.ingest non_matching_patterns
+      match = hydra.match('foobar')
+      expect(match).to eq matching_patterns
+    end
+
+    pending "patterns that are prefixes of each other"
+    pending "patterns with dots"
   end
 
   describe '#dump' do
