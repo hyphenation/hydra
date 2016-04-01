@@ -11,18 +11,29 @@ class Pattern
     end
   end
 
-  def to_s
-    unless @pattern
-      @pattern = ''
-      @digits.each_with_index do |digit, index|
-        @pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
-      end
-    end
+  def get_digits
+    breakup unless @digits
+    @digits
+  end
 
+  def get_word
+    breakup unless @word
+    @word
+  end
+
+  def to_s
+    combine unless @pattern
     @pattern
   end
 
-  def break_up
+  def combine
+    @pattern = ''
+    @digits.each_with_index do |digit, index|
+      @pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
+    end
+  end
+
+  def breakup
     @word, i, @digits = '', 0, []
     while i < @pattern.length
       char = @pattern[i]
@@ -35,16 +46,6 @@ class Pattern
       @word += @pattern[i] if @pattern[i]
       i += 1
     end
-  end
-
-  def get_digits
-    break_up unless @digits
-    @digits
-  end
-
-  def get_word
-    break_up unless @word
-    @word
   end
 end
 
