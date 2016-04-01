@@ -13,14 +13,13 @@ class Pattern
   end
 
   def to_s
-    if @pattern
-      @pattern
-    else
+    unless @pattern
       @pattern = ''
       @digits.each_with_index do |digit, index|
         @pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
       end
     end
+
     @pattern
   end
 
