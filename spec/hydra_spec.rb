@@ -306,5 +306,25 @@ describe Pattern do
         expect(pattern.get_word).to eq "bac"
       end
     end
+
+    describe '#grow' do
+      it "grows a letter.  I know it doesn’t make much sense, just give me a break" do
+        pattern = Pattern.new 'abc'
+        pattern.grow('d')
+        expect(pattern.get_word).to eq 'abcd'
+      end
+
+      it "returns the pattern" do
+        expect(pattern.grow('taller')).to be_a Pattern
+      end
+    end
+
+    describe '#grow!' do
+      it "just grows" do
+        pattern = Pattern.new 'f'
+        pattern.grow! 'g'
+        expect(pattern.get_word.length).to eq 2
+      end
+    end
   end
 end

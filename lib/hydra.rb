@@ -54,6 +54,17 @@ class Pattern
     @index == @word.length - 1
   end
 
+  def grow(letter)
+    breakup unless @word # Shouldn’t be necessary, really
+    @word += letter
+    self
+  end
+
+  def grow!(letter)
+    breakup unless @word
+    @word += letter
+  end
+
   def currletter
     breakup unless @word
     @word[@index]
