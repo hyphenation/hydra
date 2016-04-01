@@ -222,10 +222,12 @@ class Hydra
 
   def regest(pattern, delete = false)
     digits = gethead
-    if pattern.end? && digits
-      chophead if delete
-      raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
-      Pattern.new(pattern.get_word, digits).to_s
+    if pattern.end?
+      if digits
+        chophead if delete
+        raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
+        Pattern.new(pattern.get_word, digits).to_s
+      end
     else
       letter = pattern.currletter
       if getneck(letter)
