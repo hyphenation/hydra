@@ -158,20 +158,20 @@ describe Hydra do
   describe '#regest' do
     it "works as #search" do
       hydra.ingest ['b2a1c']
-      pattern = Pattern.new 'bac', []
+      pattern = Pattern.dummy 'bac'
       expect(hydra.regest(pattern)).to eq "b2a1c"
     end
 
     it "doesn’t delete by default" do
       hydra.ingest ['foo9bar']
-      pattern = Pattern.new 'foobar', []
+      pattern = Pattern.dummy 'foobar'
       hydra.regest(pattern)
       expect(hydra.count).to eq 1
     end
 
     it "works as #delete" do
       hydra.ingest ['b2a1c']
-      pattern = Pattern.new 'bac', []
+      pattern = Pattern.dummy 'bac'
       hydra.regest pattern, true
       expect(hydra.count).to eq 0
     end

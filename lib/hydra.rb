@@ -225,7 +225,7 @@ class Hydra
     if pattern.end? && digits
       chophead if delete
       raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
-      pattern.to_s
+      Pattern.new(pattern.get_word, digits).to_s
     else
       letter = pattern.currletter
       if getneck(letter)
