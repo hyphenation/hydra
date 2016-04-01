@@ -100,6 +100,14 @@ describe Hydra do
       expect(hydra.digest).to eq ['ba1', 'ba2r']
     end
 
+    it "really works with patterns that are prefix of each other" do
+      matching_patterns = ['fo1', 'o2o', 'o1b', 'ba1', 'ba2r']
+      non_matching_patterns = ['ba2', 'of3', 'mo2o']
+      hydra.ingest matching_patterns
+      hydra.ingest non_matching_patterns
+      expect(hydra.digest).to eq ['ba2', 'ba2r' 'fo1', 'mo2o', 'o1b', 'of3', 'o2o']
+    end
+
     # TODO Test with conflicting patterns
   end
 
