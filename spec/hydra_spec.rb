@@ -326,5 +326,16 @@ describe Pattern do
         expect(pattern.get_word.length).to eq 2
       end
     end
+
+    describe '#copy' do
+      it "returns a new pattern with the same word" do
+        expect(pattern.copy([1, 2, 3])).to be_a Pattern
+      end
+
+      it "sets the digits" do
+        new_pattern = pattern.copy [4, 5, 6]
+        expect(new_pattern.get_digits).to eq [4, 5, 6]
+      end
+    end
   end
 end

@@ -65,6 +65,10 @@ class Pattern
     @word += letter
   end
 
+  def copy(digits)
+    Pattern.new(@word, digits)
+  end
+
   def currletter
     breakup unless @word
     @word[@index]
