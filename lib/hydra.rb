@@ -69,6 +69,11 @@ class Pattern
 
   def set_digits(digits)
     @digits = digits
+    self
+  end
+
+  def set_digits!(digits)
+    @digits = digits
   end
 
   def currletter

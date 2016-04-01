@@ -327,10 +327,20 @@ describe Pattern do
       end
     end
 
-    describe '#set_digits' do
+    describe '#set_digits' do # This could be really dangerous
       it "sets the digits" do
         pattern.set_digits [1, 2, 3]
         expect(pattern.get_digits).to eq [1, 2 , 3]
+      end
+
+      it "returns the pattern" do
+        expect(pattern.set_digits [4, 5, 6]).to be_a Pattern
+      end
+    end
+
+    describe '#set_digits!' do
+      it "just sets the digits" do
+        expect(pattern.set_digits! [4, 5, 6]).to eq [4, 5, 6]
       end
     end
   end
