@@ -94,6 +94,11 @@ class Pattern
     @digits = digits
   end
 
+  def truncate(n)
+    breakup unless @word
+    @word[0..n-1]
+  end
+
   def currletter
     breakup unless @word
     @word[@index]
@@ -222,6 +227,15 @@ class Hydra
 
   def regest(pattern, mode = :search)
     digits = gethead
+
+    if mode == :match
+      if digits
+        return Pattern.new(pattern.truncate(pattern.index), digits).to_s
+      else
+        return getneck(pattern.currletter).regest(pattern.shift, :match) if getneck(pattern.currletter)
+      end
+    end
+
     if pattern.end?
       if digits
         chophead if mode == :delete
@@ -242,6 +256,10 @@ class Hydra
 
   def delete(pattern)
     regest(Pattern.new(pattern), :delete)
+  end
+
+  def match(word)
+    regest(Pattern.dummy(word), :match)
   end
 
   def dump(device = $stdout)

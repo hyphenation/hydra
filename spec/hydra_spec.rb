@@ -177,6 +177,13 @@ describe Hydra do
     end
   end
 
+  describe '#match' do
+    it "return a simple match" do
+      hydra.ingest ['foo1', 'boo2']
+      expect(hydra.match('foobar')).to eq 'foo1'
+    end
+  end
+
   describe '#dump' do
     let(:device) { double(:output).as_null_object }
 
@@ -403,6 +410,13 @@ describe Pattern do
     describe '#freeze!' do
       it "just sets the digits" do
         expect(pattern.freeze! [4, 5, 6]).to eq [4, 5, 6]
+      end
+    end
+
+    describe '#truncate(n)' do
+      it "truncates to letter n" do
+        pattern = Pattern.dummy 'sandrigham'
+        expect(pattern.truncate(4)).to eq 'sand'
       end
     end
   end
