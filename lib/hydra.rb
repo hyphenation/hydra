@@ -111,7 +111,7 @@ class Hydra
     digits = gethead
     if suffix == '' && digits
       chophead if delete
-      raise Hydra::ConflictingPattern if @mode == :strict && predigits != digits
+      raise ConflictingPattern if @mode == :strict && predigits != digits
       Hydra.make_pattern(prefix, digits)
     else
       head, tail = suffix[0], suffix[1..-1]
