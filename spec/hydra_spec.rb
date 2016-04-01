@@ -3,34 +3,34 @@ require 'spec_helper'
 describe Hydra do
   let(:hydra)  { Hydra.new }
 
-  describe '#grow_limb' do
+  describe '#ensure_neck' do
     it "ensures there is a limb" do
-      hydra.grow_limb('a')
-      expect(hydra.getlimb('a')).to be_a Hydra
+      hydra.ensure_neck('a')
+      expect(hydra.getneck('a')).to be_a Hydra
     end
   end
 
-  describe '#grow_head' do
-    it "grows a limb with a head" do
-      hydra.grow_head('a', [1])
+  describe '#setatlas' do
+    it "grows a neck with a head" do
+      hydra.setatlas('a', [1])
       expect(hydra.count).to eq 1
     end
 
     it "has a correctly labelled limb" do
-      hydra.grow_head('b', [2])
-      expect(hydra.getlimb('b')).to be_a Hydra
+      hydra.setatlas('b', [2])
+      expect(hydra.getneck('b')).to be_a Hydra
     end
   end
 
-  describe '#getlimb' do
+  describe '#getneck' do
     it "returns the limb" do
       hydra.ingest 'abc'
-      expect(hydra.getlimb('a')).to be_a Hydra
+      expect(hydra.getneck('a')).to be_a Hydra
     end
 
     it "returns nil for non-existing limbs" do
       hydra.ingest 'def'
-      expect(hydra.getlimb('g')).to be_nil
+      expect(hydra.getneck('g')).to be_nil
     end
   end
 
@@ -50,7 +50,7 @@ describe Hydra do
   describe '#chophead' do
     it "chops off the head" do
       hydra.ingest ['a', 'b', 'c']
-      hydra.getlimb('a').chophead
+      hydra.getneck('a').chophead
       expect(hydra.count).to eq 2
     end
   end

@@ -6,7 +6,7 @@ class Hydra
   end
 
   def initialize(mode = :lax)
-    @limbs = { }
+    @necks = { }
     @mode = mode
   end
 
@@ -14,17 +14,17 @@ class Hydra
     @mode = :strict
   end
 
-  def grow_limb(letter)
-    @limbs[letter] = Hydra.new(@mode) unless @limbs[letter]
+  def ensure_neck(letter)
+    @necks[letter] = Hydra.new(@mode) unless @necks[letter]
   end
 
-  def grow_head(letter, digits)
-    grow_limb(letter)
-    @limbs[letter].sethead(digits)
+  def setatlas(letter, digits)
+    ensure_neck(letter)
+    @necks[letter].sethead(digits)
   end
 
-  def getlimb(letter)
-    @limbs[letter]
+  def getneck(letter)
+    @necks[letter]
   end
 
   def sethead(digits)
@@ -40,7 +40,7 @@ class Hydra
   end
 
   def keys
-    @limbs.keys
+    @necks.keys
   end
 
   def self.isdigit(char)
@@ -48,7 +48,7 @@ class Hydra
   end
 
   def count
-    @limbs.inject(0) do |sum, head|
+    @necks.inject(0) do |sum, head|
       head, tail = head.first, head.last
       sum += 1 if tail.gethead
       sum + if tail.is_a? Hydra then tail.count else 0 end
@@ -73,11 +73,11 @@ class Hydra
 
       if head
         tail = word[1..-1]
-        grow_limb(head)
+        ensure_neck(head)
         if tail == ""
-          grow_head(head, digits)
+          setatlas(head, digits)
         else
-          getlimb(head).ingest(tail, digits)
+          getneck(head).ingest(tail, digits)
         end
       else
         sethead(digits)
@@ -95,7 +95,7 @@ class Hydra
       words << Hydra.make_pattern(prefix, gethead)
     end
     keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
-      tail = getlimb(head)
+      tail = getneck(head)
       words += tail.digest(prefix + head)
     end
 
@@ -115,8 +115,8 @@ class Hydra
       Hydra.make_pattern(prefix, digits)
     else
       head, tail = suffix[0], suffix[1..-1]
-      if getlimb(head)
-        getlimb(head).regest(tail, delete, prefix + head, predigits)
+      if getneck(head)
+        getneck(head).regest(tail, delete, prefix + head, predigits)
       end
     end
   end
