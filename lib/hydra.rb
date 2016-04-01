@@ -7,16 +7,21 @@ class Pattern
       @word = word
       @digits = digits
     else
-      break_up(word)
+      @pattern = word
+      break_up(@pattern)
     end
   end
 
   def to_s
-    pattern = ''
-    @digits.each_with_index do |digit, index|
-      pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
+    if @pattern
+      @pattern
+    else
+      @pattern = ''
+      @digits.each_with_index do |digit, index|
+        @pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
+      end
     end
-    pattern
+    @pattern
   end
 
   def break_up(pattern)
