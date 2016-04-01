@@ -67,12 +67,12 @@ class Pattern
     @word += letter
   end
 
-  def set_digits(digits)
+  def freeze(digits)
     @digits = digits
-    self
+    Pattern.new
   end
 
-  def set_digits!(digits)
+  def freeze!(digits)
     @digits = digits
   end
 
@@ -197,7 +197,7 @@ class Hydra
   end
 
   def digest(pattern = Pattern.new)
-    if gethead then [pattern.set_digits(gethead).to_s] else [] end + letters.sort.map do |letter|
+    if gethead then [pattern.freeze(gethead).to_s] else [] end + letters.sort.map do |letter|
       getneck(letter).digest(pattern.grow(letter))
     end.flatten
   end
