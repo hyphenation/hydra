@@ -1,6 +1,50 @@
 require 'byebug'
 require 'pp'
 
+class Pattern
+  def initialize(word, digits = nil)
+    if digits
+      @word = word
+      @digits = digits
+    else
+      break_up(word)
+    end
+  end
+
+  def to_s
+    pattern = ''
+    @digits.each_with_index do |digit, index|
+      pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
+    end
+    pattern
+  end
+
+  def break_up(pattern)
+    word, i, digits = '', 0, []
+    while i < pattern.length
+      char = pattern[i]
+      if Hydra.isdigit(char)
+        digits << char.to_i
+        i += 1
+      else
+        digits << 0
+      end
+      word += pattern[i] if pattern[i]
+      i += 1
+    end
+    @word = word
+    @digits = digits
+  end
+
+  def get_digits
+    @digits
+  end
+
+  def get_word
+    @word
+  end
+end
+
 class Hydra
   class ConflictingPattern < StandardError
   end
@@ -92,7 +136,7 @@ class Hydra
   def digest(prefix = '')
     words = []
     if gethead
-      words << Hydra.make_pattern(prefix, gethead)
+      words << Pattern.new(prefix, gethead).to_s
     end
     keys.sort { |a, b| if a == 0 then -1 elsif b == 0 then 1 else a <=> b end }.map do |head|
       tail = getneck(head)
@@ -104,7 +148,11 @@ class Hydra
 
   def regest(suffix, delete = false, prefix = '', predigits = [])
     if prefix == ''
-      predigits = Hydra.get_digits(suffix)
+      if @mode == :strict
+        predigits = Pattern.new(suffix).get_digits
+      else
+        predigits = []
+      end
       suffix.gsub! /\d/, ''
     end
 
@@ -112,7 +160,7 @@ class Hydra
     if suffix == '' && digits
       chophead if delete
       raise ConflictingPattern if @mode == :strict && predigits != digits
-      Hydra.make_pattern(prefix, digits)
+      Pattern.new(prefix, digits).to_s
     else
       head, tail = suffix[0], suffix[1..-1]
       if getneck(head)
@@ -132,32 +180,5 @@ class Hydra
   def dump(device = $stdout)
     PP.pp self, device
     count
-  end
-
-  def self.make_pattern(word, digits)
-    pattern = ''
-    digits.each_with_index do |digit, index|
-      pattern += if digit > 0 then digit.to_s else '' end + word[index].to_s
-    end
-    pattern
-  end
-
-  def self.get_digits(pattern)
-    i, digits = 0, []
-    while i < pattern.length
-      char = pattern[i]
-      if Hydra.isdigit(char)
-        digits << char.to_i
-        i += 1
-      else
-        digits << 0
-      end
-      i += 1
-    end
-    digits
-  end
-
-  def self.get_word(pattern)
-    pattern.gsub /\d/, ''
   end
 end

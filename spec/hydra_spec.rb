@@ -191,28 +191,40 @@ describe Hydra do
   # TODO ingest with dots, etc.
   # TODO Apply hydra!
 
-  describe '.make_pattern' do
-    it "makes a pattern from a word and an array of digits" do
-      expect(Hydra.make_pattern('bac', [0, 2, 1])).to eq "b2a1c"
-    end
-  end
-
-  describe '.get_digits' do
-    it "extracts the digits from a pattern" do
-      expect(Hydra.get_digits('b2a1c')).to eq [0, 2, 1]
-    end
-  end
-
-  describe '.get_word' do # For completeness!
-    it "extracts the word from a pattern" do
-      expect(Hydra.get_word('b2a1c')).to eq "bac"
-    end
-  end
-
   describe '#ingest_file' do # TODO Allow TeX-style comments?
     it "ingests a whole file of patterns" do
       hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))
       expect(hydra.count).to eq 1660
+    end
+  end
+end
+
+describe Pattern do
+  describe '#new' do
+    it "makes a pattern from a word and an array of digits" do
+      expect(Pattern.new('bac', [0, 2, 1])).to be_a Pattern
+    end
+  end
+
+  context "with a predefined pattern" do
+    let(:pattern) { Pattern.new('bac', [0, 2, 1]) }
+
+    describe '#to_s' do
+      it "returns a string representation of the pattern" do
+        expect(pattern.to_s).to eq "b2a1c"
+      end
+    end
+
+    describe '.get_digits' do
+      it "extracts the digits from a pattern" do
+        expect(pattern.get_digits).to eq [0, 2, 1]
+      end
+    end
+
+    describe '.get_word' do # For completeness!
+      it "extracts the word from a pattern" do
+        expect(pattern.get_word).to eq "bac"
+      end
     end
   end
 end
