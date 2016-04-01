@@ -223,6 +223,18 @@ describe Pattern do
         pattern.shift
         expect(pattern.index).to eq 1
       end
+
+      it "returns the pattern" do
+        expect(pattern.shift).to be_a Pattern
+      end
+    end
+
+    describe '#shift!' do
+      it "just shifts" do
+        pattern = Pattern.new 'q8u1u2x'
+        pattern.shift!
+        expect(pattern.index).to eq 1
+      end
     end
 
     describe '#reset' do

@@ -28,6 +28,11 @@ class Pattern
 
   def shift
     @index += 1
+    self
+  end
+
+  def shift!
+    @index += 1
   end
 
   def reset
