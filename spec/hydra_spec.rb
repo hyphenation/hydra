@@ -212,7 +212,7 @@ describe Pattern do
       pattern = Pattern.new('ab2')
       expect(pattern).to be_a Pattern
       expect(pattern.get_word).to [0, 0, 2]
-      expect(pattern.get_digits).to 'ab'
+      expect(pattern.get_digits).to eq 'ab'
     end
   end
 
