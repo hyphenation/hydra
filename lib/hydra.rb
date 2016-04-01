@@ -162,8 +162,7 @@ class Hydra
         if pattern.end?
           setatlas(letter, pattern.get_digits)
         else
-          pattern.shift
-          getneck(letter).ingest(pattern)
+          getneck(letter).ingest(pattern.shift)
         end
       else
         sethead(pattern.get_digits)
