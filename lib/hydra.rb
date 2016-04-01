@@ -2,7 +2,7 @@ require 'byebug'
 require 'pp'
 
 class Pattern
-  def initialize(word, digits = nil)
+  def initialize(word = nil, digits = nil)
     if digits
       @word = word
       @digits = digits
@@ -196,9 +196,9 @@ class Hydra
     ingest(File.read(filename).split)
   end
 
-  def digest(prefix = '')
-    if gethead then [Pattern.new(prefix, gethead).to_s] else [] end + letters.sort.map do |letter|
-      getneck(letter).digest(prefix + letter)
+  def digest(pattern = Pattern.new)
+    if gethead then [pattern.set_digits(gethead).to_s] else [] end + letters.sort.map do |letter|
+      getneck(letter).digest(pattern.grow(letter))
     end.flatten
   end
 
