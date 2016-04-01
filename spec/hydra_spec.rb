@@ -336,6 +336,14 @@ describe Pattern do
         new_pattern = pattern.copy [4, 5, 6]
         expect(new_pattern.get_digits).to eq [4, 5, 6]
       end
+
+      it "properly copies", copy: true do
+        p1 = Pattern.new
+        p1.grow 'foo'
+        p2 = p1.copy [0, 0, 0]
+        p2.grow 'bar'
+        expect(p2.to_s).to eq 'foobar'
+      end
     end
   end
 end
