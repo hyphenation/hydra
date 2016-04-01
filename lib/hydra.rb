@@ -9,6 +9,7 @@ class Pattern
     else
       @pattern = word
     end
+    @index = 0
   end
 
   def get_digits
@@ -19,6 +20,18 @@ class Pattern
   def get_word
     breakup unless @word
     @word
+  end
+
+  def index
+    @index
+  end
+
+  def shift
+    @index += 1
+  end
+
+  def reset
+    @index = 0
   end
 
   def to_s

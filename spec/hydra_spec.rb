@@ -207,6 +207,32 @@ describe Pattern do
   end
 
   context "with a predefined pattern" do
+    describe '#index' do
+      it "returns the index" do
+        pattern.shift; pattern.shift
+        expect(pattern.index).to eq 2
+      end
+
+      it "is zero at initialisation" do
+        expect(pattern.index).to eq 0
+      end
+    end
+
+    describe '#shift' do
+      it "shifts the index by one" do
+        pattern.shift
+        expect(pattern.index).to eq 1
+      end
+    end
+
+    describe '#reset' do
+      it "resets the index" do
+        pattern.shift; pattern.shift
+        pattern.reset
+        expect(pattern.index).to eq 0
+      end
+    end
+
     let(:pattern) { Pattern.new('bac', [0, 2, 1]) }
 
     describe '#to_s' do
