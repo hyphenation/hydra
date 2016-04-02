@@ -290,7 +290,7 @@ class Hydra
     pattern
   end
 
-  def dump(device = $stdout)
+  def disembowel(device = $stdout)
     PP.pp self, device
     count
   end

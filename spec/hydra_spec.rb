@@ -277,18 +277,18 @@ describe Hydra do
     end
   end
 
-  describe '#dump' do
+  describe '#disembowel' do
     let(:device) { double(:output).as_null_object }
 
     it "dumps a string" do
       hydra.ingest(['apple', 'orange', 'lemon'])
       expect(PP).to receive :pp # TODO specify arguments
-      hydra.dump(device)
+      hydra.disembowel(device)
     end
 
     it "returns the count" do
       hydra.ingest(['a', 'b', 'c', 'd', 'e'])
-      expect(hydra.dump(device)).to eq 5
+      expect(hydra.disembowel(device)).to eq 5
     end
   end
   # TODO ingest with dots, etc.
