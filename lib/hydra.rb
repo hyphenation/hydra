@@ -252,12 +252,7 @@ class Hydra
         end
       end
 
-      case mode
-      when :match
-        getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
-      when :hyphenate
-        getneck(pattern.currletter).regest(pattern.shift, :hyphenate, matches) if getneck(pattern.currletter)
-      end
+      getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
     else
       if pattern.end?
         if digits
