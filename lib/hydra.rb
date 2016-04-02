@@ -152,6 +152,9 @@ class Pattern
     @digits.each_with_index do |digit, index|
       @pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
     end
+
+    @pattern = '.' + @pattern if @initial
+    @pattern = @pattern + '.' if @final
   end
 
   def breakup
