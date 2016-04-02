@@ -112,6 +112,22 @@ class Pattern
     end
   end
 
+  def initial
+    breakup unless @digits
+    @initial = true
+    @digits = @digits[1..@digits.length - 2]
+  end
+
+  def final
+  end
+
+  def initial?
+    @initial == true
+  end
+
+  def final?
+  end
+
   def currletter
     breakup unless @word
     @word[@index]

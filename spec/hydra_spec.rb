@@ -582,7 +582,7 @@ describe Pattern do
         it "marks a pattern as final" do
           pattern = Pattern.new('5bar')
           pattern.final
-          expect(pattern.final?).to be_trutjy
+          expect(pattern.final?).to be_truthy
           expect(pattern.get_digits.length).to eq 4
         end
       end
