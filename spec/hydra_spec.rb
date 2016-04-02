@@ -262,8 +262,6 @@ describe Hydra do
       hydra.ingest ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch']
       expect(hydra.match('foobar').map(&:to_s)).to eq ['.ba3', '.fo1', '.foo3', 'a2r', 'ba1', '3bar', 'fo2o1', 'o2o']
     end
-
-    pending "patterns with dots"
   end
 
   describe '#prehyphenate' do
