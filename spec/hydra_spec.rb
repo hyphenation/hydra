@@ -602,6 +602,30 @@ describe Pattern do
          expect(pattern.final?).to be_truthy
        end
      end
+
+     describe '#to_s' do # That was clearly missing!
+       it "returns the verbatim pattern in case it was fed so" do
+         pattern = Pattern.new('fo2o')
+         expect(pattern.to_s).to eq 'fo2o'
+       end
+
+       it "computes the pattern correctly otherwise" do
+         pattern = Pattern.new('foo', [0, 0, 2])
+         expect(pattern.to_s).to eq 'fo2o'
+       end
+
+       it "handles dots correctly" do
+         pattern = Pattern.new('foo')
+         pattern.initial
+         expect(pattern.to_s).to eq '.foo'
+       end
+
+       it "... even in final position" do
+         pattern = Pattern.new('bar')
+         pattern.final
+         expect(pattern.to_s).to eq 'bar.'
+       end
+     end
     end
   end
 end
