@@ -253,7 +253,7 @@ class Hydra
         if pattern.end?
           chophead if mode == :delete
           raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
-          Pattern.new(pattern.get_word, digits).to_s
+          return Pattern.new(pattern.get_word, digits).to_s
         end
       end
 
