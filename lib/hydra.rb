@@ -37,13 +37,13 @@ class Pattern
     @index
   end
 
-  def shift
-    @index += 1
+  def shift(n = 1)
+    @index += n
     self
   end
 
-  def shift!
-    @index += 1
+  def shift!(n = 1)
+    @index += n
   end
 
   def reset

@@ -304,6 +304,11 @@ describe Pattern do
       it "returns the pattern" do
         expect(pattern.shift).to be_a Pattern
       end
+
+      it "takes an optional number of repetitions" do
+        pattern = Pattern.new('foo1bar')
+        expect(pattern.shift(3).index).to eq 3
+      end
     end
 
     describe '#shift!' do
@@ -311,6 +316,11 @@ describe Pattern do
         pattern = Pattern.new 'q8u1u2x'
         pattern.shift!
         expect(pattern.index).to eq 1
+      end
+
+      it "takes an optional number as argument" do
+        pattern = Pattern.new('baz1quux')
+        expect { pattern.shift! 2 }.to change(pattern, :index).by 2
       end
     end
 
