@@ -550,6 +550,10 @@ describe Pattern do
           expect(pattern.length).to eq 6
         end
       end
+
+      pending '#cmp' do
+        it "compares two patterns"
+      end
     end
   end
 end
