@@ -115,10 +115,13 @@ class Pattern
   def initial
     breakup unless @digits
     @initial = true
-    @digits = @digits[1..@digits.length - 2]
+    @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
   end
 
   def final
+    breakup unless @digits
+    @final = true
+    @digits = @digits[0..@digits.length - 2] if @digits.length > @word.length + 1
   end
 
   def initial?
@@ -126,6 +129,7 @@ class Pattern
   end
 
   def final?
+    @final == true
   end
 
   def currletter
