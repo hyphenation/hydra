@@ -221,13 +221,48 @@ describe Hydra do
       expect(match.map(&:to_s)).to eq matching_patterns
     end
 
-    pending "matches a pattern with an initial dot"
-    pending "finds no match if pattern is in the middle of the word"
-    pending "finds no match if pattern is different after initial dot"
-    pending "matches a closing dot"
-    pending "finds no match if pattern is in the middle of the word"
-    pending "finds no match if pattern is different before final dot"
-    pending "matches a more complex example"
+    pending "matches a pattern with an initial dot" do
+      hydra = Hydra.new # TODO Hydra.new(arg) → list of patterns
+      hydra.ingest ['.foo']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
+    end
+
+    pending "finds no match if pattern is in the middle of the word" do
+      hydra = Hydra.new
+      hydra.ingest ['.oob']
+      expect(hydra.match('foobar')).to be_empty
+    end
+
+    pending "finds no match if pattern is different after initial dot" do
+      hydra = Hydra.new
+      hydra.ingest ['.boo']
+      expect(hydra.match('foobar')).to be_empty
+    end
+
+    pending "matches a closing dot" do
+      hydra = Hydra.new
+      hydra.ingest ['bar1.'] # That’s a stupid pattern, by the way ;-)
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
+    end
+
+    pending "finds no match if pattern is in the middle of the word" do
+      hydra = Hydra.new
+      hydra.ingest ['oba.']
+      expect(hydra.match('foobar')).to be_empty
+    end
+
+    pending "finds no match if pattern is different before final dot" do
+      hydra = Hydra.new
+      hydra.ingest ['far.']
+      expect(hydra.match('foobar')).to be_empty
+    end
+
+    pending "matches a more complex example" do
+      hydra = Hydra.new
+      hydra.ingest ['.foo3', '.fo1', 'fo2o1', '.bar1', '3bar.', 'ba2r', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo3', '.fo1', 'fo2o1', '3bar', 'ba2r', 'ba1', '.ba3', 'a2r', 'o2o']
+    end
+
     pending "patterns with dots"
   end
 
