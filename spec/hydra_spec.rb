@@ -221,7 +221,6 @@ describe Hydra do
       expect(match.map(&:to_s)).to eq matching_patterns
     end
 
-    pending "Pre-hyphenated word-pattern"
     pending "patterns with dots"
   end
 
