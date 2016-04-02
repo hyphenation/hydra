@@ -221,6 +221,12 @@ describe Hydra do
       expect(match.map(&:to_s)).to eq matching_patterns
     end
 
+    it "matches a more complex example" do
+      hydra = Hydra.new
+      hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
+      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['hy3ph', 'he2n', 'hena4', 'hen5at', '1na', 'n2at', '1tio', '2io', 'o2n']
+    end
+
     pending "matches a pattern with an initial dot" do
       hydra = Hydra.new # TODO Hydra.new(arg) → list of patterns
       hydra.ingest ['.foo']
@@ -257,7 +263,7 @@ describe Hydra do
       expect(hydra.match('foobar')).to be_empty
     end
 
-    pending "matches a more complex example" do
+    pending "matches a more complex example with dots" do
       hydra = Hydra.new
       hydra.ingest ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch']
       expect(hydra.match('foobar').map(&:to_s)).to eq ['.ba3', '.fo1', '.foo3', 'a2r', 'ba1', '3bar', 'fo2o1', 'o2o']
