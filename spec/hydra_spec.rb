@@ -192,7 +192,7 @@ describe Hydra do
   end
 
   describe '#match' do
-    it "return a simple match" do
+    it "returns a simple match" do
       hydra.ingest ['foo1', 'boo2']
       expect(hydra.match('foobar')).to eq ['foo1']
     end
