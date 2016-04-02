@@ -233,6 +233,12 @@ describe Hydra do
       expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
     end
 
+    it "matches a pattern with an initial dot and actual digits" do
+      hydra = Hydra.new
+      hyra.ingest '.foo1'
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
+    end
+
     it "finds no match if pattern is in the middle of the word" do
       hydra = Hydra.new
       hydra.ingest ['.oob']
@@ -247,8 +253,16 @@ describe Hydra do
 
     pending "matches a closing dot" do
       hydra = Hydra.new
-      hydra.ingest ['bar1.'] # That’s a stupid pattern, by the way ;-)
+      hydra.ingest ['bar.']
       expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
+    end
+
+    # TODO Stupid pattern bar1.?
+
+    pending "matches a final do with actual digits in the pattern" do
+      hydra = Hydra.new
+      hydra.ingest '1bar.'
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
     end
 
     it "finds no match if pattern is in the middle of the word" do
