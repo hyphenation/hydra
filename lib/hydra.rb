@@ -243,27 +243,25 @@ class Hydra
   def regest(pattern, mode = :search, matches = [])
     digits = gethead
 
-    if mode == :match || mode == :hyphenate
-      if digits
-        case mode
-        when :match
-          matches << Pattern.new(pattern.truncate(pattern.index), digits)
-        when :hyphenate
-          pattern.mask digits
-        end
-      end
-
-      getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
-    else
-      if digits
+    if digits
+      case mode
+      when :match
+        matches << Pattern.new(pattern.truncate(pattern.index), digits)
+      when :hyphenate
+        pattern.mask digits
+      when :search, :delete
         if pattern.end?
           chophead if mode == :delete
           raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
           Pattern.new(pattern.get_word, digits).to_s
         end
-      else
-        getneck(pattern.currletter).regest(pattern.shift, mode) if getneck(pattern.currletter)
       end
+
+      if mode == :match || mode == :hyphenate
+        getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
+      end
+    else
+      getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
     end
   end
 
