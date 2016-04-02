@@ -475,10 +475,10 @@ describe Pattern do
         pattern.mask [0, 0, 1] # Potentially coming from a "su1"
         pattern.shift
         pattern.mask [0, 0, 2, 3] # "su2p3"
-        3.times { pattern.shift } # TODO Pattern#shift(n)!
-        pattern.mask [0, 2] # "r2c"
-        2.times { pattern.shift }
-        pattern.mask [1, 0, 2, 3]
+        4.times { pattern.shift } # TODO Pattern#shift(n)!
+        pattern.mask [0, 1, 2, 1] # "r1c2a"
+        1.times { pattern.shift }
+        pattern.mask [0, 2, 3] # "a2l3"
         expect(pattern.to_s).to eq "su2p3er1c2a2l3"
       end
     end
