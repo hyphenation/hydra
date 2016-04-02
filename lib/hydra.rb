@@ -255,17 +255,14 @@ class Hydra
 
       getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
     else
-      if pattern.end?
         if digits
+      if pattern.end?
           chophead if mode == :delete
           raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
           Pattern.new(pattern.get_word, digits).to_s
         end
       else
-        letter = pattern.currletter
-        if getneck(letter)
-          getneck(letter).regest(pattern.shift, mode)
-        end
+        getneck(pattern.currletter).regest(pattern.shift, mode) if getneck(pattern.currletter)
       end
     end
   end
