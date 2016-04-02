@@ -221,6 +221,13 @@ describe Hydra do
       expect(match.map(&:to_s)).to eq matching_patterns
     end
 
+    pending "matches a pattern with an initial dot"
+    pending "finds no match if pattern is in the middle of the word"
+    pending "finds no match if pattern is different after initial dot"
+    pending "matches a closing dot"
+    pending "finds no match if pattern is in the middle of the word"
+    pending "finds no match if pattern is different before final dot"
+    pending "matches a more complex example"
     pending "patterns with dots"
   end
 
