@@ -242,18 +242,22 @@ class Hydra
   def regest(pattern, mode = :search, matches = [])
     digits = gethead
 
-    if mode == :match
+    if mode == :match || mode == :hyphenate
       if digits
-        matches << Pattern.new(pattern.truncate(pattern.index), digits)
+        case mode
+        when :match
+          matches << Pattern.new(pattern.truncate(pattern.index), digits)
+        when :hyphenate
+          pattern.mask digits
+        end
       end
 
-      getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
-    elsif mode == :hyphenate
-      if digits
-        pattern.mask digits
+      case mode
+      when :match
+        getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
+      when :hyphenate
+        getneck(pattern.currletter).regest(pattern.shift, :hyphenate, matches) if getneck(pattern.currletter)
       end
-
-      getneck(pattern.currletter).regest(pattern.shift, :hyphenate, matches) if getneck(pattern.currletter)
     else
       if pattern.end?
         if digits
