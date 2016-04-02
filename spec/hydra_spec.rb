@@ -568,6 +568,40 @@ describe Pattern do
       pending '#cmp' do
         it "compares two patterns"
       end
+
+      describe '#initial' do
+        it "marks a pattern as initial" do
+          pattern = Pattern.new('foo3')
+          pattern.initial
+          expect(pattern.initial?).to be_truthy
+          expect(pattern.get_digits.length).to eq 4
+        end
+      end
+
+      describe '#final' do
+        it "marks a pattern as final" do
+          pattern = Pattern.new('5bar')
+          pattern.final
+          expect(pattern.final?).to be_trutjy
+          expect(pattern.get_digits.length).to eq 4
+        end
+      end
+
+      describe '#initial?' do
+        it "says whether a pattern is initial" do
+          pattern = Pattern.new('1fo2o3')
+          pattern.initial
+          expect(pattern.initial?).to be_truthy
+        end
+      end
+
+      describe '#final?' do
+        it "says whether a pattern is final" do
+         pattern = Pattern.new('4b2a4r')
+         pattern.final
+         expect(pattern.final?).to be_falsey
+       end
+     end
     end
   end
 end
