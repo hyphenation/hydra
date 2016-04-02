@@ -194,12 +194,21 @@ describe Hydra do
   describe '#match' do
     it "returns a simple match" do
       hydra.ingest ['foo1', 'boo2']
-      expect(hydra.match('foobar')).to eq ['foo1']
+      matches = hydra.match('foobar')
+      expect(matches.map(&:to_s)).to eq ['foo1']
+    end
+
+    it "returns an array of patterns" do
+      hydra.ingest ['foo1', 'boo2', '3bar']
+      matches = hydra.match('foobar')
+      expect(matches).to be_an Array
+      expect(matches.count).to eq 2
+      expect(matches.map(&:class)).to eq [Pattern, Pattern]
     end
 
     it "works with patterns that are prefixes of each other" do
       hydra.ingest ['fo2', 'foo1']
-      expect(hydra.match('foobar')).to eq ['fo2', 'foo1']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['fo2', 'foo1']
     end
 
     it "looks for matching patterns" do
@@ -209,9 +218,10 @@ describe Hydra do
       hydra.ingest matching_patterns
       hydra.ingest non_matching_patterns
       match = hydra.match('foobar')
-      expect(match).to eq matching_patterns
+      expect(match.map(&:to_s)).to eq matching_patterns
     end
 
+    pending "Pre-hyphenated word-pattern"
     pending "patterns with dots"
   end
 

@@ -230,7 +230,7 @@ class Hydra
 
     if mode == :match
       if digits
-        matches << Pattern.new(pattern.truncate(pattern.index), digits).to_s
+        matches << Pattern.new(pattern.truncate(pattern.index), digits)
       end
 
       getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
