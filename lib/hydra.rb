@@ -250,7 +250,6 @@ class Hydra
       getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
     elsif mode == :hyphenate
       if digits
-        byebug
         pattern.mask digits
       end
 

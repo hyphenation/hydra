@@ -69,7 +69,7 @@ describe Hydra do
     end
   end
 
-  describe '.isdigit', isdigit: true do
+  describe '.isdigit' do
     it "says 3 is a digit" do
       expect(Hydra.isdigit('3')).to be_truthy
     end
@@ -132,7 +132,7 @@ describe Hydra do
   # Plan: #search → #delete (more complex search)
   # → #regest (search with option to delete)
   describe '#search' do
-    it "searches one digitless pattern", focus: true do
+    it "searches one digitless pattern" do
       hydra.ingest ['b2a1c']
       expect(hydra.search('bac')).to eq "b2a1c"
     end
@@ -142,7 +142,7 @@ describe Hydra do
       expect(hydra.search('def')).to be_nil
     end
 
-    it "raises an exception if the digits didn’t match", focus: true do
+    it "raises an exception if the digits didn’t match" do
       hydra.strict_mode
       hydra.ingest 'b2a1c'
       expect { hydra.search 'ba4c3' }.to raise_exception Hydra::ConflictingPattern
