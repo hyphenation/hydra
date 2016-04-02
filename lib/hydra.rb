@@ -113,14 +113,18 @@ class Pattern
   end
 
   def initial
+    combine unless @pattern
     breakup unless @digits
     @initial = true
+    @pattern = '.' + @pattern
     @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
   end
 
   def final
+    combine unless @pattern
     breakup unless @digits
     @final = true
+    @pattern += '.'
     @digits = @digits[0..@digits.length - 2] if @digits.length > @word.length + 1
   end
 
