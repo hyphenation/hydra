@@ -460,5 +460,14 @@ describe Pattern do
         expect(pattern.truncate(4)).to eq 'sand'
       end
     end
+
+    describe '#mask(array)' do
+      it "masks the pattern’s digits with an array" do
+        pattern = Pattern.dummy 'supercal'
+        3.times { pattern.shift }
+        pattern.mask [0, 0, 0, 3]
+        expect(pattern.to_s).to eq 'sup3ercal'
+      end
+    end
   end
 end

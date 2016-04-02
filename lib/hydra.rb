@@ -99,6 +99,14 @@ class Pattern
     @word[0..n-1]
   end
 
+  def mask(a)
+    offset = a.length - 1
+    a.length.times do |i|
+      j = index - offset + i
+      @digits[j] = [a[i], @digits[j]].max
+    end
+  end
+
   def currletter
     breakup unless @word
     @word[@index]
