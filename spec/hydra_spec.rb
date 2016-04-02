@@ -224,7 +224,7 @@ describe Hydra do
     it "matches a more complex example" do
       hydra = Hydra.new
       hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
-      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '1na', 'n2at', '2io', 'o2n', '1tio']
+      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '1na', 'n2at', '2io', 'o2n', '1tio'] # According to appendix H :-)
     end
 
     pending "matches a pattern with an initial dot" do
