@@ -225,6 +225,13 @@ describe Hydra do
     pending "patterns with dots"
   end
 
+  describe '#prehyphenate' do
+    it "pre-hyphenates the string" do
+      hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
+      expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
+    end
+  end
+
   describe '#dump' do
     let(:device) { double(:output).as_null_object }
 
@@ -480,6 +487,13 @@ describe Pattern do
         1.times { pattern.shift }
         pattern.mask [0, 2, 3] # "a2l3"
         expect(pattern.to_s).to eq "su2p3er1c2a2l3"
+      end
+
+      describe '#length' do
+        it "returns the length of the underlying word" do
+          pattern = Pattern.dummy 'abcdef'
+          expect(pattern.length).to eq 6
+        end
       end
     end
   end

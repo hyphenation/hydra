@@ -28,6 +28,11 @@ class Pattern
     @word
   end
 
+  def length
+    breakup unless @word
+    @word.length
+  end
+
   def index
     @index
   end
@@ -142,6 +147,7 @@ class Pattern
       @word += @pattern[i] if @pattern[i]
       i += 1
     end
+    @digits << 0 if @digits.length == @word.length
   end
 end
 
@@ -242,6 +248,13 @@ class Hydra
       end
 
       getneck(pattern.currletter).regest(pattern.shift, :match, matches) if getneck(pattern.currletter)
+    elsif mode == :hyphenate
+      if digits
+        byebug
+        pattern.mask digits
+      end
+
+      getneck(pattern.currletter).regest(pattern.shift, :hyphenate, matches) if getneck(pattern.currletter)
     else
       if pattern.end?
         if digits
@@ -274,6 +287,16 @@ class Hydra
     end
 
     matches.flatten.compact
+  end
+
+  def prehyphenate(word)
+    pattern = Pattern.dummy(word)
+    pattern.length.times do |n|
+      pattern.reset
+      n.times { pattern.shift }
+      regest(pattern, :hyphenate)
+    end
+    pattern
   end
 
   def dump(device = $stdout)
