@@ -256,13 +256,9 @@ class Hydra
           return Pattern.new(pattern.get_word, digits).to_s
         end
       end
-
-      if mode == :match || mode == :hyphenate
-        getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
-      end
-    else
-      getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
     end
+
+    getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
   end
 
   def search(pattern)
