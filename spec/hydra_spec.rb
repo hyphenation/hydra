@@ -235,7 +235,7 @@ describe Hydra do
 
     it "matches a pattern with an initial dot and actual digits" do
       hydra = Hydra.new
-      hyra.ingest '.foo1'
+      hydra.ingest '.foo1'
       expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
     end
 
