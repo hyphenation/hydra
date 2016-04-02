@@ -271,6 +271,7 @@ class Hydra
 
   def match(word)
     matches = []
+    getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
     e = word.length - 1
     (e + 1).times.each do |n|
       regest(Pattern.dummy(word[n..e]), :match, matches)

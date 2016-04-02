@@ -227,19 +227,19 @@ describe Hydra do
       expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '1na', 'n2at', '2io', 'o2n', '1tio'] # According to appendix H :-)
     end
 
-    pending "matches a pattern with an initial dot" do
+    it "matches a pattern with an initial dot", dot: true do
       hydra = Hydra.new # TODO Hydra.new(arg) → list of patterns
       hydra.ingest ['.foo']
       expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
     end
 
-    pending "finds no match if pattern is in the middle of the word" do
+    it "finds no match if pattern is in the middle of the word" do
       hydra = Hydra.new
       hydra.ingest ['.oob']
       expect(hydra.match('foobar')).to be_empty
     end
 
-    pending "finds no match if pattern is different after initial dot" do
+    it "finds no match if pattern is different after initial dot" do
       hydra = Hydra.new
       hydra.ingest ['.boo']
       expect(hydra.match('foobar')).to be_empty
@@ -251,13 +251,13 @@ describe Hydra do
       expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
     end
 
-    pending "finds no match if pattern is in the middle of the word" do
+    it "finds no match if pattern is in the middle of the word" do
       hydra = Hydra.new
       hydra.ingest ['oba.']
       expect(hydra.match('foobar')).to be_empty
     end
 
-    pending "finds no match if pattern is different before final dot" do
+    it "finds no match if pattern is different before final dot" do
       hydra = Hydra.new
       hydra.ingest ['far.']
       expect(hydra.match('foobar')).to be_empty
