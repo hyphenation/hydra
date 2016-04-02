@@ -147,7 +147,8 @@ class Pattern
       @word += @pattern[i] if @pattern[i]
       i += 1
     end
-    @digits << 0 if @digits.length == @word.length
+    @digits << 0 if @digits.length == @word.length # Ensure explicit 0 after end of pattern
+    # FIXME Test for that
   end
 end
 
