@@ -468,6 +468,19 @@ describe Pattern do
         pattern.mask [0, 0, 0, 3]
         expect(pattern.to_s).to eq 'sup3ercal'
       end
+
+      it "applies several masks successively" do
+        pattern = Pattern.dummy 'supercal'
+        2.times { pattern.shift }
+        pattern.mask [0, 0, 1] # Potentially coming from a "su1"
+        pattern.shift
+        pattern.mask [0, 0, 2, 3] # "su2p3"
+        3.times { pattern.shift } # TODO Pattern#shift(n)!
+        pattern.mask [0, 2] # "r2c"
+        2.times { pattern.shift }
+        pattern.mask [1, 0, 2, 3]
+        expect(pattern.to_s).to eq "su2p3er1c2a2l3"
+      end
     end
   end
 end

@@ -103,7 +103,7 @@ class Pattern
     offset = a.length - 1
     a.length.times do |i|
       j = index - offset + i
-      @digits[j] = [a[i], @digits[j]].max
+      @digits[j] = [a[i], @digits[j] || 0].max
     end
   end
 
