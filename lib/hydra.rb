@@ -281,11 +281,12 @@ class Hydra
 
   def prehyphenate(word)
     pattern = Pattern.dummy(word)
-    pattern.length.times do |n|
+    word.length.times do |n|
       pattern.reset
-      n.times { pattern.shift }
+      pattern.shift(n)
       regest(pattern, :hyphenate)
     end
+
     pattern
   end
 
