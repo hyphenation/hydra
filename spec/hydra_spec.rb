@@ -599,7 +599,7 @@ describe Pattern do
         it "says whether a pattern is final" do
          pattern = Pattern.new('4b2a4r')
          pattern.final
-         expect(pattern.final?).to be_falsey
+         expect(pattern.final?).to be_truthy
        end
      end
     end
