@@ -280,7 +280,7 @@ describe Hydra do
     pending "matches a more complex example with dots" do
       hydra = Hydra.new
       hydra.ingest ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch']
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['.ba3', '.fo1', '.foo3', 'a2r', 'ba1', '3bar', 'fo2o1', 'o2o']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['.fo1', '.foo3', 'a2r.', 'ba1', '3ba2r.', 'fo2o1', 'o2o']
     end
   end
 
