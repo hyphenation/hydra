@@ -6,6 +6,7 @@ class Pattern
     if digits
       @word = word
       @digits = digits
+      raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
     elsif word
       @pattern = word
     else
@@ -197,6 +198,9 @@ end
 
 class Hydra
   class ConflictingPattern < StandardError
+  end
+
+  class BadPattern < StandardError
   end
 
   def initialize(mode = :lax)

@@ -324,7 +324,7 @@ end
 describe Pattern do
   describe '#new' do
     it "makes a pattern from a word and an array of digits" do
-      expect(Pattern.new('bac', [0, 2, 1])).to be_a Pattern
+      expect(Pattern.new('bac', [0, 2, 1, 0])).to be_a Pattern
     end
 
     it "works with patterns with trailing digits" do
@@ -448,7 +448,7 @@ describe Pattern do
       end
     end
 
-    let(:pattern) { Pattern.new('bac', [0, 2, 1]) }
+    let(:pattern) { Pattern.new('bac', [0, 2, 1, 0]) }
 
     describe '#to_s' do
       it "returns a string representation of the pattern" do
@@ -458,7 +458,7 @@ describe Pattern do
 
     describe '.get_digits' do
       it "extracts the digits from a pattern" do
-        expect(pattern.get_digits).to eq [0, 2, 1]
+        expect(pattern.get_digits).to eq [0, 2, 1, 0]
       end
     end
 
@@ -504,29 +504,34 @@ describe Pattern do
 
     describe '#copy' do
       it "returns a new pattern with the same word" do
-        expect(pattern.copy([1, 2, 3])).to be_a Pattern
+        pattern = Pattern.new('fo2o')
+        expect(pattern.copy([1, 2, 3, 0])).to be_a Pattern
       end
 
       it "sets the digits" do
-        new_pattern = pattern.copy [4, 5, 6]
-        expect(new_pattern.get_digits).to eq [4, 5, 6]
+        pattern = Pattern.new('ba2r')
+        new_pattern = pattern.copy [4, 5, 6, 0]
+        expect(new_pattern.get_digits).to eq [4, 5, 6, 0]
       end
     end
 
     describe '#freeze' do
       it "freezes the pattern and sets the digits" do
-        pattern.freeze [1, 2, 3]
-        expect(pattern.get_digits).to eq [1, 2 , 3]
+        pattern = Pattern.new('foo5bar')
+        pattern.freeze [1, 2, 3, 4, 5, 6, 7]
+        expect(pattern.get_digits).to eq [1, 2, 3, 4, 5, 6, 7]
       end
 
       it "returns the pattern" do
-        expect(pattern.freeze [4, 5, 6]).to be_a Pattern
+        pattern = Pattern.new('ba6z5quux')
+        expect(pattern.freeze [4, 5, 6, 7, 8, 9, 0, 0]).to be_a Pattern
       end
     end
 
     describe '#freeze!' do
       it "just sets the digits" do
-        expect(pattern.freeze! [4, 5, 6]).to eq [4, 5, 6]
+        pattern = Pattern.new('1ing')
+        expect(pattern.freeze! [4, 5, 6, 0]).to eq [4, 5, 6, 0]
       end
     end
 
@@ -646,7 +651,7 @@ describe Pattern do
        end
 
        it "computes the pattern correctly otherwise" do
-         pattern = Pattern.new('foo', [0, 0, 2])
+         pattern = Pattern.new('foo', [0, 0, 2, 0])
          expect(pattern.to_s).to eq 'fo2o'
        end
 
