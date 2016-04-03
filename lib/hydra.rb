@@ -83,10 +83,11 @@ class Pattern
 
   def fork(letter)
     breakup unless @word # Shouldn’t be necessary
-    Pattern.new(@word + letter, [])
+    Pattern.dummy(@word + letter)
   end
 
   def copy(digits)
+    breakup unless @word
     Pattern.new(String.new(@word), digits)
   end
 
