@@ -192,6 +192,7 @@ class Pattern
       i += 1
     end
     @digits << 0 if @digits.length == @word.length # Ensure explicit 0 after end of pattern
+    raise BadPattern unless @digits.length == @word.length + 1
     # FIXME Test for that
   end
 end
