@@ -259,7 +259,7 @@ describe Hydra do
 
     # TODO Stupid pattern bar1.?
 
-    pending "matches a final do with actual digits in the pattern" do
+    it "matches a final do with actual digits in the pattern" do
       hydra = Hydra.new
       hydra.ingest '1bar.'
       expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
