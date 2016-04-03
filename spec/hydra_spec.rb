@@ -251,7 +251,7 @@ describe Hydra do
       expect(hydra.match('foobar')).to be_empty
     end
 
-    pending "matches a closing dot" do
+    it "matches a closing dot" do
       hydra = Hydra.new
       hydra.ingest ['bar.']
       expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']

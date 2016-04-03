@@ -120,6 +120,7 @@ class Pattern
     @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
   end
 
+  # TODO initial!, final!
   def final
     combine unless @pattern
     breakup unless @digits
@@ -286,6 +287,21 @@ class Hydra
     end
 
     getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
+    if mode == :match || mode == :hyphenate && getneck(pattern.currletter)
+      dotneck = getneck(pattern.currletter).getneck('.')
+      if dotneck
+        head = dotneck.gethead
+        if head
+          if mode == :match
+            pattern = Pattern.new(pattern.truncate(pattern.index), head)
+            pattern.final
+            matches << pattern
+          elsif mode == :hyphenate
+            pattern.match head
+          end
+        end
+      end
+    end
   end
 
   def search(pattern)
