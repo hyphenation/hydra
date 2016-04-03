@@ -224,7 +224,7 @@ describe Hydra do
     pending "matches a more complex example" do # FIXME Works apart for the order
       hydra = Hydra.new
       hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
-      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '1na', 'n2at', '2io', 'o2n', '1tio'] # According to appendix H :-)
+      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '2io', '1na', 'n2at', 'o2n', '1tio'] # According to appendix H :-)
     end
 
     it "matches a pattern with an initial dot", dot: true do
@@ -280,7 +280,7 @@ describe Hydra do
     pending "matches a more complex example with dots" do
       hydra = Hydra.new
       hydra.ingest ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch']
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['.fo1', '.foo3', 'a2r.', 'ba1', '3ba2r.', 'fo2o1', 'o2o']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['a2r.', 'ba1', '3ba2r.', '.fo1', '.foo3', 'fo2o1', 'o2o']
     end
   end
 
@@ -574,7 +574,7 @@ describe Pattern do
           expect(Pattern.new('def').<=>(Pattern.new('abc'))).to eq 1
         end
 
-        it "returns 0 if the underlying words are the same" do # This may well be overspecified, but I’ll survive that
+        it "returns 0 if the underlying words are the same" do # TODO sort digits!
           expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq 0
         end
       end
