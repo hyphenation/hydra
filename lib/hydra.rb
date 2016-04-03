@@ -286,9 +286,8 @@ class Hydra
       end
     end
 
-    getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
-    if mode == :match || mode == :hyphenate && getneck(pattern.currletter)
-      dotneck = getneck(pattern.currletter).getneck('.')
+    if pattern.end? && mode == :match || mode == :hyphenate
+      dotneck = getneck('.')
       if dotneck
         head = dotneck.gethead
         if head
@@ -302,6 +301,8 @@ class Hydra
         end
       end
     end
+
+    getneck(pattern.currletter).regest(pattern.shift, mode, matches) if getneck(pattern.currletter)
   end
 
   def search(pattern)
