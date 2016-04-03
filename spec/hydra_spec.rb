@@ -339,7 +339,7 @@ describe Pattern do
     it "creates a dummy pattern from a word" do
       pattern = Pattern.dummy 'abc'
       expect(pattern.get_word).to eq 'abc'
-      expect(pattern.get_digits).to eq [0, 0, 0]
+      expect(pattern.get_digits).to eq [0, 0, 0, 0]
     end
   end
 

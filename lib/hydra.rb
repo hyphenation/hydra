@@ -15,7 +15,7 @@ class Pattern
   end
 
   def self.dummy(word)
-    new word, word.length.times.map { 0 } # I’m sure there is syntactic sugar for that ...
+    new word, (word.length + 1).times.map { 0 } # I’m sure there is syntactic sugar for that ...
   end
 
   def get_digits
