@@ -565,8 +565,18 @@ describe Pattern do
         end
       end
 
-      pending '#cmp' do
-        it "compares two patterns"
+      describe '#<=>' do
+        it "returns -1 if first pattern’s word is lexicographically less than the second’s" do
+          expect(Pattern.new('abc').<=>(Pattern.new('def'))).to eq -1
+        end
+
+        it "returns 1 if it’s the other way round" do
+          expect(Pattern.new('def').<=>(Pattern.new('abc'))).to eq 1
+        end
+
+        it "returns 0 if the underlying words are the same" do
+          expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq 0
+        end
       end
 
       describe '#initial' do

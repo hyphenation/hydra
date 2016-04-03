@@ -137,6 +137,11 @@ class Pattern
     @final == true
   end
 
+  def <=>(pattern)
+    breakup unless @word
+    @word <=> pattern.get_word
+  end
+
   def currletter
     breakup unless @word
     @word[@index]
