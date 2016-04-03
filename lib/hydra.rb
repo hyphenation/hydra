@@ -137,9 +137,9 @@ class Pattern
     @final == true
   end
 
-  def <=>(pattern)
+  def <=>(other)
     breakup unless @word
-    @word <=> pattern.get_word
+    @word <=> other.get_word
   end
 
   def currletter
