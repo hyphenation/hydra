@@ -327,7 +327,7 @@ class Hydra
       regest(Pattern.dummy(word[n..e]), :match, matches)
     end
 
-    matches.flatten.compact
+    matches.flatten.compact.sort
   end
 
   def prehyphenate(word)

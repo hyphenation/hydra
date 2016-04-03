@@ -213,7 +213,7 @@ describe Hydra do
 
     it "looks for matching patterns" do
       hydra = Hydra.new
-      matching_patterns = ['fo1', 'o2o', 'o1b', 'ba1', 'ba2r']
+      matching_patterns = ['ba1', 'ba2r', 'fo1', 'o1b', 'o2o']
       non_matching_patterns = ['ba2b', 'of3', 'mo2o']
       hydra.ingest matching_patterns
       hydra.ingest non_matching_patterns
@@ -574,7 +574,7 @@ describe Pattern do
           expect(Pattern.new('def').<=>(Pattern.new('abc'))).to eq 1
         end
 
-        it "returns 0 if the underlying words are the same" do
+        it "returns 0 if the underlying words are the same" do # This may well be overspecified, but I’ll survive that
           expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq 0
         end
       end
