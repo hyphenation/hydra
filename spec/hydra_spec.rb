@@ -579,12 +579,34 @@ describe Pattern do
         end
       end
 
+      describe '#initial!' do
+        it "marks a pattern as initial" do
+          pattern = Pattern.new('aaabbb')
+          pattern.initial!
+          expect(pattern.initial?).to be_truthy
+          expect(pattern.get_digits.length).to eq 7
+        end
+      end
+
+      describe '#final!' do
+        it "marks a pattern as final" do
+          pattern = Pattern.new('cc')
+          pattern.final!
+          expect(pattern.final?).to be_truthy
+          expect(pattern.get_digits.length).to eq 3
+        end
+      end
+
       describe '#initial' do
         it "marks a pattern as initial" do
           pattern = Pattern.new('foo3')
           pattern.initial
           expect(pattern.initial?).to be_truthy
           expect(pattern.get_digits.length).to eq 4
+        end
+
+        it "returns the pattern" do
+          expect(Pattern.new('def').initial).to be_a Pattern
         end
       end
 
@@ -594,6 +616,10 @@ describe Pattern do
           pattern.final
           expect(pattern.final?).to be_truthy
           expect(pattern.get_digits.length).to eq 4
+        end
+        
+        it "returns the pattern" do
+          expect(Pattern.new('bac').final).to be_a Pattern
         end
       end
 

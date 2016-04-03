@@ -112,7 +112,7 @@ class Pattern
     end
   end
 
-  def initial
+  def initial!
     combine unless @pattern
     breakup unless @digits
     @initial = true
@@ -120,13 +120,22 @@ class Pattern
     @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
   end
 
-  # TODO initial!, final!
-  def final
+  def final!
     combine unless @pattern
     breakup unless @digits
     @final = true
     @pattern += '.'
     @digits = @digits[0..@digits.length - 2] if @digits.length > @word.length + 1
+  end
+
+  def initial
+    initial!
+    self
+  end
+
+  def final
+    final!
+    self
   end
 
   def initial?
