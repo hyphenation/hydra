@@ -398,9 +398,9 @@ describe Hydra do
   end
 
   describe '#righthyphenmin' do
-    it "is 2 by default" do
+    it "is 3 by default" do
       hydra = Hydra.new
-      expect(hydra.righthyphenmin).to eq 2
+      expect(hydra.righthyphenmin).to eq 3
     end
 
     it "can be set to something else" do

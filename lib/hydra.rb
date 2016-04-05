@@ -226,7 +226,7 @@ class Hydra
     @necks = { }
     @mode = mode
     @lefthyphenmin = 2
-    @righthyphenmin = 2
+    @righthyphenmin = 3
     ingest words if words
   end
 
