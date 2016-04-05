@@ -11,7 +11,7 @@ describe Hydra do
 
     it "sets the mode to :lax by default" do
       hydra = Hydra.new
-      expect(hydra.instance_variable_get(:@mode)).to be == :lax # TODO Something that works
+      expect(hydra.instance_variable_get(:@mode)).to be == :lax
     end
 
     it "can set mode to :strict" do
