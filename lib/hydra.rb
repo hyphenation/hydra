@@ -204,11 +204,12 @@ class Hydra
   class BadPattern < StandardError
   end
 
-  def initialize(mode = :lax)
+  def initialize(words = nil, mode = :lax)
     @necks = { }
     @mode = mode
     @lefthyphenmin = 2
     @righthyphenmin = 2
+    ingest words if words
   end
 
   def lefthyphenmin
@@ -240,7 +241,7 @@ class Hydra
   end
 
   def ensure_neck(letter)
-    @necks[letter] = Hydra.new(@mode) unless @necks[letter]
+    @necks[letter] = Hydra.new(nil, @mode) unless @necks[letter]
     @necks[letter].setparent(self)
   end
 

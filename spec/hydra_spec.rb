@@ -23,7 +23,7 @@ describe Hydra do
 
     it "optionally ingests a word or list of words" do
       hydra = Hydra.new(['foo', 'bar', 'baz', 'quux'])
-      expect(hydra).to have(4).words
+      expect(hydra.count).to be == 4
     end
   end
 
