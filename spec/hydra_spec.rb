@@ -3,6 +3,30 @@ require 'spec_helper'
 describe Hydra do
   let(:hydra)  { Hydra.new }
 
+  describe '.new' do
+    it "creates a new Hydra" do
+      hydra = Hydra.new
+      expect(hydra).to be_a Hydra
+    end
+
+    it "sets the mode to :lax by default" do
+      hydra = Hydra.new
+      pending
+      expect(hydra.instance_variable_get(:@mode)).to == :lax # TODO Something that works
+    end
+
+    it "can set mode to :strict" do
+      hydra = Hydra.new
+      pending
+      expect(hydra.instance_variable_get(:@mode)).to == :strict
+    end
+
+    it "optionally ingests a word or list of words" do
+      hydra = Hydra.new(['foo', 'bar', 'baz', 'quux'])
+      expect(hydra).to have(4).words
+    end
+  end
+
   describe '#lefthyphenmin' do
     it "is 2 by default" do
       hydra = Hydra.new
