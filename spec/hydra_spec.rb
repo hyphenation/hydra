@@ -779,7 +779,9 @@ describe Hydra do
       expect(hydra.count).to eq 4447
     end
   end
+end
 
+describe Heracles do
   describe '#run' do
     it "runs a file of hyphenated words" do
       hydra = Hydra.new

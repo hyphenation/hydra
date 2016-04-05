@@ -395,3 +395,6 @@ class Hydra
     count
   end
 end
+
+class Heracles
+end
