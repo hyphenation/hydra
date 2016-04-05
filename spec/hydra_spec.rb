@@ -382,6 +382,13 @@ describe Hydra do
       expect(pattern.get_word).to be == "foobar"
       expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
     end
+
+    it "and with an initial dot too, why not" do
+      hydra.ingest ['.fo1', 'o2o3', '5ba4r']
+      pattern = hydra.prehyphenate('foobar')
+      expect(pattern.get_word).to be == "foobar"
+      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
+    end
   end
 
   describe '#disembowel' do
