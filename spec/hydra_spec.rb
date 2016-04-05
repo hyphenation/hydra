@@ -92,6 +92,11 @@ describe Hydra do
       deep_water = hydra.getneck('a').getneck('b').getneck('v')
       expect(deep_water.depth).to be == 3
     end
+
+    it "is zero for newly created hydrae" do
+      hydra = Hydra.new
+      expect(hydra.depth).to be == 0
+    end
   end
 
   describe '#ensure_neck' do
