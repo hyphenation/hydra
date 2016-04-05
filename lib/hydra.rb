@@ -197,6 +197,24 @@ class Pattern
   end
 end
 
+class CountPattern < Pattern
+  def initialize(pattern)
+    @pattern = pattern
+    @word, i, @digits = '', 0, []
+    while i < @pattern.length
+      char = @pattern[i]
+      if char == '-'
+        @digits << :is
+        i += 1
+      else
+        @digits << 0
+      end
+      @word += @pattern[i] if @pattern[i]
+      i += 1
+    end
+  end
+end
+
 class Hydra
   class ConflictingPattern < StandardError
   end
