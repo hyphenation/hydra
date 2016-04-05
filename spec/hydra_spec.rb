@@ -419,6 +419,14 @@ describe Hydra do
       expect(hydra.count).to eq 4447
     end
   end
+
+  describe '#run' do
+    it "runs a file of hyphenated words" do
+      hydra = Hydra.new
+      hydra.run('words.hyphenated.refo', [1, 1, 2, 2, 1, 1, 1])
+      expect(hydra.count).to be == 576
+    end
+  end
 end
 
 describe Pattern do
