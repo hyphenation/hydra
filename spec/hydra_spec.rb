@@ -3,19 +3,39 @@ require 'spec_helper'
 describe Hydra do
   let(:hydra)  { Hydra.new }
 
-  describe 'Hyphenmins' do
-    it "sets lefthyphenmin and righthyphenmin to 0 by default" do
+  describe '#lefthyphenmin' do
+    it "is 2 by default" do
       hydra = Hydra.new
       expect(hydra.lefthyphenmin).to eq 2
+    end
+
+    it "can be set to something else" do
+      hydra.setlefthyphenmin 3
+      expect(hydra.lefthyphenmin).to eq 3
+    end
+  end
+
+  describe '#righthyphenmin' do
+    it "is 2 by default" do
+      hydra = Hydra.new
       expect(hydra.righthyphenmin).to eq 2
     end
 
-    it "provides a setter for lefthyphenmin" do
+    it "can be set to something else" do
+      hydra.setrighthyphenmin(4)
+      expect(hydra.righthyphenmin).to eq 4
+    end
+  end
+
+  describe '#setlefthyphenmin' do
+    it "sets lefthyphenmin" do
       hydra.setlefthyphenmin(1)
       expect(hydra.lefthyphenmin).to eq 1
     end
+  end
 
-    it "provides a setter for righthyphenmin" do
+  describe '#setrighthyphenmin' do
+    it "sets righthyphenmin" do
       hydra.setrighthyphenmin(1)
       expect(hydra.righthyphenmin).to eq 1
     end
