@@ -375,6 +375,13 @@ describe Hydra do
       hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
       expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
     end
+
+    it "... also with a final dot" do
+      hydra.ingest ['fo1', 'o2o3', '5bar.']
+      pattern = hydra.prehyphenate('foobar')
+      expect(pattern.get_word).to be == "foobar"
+      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
+    end
   end
 
   describe '#disembowel' do

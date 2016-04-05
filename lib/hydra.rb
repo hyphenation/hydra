@@ -342,7 +342,7 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.truncate(pattern.index), head).final
           elsif mode == :hyphenate
-            pattern.match head
+            pattern.mask head[0..head.length - 2]
           end
         end
       end
