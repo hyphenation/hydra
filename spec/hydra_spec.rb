@@ -789,4 +789,10 @@ describe Heracles do
       expect(hydra.count).to be == 576
     end
   end
+
+  describe '.organ' do
+    it "generates an organ pipe-like sequence" do
+      expect(Heracles.organ(3)).to be == [1, 2, 0, 3]
+    end
+  end
 end

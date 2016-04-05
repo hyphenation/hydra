@@ -397,4 +397,11 @@ class Hydra
 end
 
 class Heracles
+  def self.organ(n)
+    dot = n / 2
+    dot1 = 2 * dot
+    (n + 1).times.map do
+      (dot, dot1 = dot1 - dot, 2 * n - dot1 - 1).first
+    end
+  end
 end
