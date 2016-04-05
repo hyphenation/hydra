@@ -11,14 +11,12 @@ describe Hydra do
 
     it "sets the mode to :lax by default" do
       hydra = Hydra.new
-      pending
-      expect(hydra.instance_variable_get(:@mode)).to == :lax # TODO Something that works
+      expect(hydra.instance_variable_get(:@mode)).to be == :lax # TODO Something that works
     end
 
     it "can set mode to :strict" do
-      hydra = Hydra.new
-      pending
-      expect(hydra.instance_variable_get(:@mode)).to == :strict
+      hydra = Hydra.new(nil, :strict)
+      expect(hydra.instance_variable_get(:@mode)).to be == :strict
     end
 
     it "optionally ingests a word or list of words" do
