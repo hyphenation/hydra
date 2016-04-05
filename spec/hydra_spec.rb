@@ -87,6 +87,11 @@ describe Hydra do
   end
 
   describe '#depth' do
+    it "returns the depth" do
+      hydra = Hydra.new 'abv'
+      deep_water = hydra.getneck('a').getneck('b').getneck('v')
+      expect(deep_water.depth).to be == 3
+    end
   end
 
   describe '#ensure_neck' do

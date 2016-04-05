@@ -240,6 +240,14 @@ class Hydra
     @parent = parent
   end
 
+  def depth(d = 0)
+    if parent
+      parent.depth(d + 1)
+    else
+      d
+    end
+  end
+
   def ensure_neck(letter)
     @necks[letter] = Hydra.new(nil, @mode) unless @necks[letter]
     @necks[letter].setparent(self)
