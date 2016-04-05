@@ -71,8 +71,7 @@ describe Hydra do
     end
 
     it "knows about its parent if it has one" do
-      hydra = Hydra.new
-      hydra.ingest 'abc'
+      hydra = Hydra.new 'abc'
       aneck = hydra.getneck 'a'
       expect(aneck.parent).to eq hydra
     end
