@@ -41,6 +41,7 @@ describe Hydra do
     end
   end
 
+  # FIXME Maybe not the best metaphor!
   describe '#parent' do
     it "is nil by default" do
       hydra = Hydra.new
