@@ -197,7 +197,7 @@ class Pattern
   end
 end
 
-class CountPattern < Pattern
+class HyphenatedWord < Pattern
   def initialize(pattern)
     @pattern = pattern
     @word, i, @digits = '', 0, []

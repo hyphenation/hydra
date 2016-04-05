@@ -350,10 +350,10 @@ describe Pattern do
   end
 end
 
-describe CountPattern do
+describe HyphenatedWord do
   describe '.new' do
     it "creates a pattern from a hyphenation dictionary" do
-      pattern = CountPattern.new('foo-bar')
+      pattern = HyphenatedWord.new('foo-bar')
       expect(pattern.get_word).to be == "foobar"
       expect(pattern.digit(3)).to be == :is
     end
