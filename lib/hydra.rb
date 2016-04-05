@@ -340,9 +340,7 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            pattern = Pattern.new(pattern.truncate(pattern.index), head)
-            pattern.final
-            matches << pattern
+            matches << Pattern.new(pattern.truncate(pattern.index), head).final
           elsif mode == :hyphenate
             pattern.match head
           end
