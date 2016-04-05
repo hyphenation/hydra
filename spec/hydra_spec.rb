@@ -784,8 +784,8 @@ end
 describe Heracles do
   describe '#run' do
     it "runs a file of hyphenated words" do
-      hydra = Hydra.new
-      hydra.run('words.hyphenated.refo', [1, 1, 2, 2, 1, 1, 1])
+      heracles = Heracles.new
+      hydra = heracles.run('words.hyphenated.refo', [1, 1, 2, 2, 1, 1, 1])
       expect(hydra.count).to be == 576
     end
   end
