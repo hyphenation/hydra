@@ -207,6 +207,24 @@ class Hydra
   def initialize(mode = :lax)
     @necks = { }
     @mode = mode
+    @lefthyphenmin = 2
+    @righthyphenmin = 2
+  end
+
+  def lefthyphenmin
+    @lefthyphenmin
+  end
+
+  def righthyphenmin
+    @righthyphenmin
+  end
+
+  def setlefthyphenmin(lefthyphenmin)
+    @lefthyphenmin = lefthyphenmin
+  end
+
+  def setrighthyphenmin(righthyphenmin)
+    @righthyphenmin = righthyphenmin
   end
 
   def strict_mode

@@ -3,6 +3,24 @@ require 'spec_helper'
 describe Hydra do
   let(:hydra)  { Hydra.new }
 
+  describe 'Hyphenmins' do
+    it "sets lefthyphenmin and righthyphenmin to 0 by default" do
+      hydra = Hydra.new
+      expect(hydra.lefthyphenmin).to eq 2
+      expect(hydra.righthyphenmin).to eq 2
+    end
+
+    it "provides a setter for lefthyphenmin" do
+      hydra.setlefthyphenmin(1)
+      expect(hydra.lefthyphenmin).to eq 1
+    end
+
+    it "provides a setter for righthyphenmin" do
+      hydra.setrighthyphenmin(1)
+      expect(hydra.righthyphenmin).to eq 1
+    end
+  end
+
   describe '#ensure_neck' do
     it "ensures there is a limb" do
       hydra.ensure_neck('a')
