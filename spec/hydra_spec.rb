@@ -41,6 +41,32 @@ describe Hydra do
     end
   end
 
+  describe '#parent' do
+    it "is nil by default" do
+      hydra = Hydra.new
+      expect(hydra.parent).to be_nil
+    end
+
+    it "knows about its parent if it has one" do
+      hydra = Hydra.new
+      hydra.ingest 'abc'
+      aneck = hydra.getneck 'a'
+      expect(aneck.parent).to eq hydra
+    end
+  end
+
+  describe '#setparent' do
+    it "sets the parent" do
+      parent = Hydra.new
+      child = Hydra.new
+      child.setparent(parent)
+      expect(child.parent).to eq parent
+    end
+  end
+
+  describe '#depth' do
+  end
+
   describe '#ensure_neck' do
     it "ensures there is a limb" do
       hydra.ensure_neck('a')

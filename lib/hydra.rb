@@ -231,8 +231,17 @@ class Hydra
     @mode = :strict
   end
 
+  def parent
+    @parent
+  end
+
+  def setparent(parent)
+    @parent = parent
+  end
+
   def ensure_neck(letter)
     @necks[letter] = Hydra.new(@mode) unless @necks[letter]
+    @necks[letter].setparent(self)
   end
 
   def setatlas(letter, digits)
