@@ -794,5 +794,13 @@ describe Heracles do
     it "generates an organ pipe-like sequence" do
       expect(Heracles.organ(3)).to be == [1, 2, 0, 3]
     end
+
+    it "works for n = 2" do
+      expect(Heracles.organ(2)).to be == [1, 0, 2]
+    end
+
+    it "works for n = 13" do
+      expect(Heracles.organ(13)).to be == [6, 7, 5, 8, 4, 9, 3, 10, 2, 11, 1, 12, 0, 13]
+    end
   end
 end
