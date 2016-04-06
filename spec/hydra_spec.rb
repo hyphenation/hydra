@@ -902,7 +902,7 @@ describe Hydra do
       it "returns matches as hydrae" do
         matches = complex_hydra.hydrae('foobar')
         expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o'] # Not yet! ;-)
-        byebug
+        # byebug
         # expect(matches.count).to be == 7
         # expect(matches.map(&:class).uniq).to be == [Hydra]
         # expect(matches.first.getneck('.').gethead).to be == [0, 2, 0, 0]

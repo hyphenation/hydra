@@ -407,7 +407,7 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        byebug
+        # byebug
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -428,7 +428,7 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
-            byebug
+            # byebug
             matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
@@ -451,7 +451,7 @@ class Hydra
   def match(word)
     matches = []
     getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
-    matches.map { |pattern| pattern.initial }
+    matches.each { |pattern| pattern.initial! }
     e = word.length - 1
     (e + 1).times.each do |n|
       regest(Pattern.dummy(word[n..e]), :match, matches)
@@ -539,8 +539,8 @@ class Heracles
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             puts word.get_word
-            matches = @count_hydra.match(word.get_word)
             # byebug if matches.count > 0
+            matches = @count_hydra.match(word.get_word)
             next unless word.length >= pattern_length
             (word.length - pattern_length).times do |i|
               puts word.word_to(pattern_length)
