@@ -593,6 +593,52 @@ describe Hydra do
     end
   end
 
+  describe '#good_count' do
+    it "returns the good count" do
+      hydra = Hydra.new ['abc', 'def', 'ghi']
+      3.times { hydra.getneck('a').getneck('b').getneck('c').inc_good_count } # TODO Convenience method for that?
+      expect(hydra.good_count).to be == 3
+    end
+
+    it "returns 0 for new heads" do
+      hydra = Hydra.new 'a'
+      aneck = hydra.getneck('a')
+      expect(aneck.good_count).to be ==  0
+    end
+  end
+
+  describe '#inc_good_count' do
+    it "increases the good count" do
+      hydra = Hydra.new 'f'
+      fneck = hydra.getneck('f')
+      fneck.inc_good_count
+      expect(fneck.instance_class_get :@good_count).to be == 1
+    end
+  end
+
+  describe '#bad_count' do
+    it "returns the bad count" do
+      hydra = Hydra.new 'ooo'
+      3.times { hydra.getneck('o').getneck('o').getneck('o').inc_bad_count }
+      expect(hydra.bad_count).to be == 3
+    end
+
+    it "returns 0 for new heads" do
+      hydra = Hydra.new 'b'
+      bneck = hydra.getneck 'b'
+      expect(bneck.bad_count).to be == 0
+    end
+  end
+
+  describe '#inc_bad_count' do
+    it "increases the bad count" do
+      hydra = Hydra.new 'f'
+      fneck = hydra.getneck 'f'
+      fneck.inc_bad_count
+      expect(fneck.bad_count).to be == 1
+    end
+  end
+
   describe '#letters' do
     it "returns the letters starting the different necks" do
       hydra.ingest ['a', 'b', 'c', 'cd', 'cde']
@@ -729,117 +775,130 @@ describe Hydra do
     end
   end
 
-  describe '#match' do
-    it "returns a simple match" do
-      hydra.ingest ['foo1', 'boo2']
-      matches = hydra.match('foobar')
-      expect(matches.map(&:to_s)).to eq ['foo1']
+  context "with a complex hydra" do
+    let(:complex_hydra) { Hydra.new ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch'] }
+
+    describe '#match' do
+      it "returns a simple match" do
+        hydra.ingest ['foo1', 'boo2']
+        matches = hydra.match('foobar')
+        expect(matches.map(&:to_s)).to eq ['foo1']
+      end
+
+      it "returns an array of patterns" do
+        hydra.ingest ['foo1', 'boo2', '3bar']
+        matches = hydra.match('foobar')
+        expect(matches).to be_an Array
+        expect(matches.count).to eq 2
+        expect(matches.map(&:class)).to eq [Pattern, Pattern]
+      end
+
+      it "works with patterns that are prefixes of each other" do
+        hydra.ingest ['fo2', 'foo1']
+        expect(hydra.match('foobar').map(&:to_s)).to eq ['fo2', 'foo1']
+      end
+
+      it "looks for matching patterns" do
+        hydra = Hydra.new
+        matching_patterns = ['ba1', 'ba2r', 'fo1', 'o1b', 'o2o']
+        non_matching_patterns = ['ba2b', 'of3', 'mo2o']
+        hydra.ingest matching_patterns
+        hydra.ingest non_matching_patterns
+        match = hydra.match('foobar')
+        expect(match.map(&:to_s)).to eq matching_patterns
+      end
+
+      it "matches a more complex example" do
+        hydra = Hydra.new
+        hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
+        expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '2io', '1na', 'n2at', 'o2n', '1tio'] # According to appendix H :-)
+      end
+
+      it "matches a pattern with an initial dot", dot: true do
+        hydra = Hydra.new # TODO Hydra.new(arg) → list of patterns
+        hydra.ingest ['.foo']
+        expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
+      end
+
+      it "matches a pattern with an initial dot and actual digits" do
+        hydra = Hydra.new
+        hydra.ingest '.foo1'
+        expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
+      end
+
+      it "finds no match if pattern is in the middle of the word" do
+        hydra = Hydra.new
+        hydra.ingest ['.oob']
+        expect(hydra.match('foobar')).to be_empty
+      end
+
+      it "finds no match if pattern is different after initial dot" do
+        hydra = Hydra.new
+        hydra.ingest ['.boo']
+        expect(hydra.match('foobar')).to be_empty
+      end
+
+      it "matches a closing dot" do
+        hydra = Hydra.new
+        hydra.ingest ['bar.']
+        expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
+      end
+
+      # TODO Stupid pattern bar1.?
+
+      it "matches a final do with actual digits in the pattern" do
+        hydra = Hydra.new
+        hydra.ingest '1bar.'
+        expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
+      end
+
+      it "finds no match if pattern is in the middle of the word" do
+        hydra = Hydra.new
+        hydra.ingest ['oba.']
+        expect(hydra.match('foobar')).to be_empty
+      end
+
+      it "finds no match if pattern is different before final dot" do
+        hydra = Hydra.new
+        hydra.ingest ['far.']
+        expect(hydra.match('foobar')).to be_empty
+      end
+
+      it "matches a more complex example with dots" do
+        expect(complex_hydra.match('foobar').map(&:to_s)).to eq ['a2r.', 'ba1', '3ba2r.', '.fo1', '.foo3', 'fo2o1', 'o2o']
+      end
     end
 
-    it "returns an array of patterns" do
-      hydra.ingest ['foo1', 'boo2', '3bar']
-      matches = hydra.match('foobar')
-      expect(matches).to be_an Array
-      expect(matches.count).to eq 2
-      expect(matches.map(&:class)).to eq [Pattern, Pattern]
+    describe '#prehyphenate' do
+      it "pre-hyphenates the string" do
+        hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
+        expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
+      end
+
+      it "... also with a final dot" do
+        hydra.ingest ['fo1', 'o2o3', '5bar.']
+        pattern = hydra.prehyphenate('foobar')
+        expect(pattern.get_word).to be == "foobar"
+        expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
+      end
+
+      it "and with an initial dot too, why not" do
+        hydra.ingest ['.fo1', 'o2o3', '5ba4r']
+        pattern = hydra.prehyphenate('foobar')
+        expect(pattern.get_word).to be == "foobar"
+        expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
+      end
     end
 
-    it "works with patterns that are prefixes of each other" do
-      hydra.ingest ['fo2', 'foo1']
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['fo2', 'foo1']
-    end
-
-    it "looks for matching patterns" do
-      hydra = Hydra.new
-      matching_patterns = ['ba1', 'ba2r', 'fo1', 'o1b', 'o2o']
-      non_matching_patterns = ['ba2b', 'of3', 'mo2o']
-      hydra.ingest matching_patterns
-      hydra.ingest non_matching_patterns
-      match = hydra.match('foobar')
-      expect(match.map(&:to_s)).to eq matching_patterns
-    end
-
-    it "matches a more complex example" do
-      hydra = Hydra.new
-      hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
-      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '2io', '1na', 'n2at', 'o2n', '1tio'] # According to appendix H :-)
-    end
-
-    it "matches a pattern with an initial dot", dot: true do
-      hydra = Hydra.new # TODO Hydra.new(arg) → list of patterns
-      hydra.ingest ['.foo']
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
-    end
-
-    it "matches a pattern with an initial dot and actual digits" do
-      hydra = Hydra.new
-      hydra.ingest '.foo1'
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
-    end
-
-    it "finds no match if pattern is in the middle of the word" do
-      hydra = Hydra.new
-      hydra.ingest ['.oob']
-      expect(hydra.match('foobar')).to be_empty
-    end
-
-    it "finds no match if pattern is different after initial dot" do
-      hydra = Hydra.new
-      hydra.ingest ['.boo']
-      expect(hydra.match('foobar')).to be_empty
-    end
-
-    it "matches a closing dot" do
-      hydra = Hydra.new
-      hydra.ingest ['bar.']
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
-    end
-
-    # TODO Stupid pattern bar1.?
-
-    it "matches a final do with actual digits in the pattern" do
-      hydra = Hydra.new
-      hydra.ingest '1bar.'
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
-    end
-
-    it "finds no match if pattern is in the middle of the word" do
-      hydra = Hydra.new
-      hydra.ingest ['oba.']
-      expect(hydra.match('foobar')).to be_empty
-    end
-
-    it "finds no match if pattern is different before final dot" do
-      hydra = Hydra.new
-      hydra.ingest ['far.']
-      expect(hydra.match('foobar')).to be_empty
-    end
-
-    it "matches a more complex example with dots" do
-      hydra = Hydra.new
-      hydra.ingest ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch']
-      expect(hydra.match('foobar').map(&:to_s)).to eq ['a2r.', 'ba1', '3ba2r.', '.fo1', '.foo3', 'fo2o1', 'o2o']
-    end
-  end
-
-  describe '#prehyphenate' do
-    it "pre-hyphenates the string" do
-      hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
-      expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
-    end
-
-    it "... also with a final dot" do
-      hydra.ingest ['fo1', 'o2o3', '5bar.']
-      pattern = hydra.prehyphenate('foobar')
-      expect(pattern.get_word).to be == "foobar"
-      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
-    end
-
-    it "and with an initial dot too, why not" do
-      hydra.ingest ['.fo1', 'o2o3', '5ba4r']
-      pattern = hydra.prehyphenate('foobar')
-      expect(pattern.get_word).to be == "foobar"
-      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
+    describe '#hydrae' do
+      it "returns matches as hydrae" do
+        # expect(complex_hydra.match('foobar').digest).to eq "a2r.\nba1\n3ba2r.\n.fo1\n.foo3\nfo2o1\no2o" # Not yet! ;-)
+        matches = complex_hydra.hydrae
+        expect(matches.count).to be == 7
+        expect(matches.map(&:class).uniq).to be == [Hydra]
+        expect(matches.first.getneck('.').gethead).to be == [0, 2, 0, 0]
+        expect(matches.last.gethead).to be == [0, 2, 0]
+      end
     end
   end
 
