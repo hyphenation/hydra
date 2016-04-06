@@ -460,11 +460,12 @@ class Hydra
   def hydrae(word)
     matches = []
     getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if getneck('.')
-    matches.map { |pattern| pattern.initial }
     l = word.length
     l.times.each do |n|
       regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
     end
+
+    matches
   end
 
   def prehyphenate(word)
