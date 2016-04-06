@@ -830,8 +830,8 @@ describe Heracles do
   describe '#run' do
     it "runs a file of hyphenated words" do
       heracles = Heracles.new
-      hydra = heracles.run(File.expand_path('../../files/words.hyphenated.refo', __FILE__), [1, 1, 2, 2, 1, 1, 1])
-      expect(hydra.count).to be == 576
+      hydra = heracles.run(File.expand_path('../../files/dummy1.dic', __FILE__), [1, 1, 2, 2, 1, 1, 1])
+      expect(hydra.count).to be == 4
     end
   end
 

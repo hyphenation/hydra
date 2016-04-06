@@ -447,11 +447,16 @@ class Heracles
         Heracles.organ(pattern_length).each do |dot|
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
+            puts word.get_word
             next unless word.length >= pattern_length
             (word.length - pattern_length).times do |i|
+              matches = @count_hydra.match(word.get_word)
+              # byebug if matches.count > 0
+              puts word.word_to(pattern_length)
               if word.dot(dot) == :is
-                @count_hydra.ingest Pattern.new word.word_to(pattern_length)
+                @count_hydra.ingest Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end }
               end
+              word.shift
             end
             n += 1
             print "\r#{n}"
@@ -459,13 +464,8 @@ class Heracles
         end
       end
     end
-    pattern_length = 2 # FIXME
-    File.read(filename).each_line do |line|
-      word = HyphenatedWord.new(line.strip.downcase)
-      next unless word.length >= pattern_length
-      @count_hydra.prehyphenate(word.get_word)
-    end
     print "\r"
+    # byebug
     @final_hydra
   end
 
