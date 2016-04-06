@@ -403,7 +403,7 @@ class Hydra
 
     if digits
       case mode
-      when :match
+      when :match, :hydrae
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hyphenate
         pattern.mask digits
@@ -416,12 +416,12 @@ class Hydra
       end
     end
 
-    if pattern.end? && mode == :match || mode == :hyphenate
+    if pattern.end? && mode == :match || mode == :hyphenate || mode == :hydrae
       dotneck = getneck('.')
       if dotneck
         head = dotneck.gethead
         if head
-          if mode == :match
+          if mode == :match, :hydrae
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
@@ -441,16 +441,20 @@ class Hydra
     regest(Pattern.new(pattern), :delete)
   end
 
-  def match(word)
+  def match(word, mode = :match)
     matches = []
-    getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
+    getneck('.').regest(Pattern.dummy(word), mode, matches) if getneck('.')
     matches.map { |pattern| pattern.initial }
     e = word.length - 1
     (e + 1).times.each do |n|
-      regest(Pattern.dummy(word[n..e]), :match, matches)
+      regest(Pattern.dummy(word[n..e]), mode, matches)
     end
 
     matches.flatten.compact.sort
+  end
+
+  def hydrae(word)
+    match(word, :hydrae)
   end
 
   def prehyphenate(word)
