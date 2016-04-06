@@ -482,9 +482,9 @@ class Hydra
 
   # Debug methods
   def spattern(sneck = "", digits = nil)
-    byebug
+    # byebug
     if digits
-      byebug
+      # byebug
       if parent
         letter = nil
         parent.letters.each do |l|
@@ -495,8 +495,8 @@ class Hydra
         end
         parent.spattern(letter + sneck, digits)
       else
-        byebug
-        Pattern.new(sneck, digits)
+        # byebug
+        Pattern.new(sneck, digits).to_s
       end
     else
       if gethead

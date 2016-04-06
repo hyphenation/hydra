@@ -914,7 +914,8 @@ describe Hydra do
       it "returns the pattern associated with that head, as string" do
         hydra = Hydra.new '5fo2o3'
         fooneck = hydra.getneck('f').getneck('o').getneck('o')
-        expect(fooneck.spattern).to be == "5to2o3"
+        # byebug
+        expect(fooneck.spattern).to eq "5fo2o3" # I’m an idiot :-P
       end
 
       it "returns the empty string if no head" do
