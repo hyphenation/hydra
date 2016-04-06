@@ -501,6 +501,12 @@ class Hydra
     else
       if gethead
         spattern('', gethead)
+      elsif getneck('.')
+        if getneck('.').gethead
+          spattern('.', getneck('.').gethead)
+        else
+          ""
+        end
       else
         ""
       end

@@ -923,6 +923,18 @@ describe Hydra do
         bneck = hydra.getneck('a').getneck('b')
         expect(bneck.spattern).to be == ""
       end
+
+      it "works with initial dots" do
+        hydra = Hydra.new '.ba2'
+        aneck = hydra.getneck('.').getneck('b').getneck('a')
+        expect(aneck.spattern).to be == ".ba2"
+      end
+
+      it "works with final dots" do
+        hydra = Hydra.new 'f4o.'
+        oneck = hydra.getneck('f').getneck('o')
+        expect(oneck.spattern).to be == "f4o."
+      end
     end
   end
 
