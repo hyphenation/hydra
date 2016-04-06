@@ -3,6 +3,7 @@ require 'pp'
 
 class Pattern
   def initialize(word = nil, digits = nil, index = 0)
+    # byebug
     if digits
       @word = word
       @digits = digits
@@ -480,9 +481,10 @@ class Hydra
   end
 
   # Debug methods
-  def spattern(sneck = "", digits = [])
+  def spattern(sneck = "", digits = nil)
     byebug
-    if gethead
+    if digits
+      byebug
       if parent
         letter = nil
         parent.letters.each do |l|
@@ -491,12 +493,17 @@ class Hydra
             break
           end
         end
-        parent.spattern(letter + sneck, gethead)
+        parent.spattern(letter + sneck, digits)
       else
+        byebug
         Pattern.new(sneck, digits)
       end
     else
-      ""
+      if gethead
+        spattern('', gethead)
+      else
+        ""
+      end
     end
   end
 
