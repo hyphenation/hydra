@@ -597,13 +597,13 @@ describe Hydra do
     it "returns the good count" do
       hydra = Hydra.new ['abc', 'def', 'ghi']
       3.times { hydra.getneck('a').getneck('b').getneck('c').inc_good_count } # TODO Convenience method for that?
-      expect(hydra.good_count).to be == 3
+      expect(hydra.getneck('a').getneck('b').getneck('c').good_count).to be == 3
     end
 
     it "returns 0 for new heads" do
-      hydra = Hydra.new 'a'
-      aneck = hydra.getneck('a')
-      expect(aneck.good_count).to be ==  0
+      hydra = Hydra.new 'g'
+      gneck = hydra.getneck('g')
+      expect(gneck.good_count).to be ==  0
     end
   end
 
@@ -620,7 +620,7 @@ describe Hydra do
     it "returns the bad count" do
       hydra = Hydra.new 'ooo'
       3.times { hydra.getneck('o').getneck('o').getneck('o').inc_bad_count }
-      expect(hydra.bad_count).to be == 3
+      expect(hydra.getneck('o').getneck('o').getneck('o').bad_count).to be == 3
     end
 
     it "returns 0 for new heads" do
@@ -636,6 +636,14 @@ describe Hydra do
       fneck = hydra.getneck 'f'
       fneck.inc_bad_count
       expect(fneck.bad_count).to be == 1
+    end
+
+    it "works independently of #inc_good_count" do
+      hydra = Hydra.new
+      4.times { hydra.inc_good_count }
+      2.times { hydra.inc_bad_count }
+      expect(hydra.good_count).to be == 4
+      expect(hydra.bad_count).to be == 2
     end
   end
 

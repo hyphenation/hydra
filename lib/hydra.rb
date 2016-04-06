@@ -266,6 +266,7 @@ class Hydra
     @mode = mode
     @lefthyphenmin = 2
     @righthyphenmin = 3
+    @good_count = @bad_count = 0
     ingest words if words
   end
 
@@ -329,6 +330,22 @@ class Hydra
 
   def chophead
     @head = nil
+  end
+
+  def good_count
+    @good_count
+  end
+
+  def inc_good_count
+    @good_count += 1
+  end
+
+  def bad_count
+    @bad_count
+  end
+
+  def inc_bad_count
+    @bad_count += 1
   end
 
   def letters
