@@ -405,7 +405,7 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.word_so_far, head, pattern.index).final
+            matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
           end
@@ -495,12 +495,12 @@ class Heracles
             n += 1
             print "\r#{n}"
           end
-          byebug
+          # byebug
         end
       end
     end
     print "\r"
-    byebug
+    # byebug
     puts @count_hydra.count
     @final_hydra
   end
