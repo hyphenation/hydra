@@ -424,9 +424,9 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << self
-          elsif mode == :hydrae
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
+          elsif mode == :hydrae
+            matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
           end
@@ -459,7 +459,7 @@ class Hydra
 
   def hydrae(word)
     matches = []
-    getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if netneck('.')
+    getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if getneck('.')
     matches.map { |pattern| pattern.initial }
     l = word.length
     l.times.each do |n|
