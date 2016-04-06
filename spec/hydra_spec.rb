@@ -230,6 +230,14 @@ describe Pattern do
       end
     end
 
+    describe '#digits_to' do # TODO #digits_so_far as well
+      it "returns the digits from the current index to length n" do
+        pattern = Pattern.new 'po2l3ish9en4g3lish'
+        6.times { pattern.shift }
+        expect(pattern.digits_to(4)).to be == [9, 0, 4, 3, 0]
+      end
+    end
+
     describe '#mask(array)' do
       it "masks the pattern’s digits with an array" do
         pattern = Pattern.dummy 'supercal'

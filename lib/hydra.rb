@@ -111,6 +111,11 @@ class Pattern
     @word[index..index + n - 1]
   end
 
+  def digits_to(n)
+    breakup unless @word
+    @digits[index..index + n]
+  end
+
   def mask(a)
     offset = a.length - 1
     a.length.times do |i|
