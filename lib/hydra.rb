@@ -268,7 +268,16 @@ class Hydra
     @lefthyphenmin = 2
     @righthyphenmin = 3
     @good_count = @bad_count = 0
+    @index = 0
     ingest words if words
+  end
+
+  def index
+    @index
+  end
+
+  def shift
+    @index += 1
   end
 
   def lefthyphenmin

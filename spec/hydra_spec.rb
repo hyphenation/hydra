@@ -910,6 +910,25 @@ describe Hydra do
       end
     end
 
+    describe '#index' do
+      it "returns the current index" do
+        hydra = Hydra.new
+        3.times { hydra.shift }
+        expect(hydra.index).to be == 3
+      end
+
+      it "is 0 at initialisation" do
+        hydra = Hydra.new
+        expect(hydra.index).to be == 0
+      end
+    end
+
+    describe '#shift' do
+      it "shifts the index by one" do
+        expect { hydra.shift }.to change(hydra, :index).by(1)
+      end
+    end
+
     describe '#spattern' do
       it "returns the pattern associated with that head, as string" do
         hydra = Hydra.new '5fo2o3'
