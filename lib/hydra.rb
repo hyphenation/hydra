@@ -435,6 +435,7 @@ class Heracles
     @bad_weight = parameters[5]
     @threshold = parameters[6]
     @count_hydra = Hydra.new
+    @final_hydra = Hydra.new
     n = 0
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
@@ -453,8 +454,14 @@ class Heracles
         end
       end
     end
+    pattern_length = 2 # FIXME
+    File.read(filename).each_line do |line|
+      word = HyphenatedWord.new(line.strip.downcase)
+      next unless word.length >= pattern_length
+      @count_hydra.prehyphenate(word.get_word)
+    end
     print "\r"
-    @count_hydra
+    @final_hydra
   end
 
   def self.organ(n)
