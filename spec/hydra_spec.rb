@@ -366,16 +366,16 @@ describe Pattern do
     end
   end
 
-  describe '#good' do
+  describe '#inc_good_count' do
   end
 
-  describe '#good?' do
+  describe '#good_count' do
   end
 
-  describe '#bad' do
+  describe '#inc_bad_count' do
   end
 
-  describe '#bad?' do
+  describe '#bad_count' do
   end
 end
 
