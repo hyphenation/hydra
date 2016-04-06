@@ -445,20 +445,26 @@ class Hydra
     regest(Pattern.new(pattern), :delete)
   end
 
-  def match(word, mode = :match)
+  def match(word)
     matches = []
-    getneck('.').regest(Pattern.dummy(word), mode, matches) if getneck('.')
+    getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
     matches.map { |pattern| pattern.initial }
     e = word.length - 1
     (e + 1).times.each do |n|
-      regest(Pattern.dummy(word[n..e]), mode, matches)
+      regest(Pattern.dummy(word[n..e]), :match, matches)
     end
 
     matches.flatten.compact.sort
   end
 
   def hydrae(word)
-    match(word, :hydrae)
+    matches = []
+    getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if netneck('.')
+    matches.map { |pattern| pattern.initial }
+    l = word.length
+    l.times.each do |n|
+      regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
+    end
   end
 
   def prehyphenate(word)
