@@ -479,6 +479,27 @@ class Hydra
     pattern
   end
 
+  # Debug methods
+  def spattern(sneck = "", digits = [])
+    byebug
+    if gethead
+      if parent
+        letter = nil
+        parent.letters.each do |l|
+          if parent.getneck(l) == self
+            letter = l
+            break
+          end
+        end
+        parent.spattern(letter + sneck, gethead)
+      else
+        Pattern.new(sneck, digits)
+      end
+    else
+      ""
+    end
+  end
+
   def disembowel(device = $stdout)
     PP.pp self, device
     count

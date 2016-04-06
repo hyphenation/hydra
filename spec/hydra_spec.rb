@@ -902,10 +902,25 @@ describe Hydra do
       it "returns matches as hydrae" do
         # expect(complex_hydra.match('foobar').digest).to eq "a2r.\nba1\n3ba2r.\n.fo1\n.foo3\nfo2o1\no2o" # Not yet! ;-)
         matches = complex_hydra.hydrae('foobar')
+        # byebug
         expect(matches.count).to be == 7
         expect(matches.map(&:class).uniq).to be == [Hydra]
         expect(matches.first.getneck('.').gethead).to be == [0, 2, 0, 0]
         expect(matches.last.gethead).to be == [0, 2, 0]
+      end
+    end
+
+    describe '#spattern' do
+      it "returns the pattern associated with that head, as string" do
+        hydra = Hydra.new '5fo2o3'
+        fooneck = hydra.getneck('f').getneck('o').getneck('o')
+        expect(fooneck.spattern).to be == "5to2o3"
+      end
+
+      it "returns the empty string if no head" do
+        hydra = Hydra.new 'abc'
+        bneck = hydra.getneck('a').getneck('b')
+        expect(bneck.spattern).to be == ""
       end
     end
   end
