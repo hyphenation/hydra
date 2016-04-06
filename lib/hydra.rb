@@ -387,7 +387,7 @@ class Hydra
     if digits
       case mode
       when :match
-        matches << Pattern.new(pattern.word_so_far, digits, pattern.index)
+        matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hyphenate
         pattern.mask digits
       when :search, :delete
