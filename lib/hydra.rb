@@ -471,12 +471,13 @@ class Heracles
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             puts word.get_word
+            matches = @count_hydra.match(word.get_word)
+            # byebug if matches.count > 0
             next unless word.length >= pattern_length
             (word.length - pattern_length).times do |i|
-              matches = @count_hydra.match(word.get_word)
-              # byebug if matches.count > 0
               puts word.word_to(pattern_length)
               if word.dot(dot) == :is
+                # Something to the effect of testing the dot positions in matches
                 count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end }
                 byebug if count_pattern.to_s == "1cx"
                 @count_hydra.ingest count_pattern
