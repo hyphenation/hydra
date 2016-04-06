@@ -358,6 +358,24 @@ describe HyphenatedWord do
       expect(pattern.digit(3)).to be == :is
     end
   end
+
+  describe '#dot' do
+    it "returns the dot value at position i" do
+      pattern = HyphenatedWord.new('foo-bar')
+      expect(pattern.dot(3)).to be == :is
+    end
+
+    it "counts from the current index" do
+      pattern = HyphenatedWord.new('foo-bar')
+      2.times { pattern.shift }
+      expect(pattern.dot(1)).to be == :is
+    end
+
+    it "returns 0 if there’s nothing there" do
+      pattern = HyphenatedWord.new('foo-bar')
+      expect(pattern.dot(2)).to be == 0
+    end
+  end
 end
 
 describe Hydra do
