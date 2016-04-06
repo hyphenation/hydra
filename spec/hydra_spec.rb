@@ -214,7 +214,7 @@ describe Pattern do
       end
     end
 
-    describe '#word_so_far' do
+    describe '#word_so_far' do # TODO word_at?
       it "returns the word up to the current index" do
         pattern = Pattern.dummy 'sandrigham'
         4.times { pattern.shift }
