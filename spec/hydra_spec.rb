@@ -365,6 +365,14 @@ describe Pattern do
      end
     end
   end
+
+  describe '#increment_good_count' do
+  end
+
+  describe '#good_count' do
+  end
+
+  describe '#increment_bad
 end
 
 describe HyphenatedWord do
