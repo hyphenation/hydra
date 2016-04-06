@@ -401,7 +401,7 @@ describe Pattern do
       pattern = Pattern.new
       2.times { pattern.inc_good_count }
       pattern.inc_bad_count
-      expect(pattern.good.count).to be == 2
+      expect(pattern.good_count).to be == 2
       expect(pattern.bad_count).to be == 1
     end
   end
