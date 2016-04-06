@@ -231,7 +231,7 @@ class Pattern
 end
 
 class HyphenatedWord < Pattern
-  def initialize(pattern)
+  def initialize(pattern) # TODO Add “atlas”
     @pattern = pattern
     @word, i, @digits = '', 0, []
     while i < @pattern.length
