@@ -101,9 +101,14 @@ class Pattern
     @digits = digits
   end
 
-  def truncate(n)
+  def word_so_far
     breakup unless @word
-    @word[0..n-1]
+    @word[0..index-1]
+  end
+
+  def word_to(n)
+    breakup unless @word
+    @word[index..index + n - 1]
   end
 
   def mask(a)
@@ -354,7 +359,7 @@ class Hydra
     if digits
       case mode
       when :match
-        matches << Pattern.new(pattern.truncate(pattern.index), digits)
+        matches << Pattern.new(pattern.word_so_far, digits)
       when :hyphenate
         pattern.mask digits
       when :search, :delete
@@ -372,7 +377,7 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.truncate(pattern.index), head).final
+            matches << Pattern.new(pattern.word_so_far, head).final
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
           end

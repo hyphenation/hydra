@@ -214,16 +214,19 @@ describe Pattern do
       end
     end
 
-    describe '#truncate(n)' do
-      it "truncates to letter n" do
+    describe '#word_so_far' do
+      it "returns the word up to the current index" do
         pattern = Pattern.dummy 'sandrigham'
-        expect(pattern.truncate(4)).to eq 'sand'
+        4.times { pattern.shift }
+        expect(pattern.word_so_far).to eq 'sand'
       end
+    end
 
-      it "with two arguments, it starts at arg. 1 and return string of length arg.2 " do
+    describe '#word_to' do
+      it "returns the word from the current index with length n" do
         pattern = Pattern.dummy 'maskedball'
         2.times { pattern.shift }
-        expect(pattern.truncate(6)).to eq 'skedba'
+        expect(pattern.word_to(6)).to eq 'skedba'
       end
     end
 
