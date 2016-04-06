@@ -12,6 +12,11 @@ class Pattern
     else
       @word = ''
     end
+
+    set_variables
+  end
+
+  def set_variables
     @index = 0
   end
 
@@ -209,7 +214,6 @@ end
 
 class HyphenatedWord < Pattern
   def initialize(pattern)
-    @index = 0
     @pattern = pattern
     @word, i, @digits = '', 0, []
     while i < @pattern.length
@@ -223,6 +227,8 @@ class HyphenatedWord < Pattern
       @word += @pattern[i] if @pattern[i]
       i += 1
     end
+
+    set_variables
   end
 
   def dot(n)
