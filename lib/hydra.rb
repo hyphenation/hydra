@@ -403,8 +403,10 @@ class Hydra
 
     if digits
       case mode
-      when :match, :hydrae
+      when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
+      when :hydrae
+        matches << self
       when :hyphenate
         pattern.mask digits
       when :search, :delete
@@ -421,7 +423,9 @@ class Hydra
       if dotneck
         head = dotneck.gethead
         if head
-          if mode == :match, :hydrae
+          if mode == :match
+            matches << self
+          elsif mode == :hydrae
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
