@@ -219,6 +219,12 @@ describe Pattern do
         pattern = Pattern.dummy 'sandrigham'
         expect(pattern.truncate(4)).to eq 'sand'
       end
+
+      it "with two arguments, it starts at arg. 1 and return string of length arg.2 " do
+        pattern = Pattern.dummy 'maskedball'
+        2.times { pattern.shift }
+        expect(pattern.truncate(6)).to eq 'skedba'
+      end
     end
 
     describe '#mask(array)' do
