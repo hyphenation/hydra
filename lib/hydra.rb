@@ -407,6 +407,7 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
+        byebug
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -419,7 +420,7 @@ class Hydra
       end
     end
 
-    if pattern.end? && mode == :match || mode == :hyphenate || mode == :hydrae
+    if pattern.end? && (mode == :match || mode == :hyphenate || mode == :hydrae)
       dotneck = getneck('.')
       if dotneck
         head = dotneck.gethead
@@ -427,6 +428,7 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
+            byebug
             matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
