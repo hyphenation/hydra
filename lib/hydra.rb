@@ -477,11 +477,19 @@ class Heracles
             (word.length - pattern_length).times do |i|
               puts word.word_to(pattern_length)
               if word.dot(dot) == :is
-                # Something to the effect of testing the dot positions in matches
-                count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end }
+                covered = false
+                matches.each do |match|
+                  next if match.index < 0
+                  if match.currdigit != 0
+                    covered = true
+                    break
+                  end
+                end
+                count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } unless covered
                 byebug if count_pattern.to_s == "1cx"
                 @count_hydra.ingest count_pattern
               end
+              matches.each(&:shift)
               word.shift
             end
             n += 1
