@@ -366,13 +366,17 @@ describe Pattern do
     end
   end
 
-  describe '#increment_good_count' do
+  describe '#good' do
   end
 
-  describe '#good_count' do
+  describe '#good?' do
   end
 
-  describe '#increment_bad
+  describe '#bad' do
+  end
+
+  describe '#bad?' do
+  end
 end
 
 describe HyphenatedWord do
