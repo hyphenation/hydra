@@ -367,15 +367,43 @@ describe Pattern do
   end
 
   describe '#inc_good_count' do
+    it "increases the good count by 1" do
+      pattern = Pattern.new
+      pattern.inc_good_count
+      expect(pattern.instance_variable_get :@good_count).to be == 1
+    end
   end
 
   describe '#good_count' do
+    it "returns the good count" do
+      pattern = Pattern.new
+      4.times { pattern.inc_good_count }
+      expect(pattern.good_count).to be == 4
+    end
   end
 
   describe '#inc_bad_count' do
+    it "increases the bad count by 1" do
+      pattern = Pattern.new
+      pattern.inc_bad_count
+      expect(pattern.instance_variable_get :@bad_count).to be == 1
+    end
   end
 
   describe '#bad_count' do
+    it "returns the bad count" do
+      pattern = Pattern.new
+      2.times { pattern.inc_bad_count }
+      expect(pattern.bad_count).to be == 2
+    end
+
+    it "works independently of #good_count" do
+      pattern = Pattern.new
+      2.times { pattern.inc_good_count }
+      pattern.inc_bad_count
+      expect(pattern.good.count).to be == 2
+      expect(pattern.bad_count).to be == 1
+    end
   end
 end
 

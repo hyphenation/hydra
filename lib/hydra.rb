@@ -18,6 +18,23 @@ class Pattern
 
   def set_variables
     @index = 0
+    @good_count = @bad_count = 0
+  end
+
+  def inc_good_count
+    @good_count += 1
+  end
+
+  def good_count
+    @good_count
+  end
+
+  def inc_bad_count
+    @bad_count += 1
+  end
+
+  def bad_count
+    @bad_count
   end
 
   def self.dummy(word)
