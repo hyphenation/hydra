@@ -426,6 +426,37 @@ class Hydra
 end
 
 class Heracles
+  def run(filename, parameters = [])
+    @hyphenation_level_start = parameters[0]
+    @hyphenation_level_end = parameters[1]
+    @pattern_length_start = parameters[2]
+    @pattern_length_end = parameters[3]
+    @good_weight = parameters[4]
+    @bad_weight = parameters[5]
+    @threshold = parameters[6]
+    @count_hydra = Hydra.new
+    n = 0
+    (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
+      (@pattern_length_start..@pattern_length_end).each do |pattern_length|
+        Heracles.organ(pattern_length).each do |dot|
+          File.read(filename).each_line do |line|
+            word = HyphenatedWord.new(line.strip.downcase)
+            next unless word.length >= pattern_length
+            (word.length - pattern_length).times do |i|
+              if word.dot(dot) == :is
+                @count_hydra.ingest Pattern.new word.word_to(pattern_length)
+              end
+            end
+            n += 1
+            print "\r#{n}"
+          end
+        end
+      end
+    end
+    print "\r"
+    @count_hydra
+  end
+
   def self.organ(n)
     dot = n / 2
     dot1 = 2 * dot
