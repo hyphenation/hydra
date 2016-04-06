@@ -220,6 +220,7 @@ class HyphenatedWord < Pattern
   end
 end
 
+# TODO Comparison function for Hydra.  Criterion: basically, the list of generated patterns is identical
 class Hydra
   class ConflictingPattern < StandardError
   end
