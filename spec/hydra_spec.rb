@@ -12,6 +12,13 @@ describe Pattern do
       expect(pattern.get_word).to eq 'ab'
       expect(pattern.get_digits).to eq [0, 0, 2]
     end
+
+    it "can set the index" do
+      pattern = Pattern.new('foo', [5, 0, 2, 3], 2)
+      expect(pattern).to be_a Pattern
+      expect(pattern.to_s).to be == "5fo2o3"
+      expect(pattern.index).to be == 2
+    end
   end
 
   describe '.dummy' do

@@ -2,7 +2,7 @@ require 'byebug'
 require 'pp'
 
 class Pattern
-  def initialize(word = nil, digits = nil)
+  def initialize(word = nil, digits = nil, index = 0)
     if digits
       @word = word
       @digits = digits
@@ -13,11 +13,11 @@ class Pattern
       @word = ''
     end
 
-    set_variables
+    set_variables(index)
   end
 
-  def set_variables
-    @index = 0
+  def set_variables(index)
+    @index = index
     @good_count = @bad_count = 0
   end
 
@@ -245,7 +245,7 @@ class HyphenatedWord < Pattern
       i += 1
     end
 
-    set_variables
+    set_variables(0)
   end
 
   def dot(n)
@@ -477,18 +477,22 @@ class Heracles
               # byebug if matches.count > 0
               puts word.word_to(pattern_length)
               if word.dot(dot) == :is
-                @count_hydra.ingest Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end }
+                count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end }
+                byebug if count_pattern.to_s == "1cx"
+                @count_hydra.ingest count_pattern
               end
               word.shift
             end
             n += 1
             print "\r#{n}"
           end
+          byebug
         end
       end
     end
     print "\r"
-    # byebug
+    byebug
+    puts @count_hydra.count
     @final_hydra
   end
 
