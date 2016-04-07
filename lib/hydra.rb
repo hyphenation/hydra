@@ -594,7 +594,7 @@ class Heracles
                   if match.currdigit != 0
                     match.inc_good_count
                     covered = true
-                    break
+                    # break
                   end
                 end
                 count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } unless covered
