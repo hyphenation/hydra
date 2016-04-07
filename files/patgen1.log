@@ -1,0 +1,31 @@
+This is PATGEN, Version 2.4 (TeX Live 2013/Debian)
+left_hyphen_min = 2, right_hyphen_min = 3, 10 letters
+0 patterns read in
+pattern trie has 256 nodes, trie_max = 256, 0 outputs
+hyph_start, hyph_finish: pat_start, pat_finish: good weight, bad weight, threshold: processing dictionary with pat_len = 2, pat_dot = 1
+ 
+0 good, 0 bad, 10 missed
+0.00 %, 0.00 %, 100.00 %
+18 patterns, 274 nodes in count trie, triec_max = 283
+4 good and 14 bad patterns added 
+finding 10 good and 0 bad hyphens, efficiency = 2.50
+pattern trie has 274 nodes, trie_max = 277, 2 outputs
+processing dictionary with pat_len = 2, pat_dot = 0
+ 
+10 good, 0 bad, 0 missed
+100.00 %, 0.00 %, 0.00 %
+9 patterns, 265 nodes in count trie, triec_max = 267
+0 good and 9 bad patterns added 
+finding 0 good and 0 bad hyphens 
+pattern trie has 275 nodes, trie_max = 282, 5 outputs
+processing dictionary with pat_len = 2, pat_dot = 2
+ 
+10 good, 0 bad, 0 missed
+100.00 %, 0.00 %, 0.00 %
+9 patterns, 265 nodes in count trie, triec_max = 271
+0 good and 9 bad patterns added 
+finding 0 good and 0 bad hyphens 
+pattern trie has 275 nodes, trie_max = 282, 8 outputs
+15 nodes and 7 outputs deleted
+total of 4 patterns at hyph_level 1
+hyphenate word list? 
