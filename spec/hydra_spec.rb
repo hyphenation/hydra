@@ -921,10 +921,6 @@ describe Hydra do
         hydra = Hydra.new
         expect(hydra.index).to be == 0
       end
-
-      it "can optionally be set at initialization" do
-        hydra = Hydra.new
-      end
     end
 
     describe '#shift' do
