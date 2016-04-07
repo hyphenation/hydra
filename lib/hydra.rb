@@ -3,7 +3,6 @@ require 'pp'
 
 class Pattern
   def initialize(word = nil, digits = nil, index = 0)
-    # byebug
     if digits
       @word = word
       @digits = digits
@@ -379,7 +378,6 @@ class Hydra
   end
 
   def iterate(mode = :count, block = nil)
-    # byebug unless block
     if mode == :count
       @necks.inject(0) do |sum, neck|
         neck = neck.last
@@ -388,9 +386,7 @@ class Hydra
       end
     elsif mode == :each
       @necks.each do |neck|
-        # byebug
         neck = neck.last
-        # byebug if gethead
         block.call(neck) if neck.gethead
         neck.iterate(:each, block)
       end
@@ -447,7 +443,6 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        # byebug
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -468,7 +463,6 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
-            # byebug
             matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
@@ -524,9 +518,7 @@ class Hydra
 
   # Debug methods
   def spattern(sneck = "", digits = nil)
-    # byebug
     if digits
-      # byebug
       if parent
         letter = nil
         parent.letters.each do |l|
@@ -537,7 +529,6 @@ class Hydra
         end
         parent.spattern(letter + sneck, digits)
       else
-        # byebug
         Pattern.new(sneck, digits).to_s
       end
     else
@@ -572,18 +563,14 @@ class Heracles
     @threshold = parameters[6]
     @count_hydra = Hydra.new
     @final_hydra = Hydra.new
-    n = 0
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
-            puts word.get_word
-            # byebug if matches.count > 0
             matches = @count_hydra.hydrae(word.get_word)
             next unless word.length >= pattern_length
             (word.length - pattern_length).times do |i|
-              puts word.word_to(pattern_length)
               if word.dot(dot) == :is
                 covered = false
                 matches.each do |match|
@@ -595,25 +582,22 @@ class Heracles
                   end
                 end
                 count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } unless covered
-                byebug if count_pattern.to_s == "1cx"
                 @count_hydra.ingest count_pattern
               end
               matches.each(&:shift)
               word.shift
             end
-            n += 1
-            print "\r#{n}"
           end
-          # byebug
         end
       end
     end
-    print "\r"
-    # byebug
-    puts @count_hydra.count
     # Plan: add atlas; use it; extract Hydra#each.
     # Or not even that!  Just use spattern :-)
-    @count_hydra.each { |hydra| if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold then @final_hydra.ingest Pattern.new(hydra.spattern) end }
+    @count_hydra.each do |hydra|
+      if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
+        @final_hydra.ingest Pattern.new(hydra.spattern)
+      end
+    end
     @final_hydra
   end
 

@@ -921,12 +921,7 @@ describe Hydra do
     describe '#hydrae' do
       it "returns matches as hydrae" do
         matches = complex_hydra.hydrae('foobar')
-        expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o'] # Not yet! ;-)
-        # byebug
-        # expect(matches.count).to be == 7
-        # expect(matches.map(&:class).uniq).to be == [Hydra]
-        # expect(matches.first.getneck('.').gethead).to be == [0, 2, 0, 0]
-        # expect(matches.last.gethead).to be == [0, 2, 0]
+        expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
       end
     end
 
@@ -970,8 +965,7 @@ describe Hydra do
       it "returns the pattern associated with that head, as string" do
         hydra = Hydra.new '5fo2o3'
         fooneck = hydra.getneck('f').getneck('o').getneck('o')
-        # byebug
-        expect(fooneck.spattern).to eq "5fo2o3" # I’m an idiot :-P
+        expect(fooneck.spattern).to eq "5fo2o3"
       end
 
       it "returns the empty string if no head" do
