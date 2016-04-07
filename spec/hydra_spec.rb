@@ -921,12 +921,31 @@ describe Hydra do
         hydra = Hydra.new
         expect(hydra.index).to be == 0
       end
+
+      it "can optionally be set at initialization" do
+        hydra = Hydra.new
+      end
     end
 
     describe '#shift' do
       it "shifts the index by one" do
         expect { hydra.shift }.to change(hydra, :index).by(1)
       end
+    end
+
+    describe '#currdigit' do
+      it "returns the digit at the current index position" do
+        hydra = Hydra.new 'ab3c'
+        2.times { hydra.shift }
+        expect(hydra.currdigit).to be == 3
+      end
+
+      it "raises an OutOfBound exception if index is negative" do
+        hydra = Hydra.new
+        expect(hydra.currdigit)
+      end
+
+      # FIXME Also if larger than end of digits array
     end
 
     describe '#spattern' do
