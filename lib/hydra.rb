@@ -613,7 +613,7 @@ class Heracles
     puts @count_hydra.count
     # Plan: add atlas; use it; extract Hydra#each.
     # Or not even that!  Just use spattern :-)
-    # @count_hydra.each { |hydra| byebug unless hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold }
+    @count_hydra.each { |hydra| if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold then @final_hydra.ingest Pattern.new(hydra.spattern) end }
     @final_hydra
   end
 
