@@ -667,7 +667,7 @@ describe Hydra do
       let(:hydra) { Hydra.new initial_words }
 
       it "iterates over the hydra" do
-        n = 1
+        n = 0
         hydra.each { n += 1 }
         expect(n).to be == 4
       end
