@@ -1029,9 +1029,9 @@ describe Heracles do
     it "runs an array of hyphenated words" do
       dictionary = ['ab-cd-de-fg-hi', 'ab-cd-de', 'ab-cd', 'b-c', 'd-d', 'e-f']
       dictionary.map! { |word| word = 'xx' + word + 'xxx' } # TODO Helper function for that
-      f = File.open '/tmp/foo', 'w'
-      dictionary.each { |word| f.puts word }
-      f.close
+      heracles = Heracles.new
+      hydra = heracles.run_array(dictionary, [1, 1, 2, 2, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
   end
 

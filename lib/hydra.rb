@@ -548,6 +548,10 @@ end
 
 class Heracles
   def run(filename, parameters = [])
+    run_array(File.read(filename).split("\n"), parameters)
+  end
+
+  def set_parameters(parameters)
     @hyphenation_level_start = parameters[0]
     @hyphenation_level_end = parameters[1]
     @pattern_length_start = parameters[2]
@@ -557,10 +561,14 @@ class Heracles
     @threshold = parameters[6]
     @count_hydra = Hydra.new
     @final_hydra = Hydra.new
+  end
+
+  def run_array(array, parameters = [])
+    set_parameters(parameters)
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
-          File.read(filename).each_line do |line|
+          array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @count_hydra.hydrae(word.get_word)
