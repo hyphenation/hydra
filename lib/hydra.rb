@@ -561,7 +561,7 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             puts word.get_word
             # byebug if matches.count > 0
-            matches = @count_hydra.match(word.get_word)
+            matches = @count_hydra.hydrae(word.get_word)
             next unless word.length >= pattern_length
             (word.length - pattern_length).times do |i|
               puts word.word_to(pattern_length)
