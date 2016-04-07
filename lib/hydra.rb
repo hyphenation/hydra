@@ -560,8 +560,8 @@ class Heracles
         Heracles.organ(pattern_length).each do |dot|
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
-            matches = @count_hydra.hydrae(word.get_word)
             next unless word.length >= pattern_length
+            matches = @count_hydra.hydrae(word.get_word)
             (word.length - pattern_length).times do |i|
               if word.dot(dot) == :is
                 covered = false
