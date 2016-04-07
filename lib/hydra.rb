@@ -584,6 +584,7 @@ class Heracles
       end
     end
     @count_hydra.each do |hydra|
+      byebun
       if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
         @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
       end
