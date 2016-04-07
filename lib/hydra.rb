@@ -377,28 +377,20 @@ class Hydra
     char >= '0' && char <= '9'
   end
 
-  def iterate(mode = :count, block = nil)
-    if mode == :count
-      @necks.inject(0) do |sum, neck|
-        neck = neck.last
-        sum += 1 if neck.gethead
-        sum + if neck.is_a? Hydra then neck.count else 0 end
-      end
-    elsif mode == :each
-      @necks.each do |neck|
-        neck = neck.last
-        block.call(neck) if neck.gethead
-        neck.iterate(:each, block)
-      end
+  def count
+    @necks.inject(0) do |sum, neck|
+      neck = neck.last
+      sum += 1 if neck.gethead
+      sum + if neck.is_a? Hydra then neck.count else 0 end
     end
   end
 
-  def count
-    iterate
-  end
-
   def each(&block)
-    iterate(:each, block)
+    @necks.each do |neck|
+      neck = neck.last
+      block.call(neck) if neck.gethead
+      neck.each(&block)
+    end
   end
 
   def ingest(words)
@@ -591,11 +583,9 @@ class Heracles
         end
       end
     end
-    # Plan: add atlas; use it; extract Hydra#each.
-    # Or not even that!  Just use spattern :-)
     @count_hydra.each do |hydra|
       if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
-        @final_hydra.ingest Pattern.new(hydra.spattern)
+        @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
       end
     end
     @final_hydra
