@@ -560,7 +560,6 @@ class Heracles
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
-        puts "dot = #{dot}"
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
@@ -568,16 +567,8 @@ class Heracles
             (word.length - pattern_length).times do |i|
               if word.dot(dot) == :is
                 covered = false
-                puts "#{word.get_word}; #{matches.count}"
                 matches.each do |match|
-                  byebug if match.spattern == "g1h"
-                  print "  match index: #{match.index}"
-                  if match.index < 0
-                    next
-                  else
-                    puts ""
-                  end
-                  puts "match.currdigit = #{match.currdigit}"
+                  next if match.index < 0
                   if match.currdigit != 0
                     match.inc_good_count
                     covered = true
@@ -599,7 +590,6 @@ class Heracles
         @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
       end
     end
-    byebug
     @final_hydra
   end
 
