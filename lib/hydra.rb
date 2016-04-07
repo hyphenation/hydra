@@ -378,12 +378,31 @@ class Hydra
     char >= '0' && char <= '9'
   end
 
-  def count
-    @necks.inject(0) do |sum, neck|
-      neck = neck.last
-      sum += 1 if neck.gethead
-      sum + if neck.is_a? Hydra then neck.count else 0 end
+  def iterate(mode = :count, block = nil)
+    # byebug unless block
+    if mode == :count
+      @necks.inject(0) do |sum, neck|
+        neck = neck.last
+        sum += 1 if neck.gethead
+        sum + if neck.is_a? Hydra then neck.count else 0 end
+      end
+    elsif mode == :each
+      @necks.each do |neck|
+        # byebug
+        neck = neck.last
+        # byebug if gethead
+        block.call(neck) if neck.gethead
+        neck.iterate(:each, block)
+      end
     end
+  end
+
+  def count
+    iterate
+  end
+
+  def each(&block)
+    iterate(:each, block)
   end
 
   def ingest(words)
@@ -570,6 +589,7 @@ class Heracles
                 matches.each do |match|
                   next if match.index < 0
                   if match.currdigit != 0
+                    match.inc_good_count
                     covered = true
                     break
                   end
@@ -589,7 +609,7 @@ class Heracles
       end
     end
     print "\r"
-    # byebug
+    byebug
     puts @count_hydra.count
     @final_hydra
   end
