@@ -435,6 +435,7 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
+        @index = -pattern.index
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -455,6 +456,7 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
+            @index = -pattern.index
             matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
@@ -558,6 +560,7 @@ class Heracles
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
+        puts "dot = #{dot}"
           File.read(filename).each_line do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
@@ -565,8 +568,16 @@ class Heracles
             (word.length - pattern_length).times do |i|
               if word.dot(dot) == :is
                 covered = false
+                puts "#{word.get_word}; #{matches.count}"
                 matches.each do |match|
-                  next if match.index < 0
+                  byebug if match.spattern == "g1h"
+                  print "  match index: #{match.index}"
+                  if match.index < 0
+                    next
+                  else
+                    puts ""
+                  end
+                  puts "match.currdigit = #{match.currdigit}"
                   if match.currdigit != 0
                     match.inc_good_count
                     covered = true
@@ -584,11 +595,11 @@ class Heracles
       end
     end
     @count_hydra.each do |hydra|
-      byebun
       if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
         @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
       end
     end
+    byebug
     @final_hydra
   end
 
