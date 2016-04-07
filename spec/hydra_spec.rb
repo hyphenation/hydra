@@ -1021,7 +1021,7 @@ describe Heracles do
     it "runs a file of hyphenated words" do
       heracles = Heracles.new
       hydra = heracles.run(File.expand_path('../../files/dummy1.dic', __FILE__), [1, 1, 2, 2, 1, 1, 1])
-      expect(hydra.count).to be == 4
+      expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
   end
 
