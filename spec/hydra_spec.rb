@@ -661,6 +661,26 @@ describe Hydra do
     end
   end
 
+  describe '#each' do # TODO Also #map
+    context "with a simple Hydra" do
+      let(:initial_words) { ['abc', 'def', 'ghij', 'klm'] }
+      let(:hydra) { Hydra.new initial_words }
+
+      it "iterates over the hydra" do
+        n = 1
+        hydra.each { n += 1 }
+        expect(n).to be == 4
+      end
+
+      it "can work as “digest”" do
+        words = []
+        hydra.each { |h| words << h.spattern }
+        words.sort!
+        expect(words).to be == initial_words
+      end
+    end
+  end
+
   describe '.isdigit' do
     it "says 3 is a digit" do
       expect(Hydra.isdigit('3')).to be_truthy
