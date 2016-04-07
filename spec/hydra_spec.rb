@@ -1002,8 +1002,6 @@ describe Hydra do
       expect(hydra.disembowel(device)).to eq 5
     end
   end
-  # TODO ingest with dots, etc.
-  # TODO Apply hydra!
 
   describe '#ingest_file' do # TODO Allow TeX-style comments?
     it "ingests a whole file of patterns" do
