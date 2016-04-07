@@ -932,13 +932,15 @@ describe Hydra do
     describe '#currdigit' do
       it "returns the digit at the current index position" do
         hydra = Hydra.new 'ab3c'
-        2.times { hydra.shift }
-        expect(hydra.currdigit).to be == 3
+        chydra = hydra.getneck('a').getneck('b').getneck('c')
+        2.times { chydra.shift }
+        expect(chydra.currdigit).to be == 3
       end
 
       it "raises an OutOfBound exception if index is negative" do
         hydra = Hydra.new
-        expect(hydra.currdigit)
+        hydra.instance_variable_set :@index, -2
+        expect { hydra.currdigit }.to raise_exception(Hydra::OutOfBounds)
       end
 
       # FIXME Also if larger than end of digits array

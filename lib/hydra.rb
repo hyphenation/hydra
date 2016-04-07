@@ -262,6 +262,9 @@ class Hydra
   class BadPattern < StandardError
   end
 
+  class OutOfBounds < StandardError
+  end
+
   def initialize(words = nil, mode = :lax)
     @necks = { }
     @mode = mode
@@ -278,6 +281,15 @@ class Hydra
 
   def shift
     @index += 1
+  end
+
+  def currdigit
+    raise OutOfBounds if @index < 0
+    if gethead
+      gethead[@index]
+    else
+      nil
+    end
   end
 
   def lefthyphenmin
