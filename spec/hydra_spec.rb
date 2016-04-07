@@ -668,13 +668,13 @@ describe Hydra do
 
       it "iterates over the hydra" do
         n = 0
-        hydra.each { byebug; n += 1 }
+        hydra.each { n += 1 }
         expect(n).to be == 4
       end
 
       it "can work as “digest”" do
         words = []
-        hydra.each { |h| byebug; words << h.spattern }
+        hydra.each { |h| words << h.spattern }
         words.sort!
         expect(words).to be == initial_words
       end
