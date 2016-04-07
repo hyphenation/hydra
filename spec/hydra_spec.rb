@@ -1025,6 +1025,16 @@ describe Heracles do
     end
   end
 
+  describe '#run_array' do
+    it "runs an array of hyphenated words" do
+      dictionary = ['ab-cd-de-fg-hi', 'ab-cd-de', 'ab-cd', 'b-c', 'd-d', 'e-f']
+      dictionary.map! { |word| word = 'xx' + word + 'xxx' } # TODO Helper function for that
+      f = File.open '/tmp/foo', 'w'
+      dictionary.each { |word| f.puts word }
+      f.close
+    end
+  end
+
   describe '.organ' do
     it "generates an organ pipe-like sequence" do
       expect(Heracles.organ(3)).to be == [1, 2, 0, 3]

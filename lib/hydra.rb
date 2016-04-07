@@ -564,6 +564,7 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @count_hydra.hydrae(word.get_word)
+            dot.times { word.shift }
             if word.get_word =~ /gh/
               puts '+++++'
               matches.each { |match| puts match.index }
@@ -581,6 +582,7 @@ class Heracles
                 puts "hyphen found (currletter = #{word.currletter})" if word.get_word =~ /gh/
                 covered = false
                 matches.each do |match|
+                  if match.parent.getneck('h') == match then puts 'yes' end
                   next if match.index < 0
                   if match.currdigit != 0
                     match.inc_good_count
