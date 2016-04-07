@@ -611,7 +611,7 @@ class Heracles
     print "\r"
     byebug
     puts @count_hydra.count
-    @count_hydra.each { |hydra| raise unless hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold }
+    @count_hydra.each { |hydra| byebug unless hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold }
     @final_hydra
   end
 
