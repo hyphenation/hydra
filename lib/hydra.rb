@@ -571,7 +571,7 @@ class Heracles
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
-            matches = @count_hydra.hydrae(word.get_word)
+            matches = @final_hydra.hydrae(word.get_word)
             if word.get_word =~ /gh/
               puts '+++++'
               matches.each { |match| puts match.index }
@@ -583,33 +583,42 @@ class Heracles
               puts '+++++'
             end
             puts "#{word.get_word} (matches.count = #{matches.count})" if word.get_word =~ /gh/
-            (word.length - pattern_length).times do |i|
+            (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
               puts word.index if word.get_word =~ /gh/
-              if word.dot(dot) == :is
+              # if word.dot(dot) == :is
                 puts "hyphen found (currletter = #{word.currletter})" if word.get_word =~ /gh/
                 covered = false
                 matches.each do |match|
                   if match.parent.getneck('h') == match then puts 'yes' end
-                  next if match.index < 0
-                  if match.currdigit != 0
+                  next if match.index < 0 || match.index > pattern_length
+                  if word.dot(dot) == :is && match.currdigit != 0
+                    # byebug if match.spattern == "xx"
                     match.inc_good_count
                     covered = true
                     # break
                   end
                 end
-                count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } unless covered
+                # count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } # unless covered
+                digits = (pattern_length + 1).times.map { 0 }
+                digits[dot] = hyphenation_level if word.dot(dot) == :is
+                count_pattern = Pattern.new word.word_to(pattern_length), digits
                 @count_hydra.ingest count_pattern
-              end
+                @count_hydra.match(word.word_to(pattern_length)).each do |head|
+                  puts '+1'
+                  head.inc_good_count
+                end
+              # end
               matches.each(&:shift)
               word.shift
             end
           end
+
+          @count_hydra.each do |hydra|
+            if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
+              @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
+            end
+          end
         end
-      end
-    end
-    @count_hydra.each do |hydra|
-      if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
-        @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
       end
     end
     @final_hydra
