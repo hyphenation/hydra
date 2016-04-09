@@ -622,10 +622,11 @@ class Heracles
               byebug if hydra.spattern == "1cd"
               # byebug if count_pattern == "1cd"
               puts 'bar'
+              currpos = word.index + dot
               relevant_matches = matches.select do |match|
                 # byebug if hydra.spattern == "1ex"
                 # match.index >= word.index && match.index <= word.index + pattern_length
-                match.index == word.index + dot
+                match.gethead[currpos - match.index] == hyphenation_level
               end
               # byebug if hydra.spattern == "1ex"
               if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
