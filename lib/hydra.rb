@@ -598,7 +598,7 @@ class Heracles
             next unless word.length >= pattern_length
             # byebug if word.get_word == "xxabcdexxx" && pattern_length == 2 && dot == 0
             matches = @final_hydra.hydrae(word.get_word)
-            byebug if line == "xxab-cd-de-fg-hixxx"
+            # byebug if line == "xxab-cd-de-fg-hixxx"
             # byebug if word.get_word == "xxab-cd-de-fg-hixxx"
             # matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
@@ -616,10 +616,11 @@ class Heracles
               # byebug if hydra.good_count + hydra.bad_count > 0 && @check
               puts 'foo'
               # byebug if hydra.spattern == "cd1"
+              byebug if hydra.spattern == "xb1"
               puts 'bar'
               relevant_matches = matches.select do |match|
                 # byebug if hydra.spattern == "1ex"
-                match.index >= word.index && match.index <= word.index + pattern_length
+                # match.index >= word.index && match.index <= word.index + pattern_length
               end
               # byebug if hydra.spattern == "1ex"
               if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
