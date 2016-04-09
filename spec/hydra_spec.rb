@@ -955,7 +955,7 @@ describe Hydra do
         expect(match.first.index).to be == 0
       end
 
-      it "... and trailing ones."
+      it "... and trailing ones." do
         hydra = Hydra.new 'a1bcd.'
         matches = hydra.hydrae('xxa-bcd')
         expect(matches.count).to be == 1
