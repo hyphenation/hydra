@@ -568,52 +568,29 @@ class Heracles
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
-          puts "pattern length #{pattern_length}, dot: #{dot}"
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @final_hydra.hydrae(word.get_word)
             matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
-              # if matches.count == 0 && word.dot(dot) == :is
-                covered = false
-                matches.each do |match|
-                  next if match.index < 0 || match.index > pattern_length
-                  if word.dot(dot) == :is && match.currdigit != 0
-                    # match.inc_good_count
-                    # covered = true
-                    # break
-                  end
-                end
-                covered = matches.count > 0 && word.dot(dot) == :is || word.dot(dot) == :no
-                if covered
-                  puts "#{word.word_to(pattern_length)} is covered"
-                else
-                  puts "#{Pattern.new(word.word_to(pattern_length), (pattern_length + 1).times.map { |i| if i == dot then 1 else 0 end })} isn’t covered"
-                end
-                # count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } # unless covered
-                digits = (pattern_length + 1).times.map { 0 }
-                # digits[dot] = hyphenation_level
+              unless matches.count > 0 && word.dot(dot) == :is || word.dot(dot) == :no
                 digits = (pattern_length + 1).times.map { |i| if word.dot(i) == :is then hyphenation_level else 0 end }
                 count_pattern = Pattern.new word.word_to(pattern_length), digits
-                unless covered
-                  @count_hydra.ingest count_pattern # unless covered
-                  # TODO Method in Hydra for that
-                  hydra = @count_hydra
-                  word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
-                    byebug unless hydra
-                    hydra = hydra.getneck(byte.chr)
-                  end
-                  if word.dot(dot) == :is then hydra.inc_good_count else hydra.inc_bad_count end
+                @count_hydra.ingest count_pattern
+                # TODO Method in Hydra for that
+                hydra = @count_hydra
+                word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
+                  byebug unless hydra
+                  hydra = hydra.getneck(byte.chr)
                 end
-              # end
+                if word.dot(dot) == :is then hydra.inc_good_count else hydra.inc_bad_count end
+              end
               matches.each(&:shift)
               word.shift
             end
           end
 
-          puts ''
-          # byebug
           @count_hydra.each do |hydra|
             if hydra.good_count < @threshold
               @count_hydra.delete hydra.spattern
@@ -623,7 +600,6 @@ class Heracles
               @count_hydra.delete pattern
             end
           end
-          # byebug
         end
       end
     end
