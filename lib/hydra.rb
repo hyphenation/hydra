@@ -568,6 +568,7 @@ class Heracles
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
+          puts "pattern length #{pattern_length}, dot: #{dot}"
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
@@ -583,6 +584,11 @@ class Heracles
                     covered = true
                     # break
                   end
+                end
+                if covered
+                  puts "#{word.word_to(pattern_length)} is covered"
+                else
+                  puts "#{Pattern.new(word.word_to(pattern_length), (pattern_length + 1).times.map { |i| if i == dot then 1 else 0 end })} isn’t covered"
                 end
                 # count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } # unless covered
                 digits = (pattern_length + 1).times.map { 0 }
@@ -602,7 +608,8 @@ class Heracles
             end
           end
 
-          byebug
+          puts ''
+          # byebug
           @count_hydra.each do |hydra|
             if hydra.good_count < @threshold
               @count_hydra.delete hydra.spattern
@@ -612,7 +619,7 @@ class Heracles
               @count_hydra.delete pattern
             end
           end
-          byebug
+          # byebug
         end
       end
     end
