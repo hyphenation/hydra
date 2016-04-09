@@ -455,7 +455,7 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        @index = -pattern.index
+        @index = pattern.index
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -608,14 +608,16 @@ class Heracles
                 hydra = hydra.getneck(byte.chr)
               end
               # byebug if hydra.good_count + hydra.bad_count > 0 && @check
-              # byebug if hydra.spattern == "1ex"
+              puts 'foo'
+              # byebug if hydra.spattern == "cd1"
+              puts 'bar'
               relevant_matches = matches.select do |match|
                 # byebug if hydra.spattern == "1ex"
-                match.index >= 0 && match.index <= pattern_length
+                match.index >= word.index && match.index <= word.index + pattern_length
               end
-              byebug if hydra.spattern == "1ex"
+              # byebug if hydra.spattern == "1ex"
               if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
-              matches.each(&:shift)
+              # matches.each(&:shift)
               word.shift
             end
           end
