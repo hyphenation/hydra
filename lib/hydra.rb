@@ -516,6 +516,7 @@ class Hydra
     l.times.each do |n|
       # regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
       regest(pattern, :hydrae, matches)
+      pattern.shift
     end
 
     matches
