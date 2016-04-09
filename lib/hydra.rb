@@ -515,7 +515,7 @@ class Hydra
     pattern = Pattern.dummy(word)
     l.times.each do |n|
       # regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
-      pattern.reset
+      pattern.reset # TODO Test that strategy thoroughly
       pattern.shift(n)
       regest(pattern, :hydrae, matches)
     end
