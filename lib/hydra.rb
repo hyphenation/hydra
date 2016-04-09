@@ -602,14 +602,15 @@ class Heracles
             end
           end
 
-          # byebug
+          byebug
           @count_hydra.each do |hydra|
             if hydra.good_count < @threshold
-              @count_hydra.delete Pattern.new(hydra.spattern)
+              @count_hydra.delete hydra.spattern
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
             end
           end
+          byebug
         end
       end
     end
