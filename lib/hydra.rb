@@ -455,7 +455,8 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        @index = pattern.index - depth # FIXME
+        @index = pattern.index - depth
+        @index += 1 if spattern =~ /^\./ # FIXME awful
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -476,7 +477,7 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
-            @index = pattern.index - pattern.length
+            @index = pattern.index - depth
             matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
