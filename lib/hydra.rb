@@ -512,8 +512,10 @@ class Hydra
     matches = []
     getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if getneck('.')
     l = word.length
+    pattern = Pattern.dummy(word)
     l.times.each do |n|
-      regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
+      # regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
+      regest(pattern, :hydrae, matches)
     end
 
     matches
@@ -594,6 +596,8 @@ class Heracles
             next unless word.length >= pattern_length
             # byebug if word.get_word == "xxabcdexxx" && pattern_length == 2 && dot == 0
             matches = @final_hydra.hydrae(word.get_word)
+            byebug if line == "xxab-cd-de-fg-hixxx"
+            # byebug if word.get_word == "xxab-cd-de-fg-hixxx"
             # matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
               digits = (pattern_length + 1).times.map { |i| if i == dot then hyphenation_level else 0 end }
