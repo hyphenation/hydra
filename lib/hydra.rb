@@ -455,7 +455,6 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        byebug if "xxabcdexxx" =~ /#{pattern.to_s}/
         @index = -pattern.index
         matches << self
       when :hyphenate
