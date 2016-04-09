@@ -574,7 +574,7 @@ class Heracles
             matches = @final_hydra.hydrae(word.get_word)
             matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
-              if (matches.count == 0) && word.dot(dot) == :is
+              if matches.count == 0 && word.dot(dot) == :is
                 digits = (pattern_length + 1).times.map { |i| if word.dot(i) == :is then hyphenation_level else 0 end }
                 count_pattern = Pattern.new word.word_to(pattern_length), digits
                 @count_hydra.ingest count_pattern
