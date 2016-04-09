@@ -961,6 +961,13 @@ describe Hydra do
         expect(matches.count).to be == 1
         expect(matches.first.index).to be == 2
       end
+
+      it "And even at both ends :-)" do
+        hydra = Hydra.new '.ab1cde.'
+        matches = hydra.hydrae('abcde')
+        expect(matches.count).to be == 1
+        expect(matches.first.index).to be == 0
+      end
     end
 
     describe '#index' do
