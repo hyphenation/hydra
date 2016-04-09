@@ -952,14 +952,14 @@ describe Hydra do
         hydra = Hydra.new '.ab1'
         matches = hydra.hydrae('abcdxxx')
         expect(matches.count).to be == 1
-        expect(match.first.index).to be == 0
+        expect(matches.first.index).to be == 0
       end
 
       it "... and trailing ones." do
         hydra = Hydra.new 'a1bcd.'
         matches = hydra.hydrae('xxabcd')
         expect(matches.count).to be == 1
-        expect(match.first.index).to be == 2
+        expect(matches.first.index).to be == 2
       end
     end
 
