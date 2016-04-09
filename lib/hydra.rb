@@ -625,7 +625,7 @@ class Heracles
     if @hyphenation_level % 2 == 1
       :no
     else
-      :hyph
+      :found
     end
   end
 end
