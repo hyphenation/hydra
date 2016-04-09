@@ -589,7 +589,7 @@ class Heracles
                 # digits[dot] = hyphenation_level
                 digits = (pattern_length + 1).times.map { |i| if word.dot(i) == :is then hyphenation_level else 0 end }
                 count_pattern = Pattern.new word.word_to(pattern_length), digits
-                @count_hydra.ingest count_pattern
+                @count_hydra.ingest count_pattern unless covered
                 # TODO Method in Hydra for that
                 hydra = @count_hydra
                 word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
@@ -607,7 +607,9 @@ class Heracles
             if hydra.good_count < @threshold
               @count_hydra.delete hydra.spattern
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
-              @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
+              pattern = hydra.spattern
+              @final_hydra.ingest Pattern.new(pattern) # FIXME add atlas and use it instead of spattern
+              @count_hydra.delete pattern
             end
           end
           byebug
