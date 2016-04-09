@@ -356,6 +356,10 @@ class Hydra
     propagate_chop
   end
 
+  def propagate_chop
+    parent.propagate_chop if parent && @necks.count == 0
+  end
+
   def good_count
     @good_count
   end
