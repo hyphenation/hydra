@@ -938,6 +938,29 @@ describe Hydra do
         matches = complex_hydra.hydrae('foobar')
         expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
       end
+
+      it "sets the index correctly ..." do
+        hydra = Hydra.new ['a1b', 'c1de', 'fg1hi']
+        matches = hydra.hydrae('xxa-bc-defg-hixxx')
+        expect(matches.count).to be == 3
+        expect(matches[0].index).to be == 2
+        expect(matches[1].index).to be == 4
+        expect(matches[2].index).to be == 7
+      end
+
+      it "... even with initial dots ..." do
+        hydra = Hydra.new '.ab1'
+        matches = hydra.hydrae('ab-cdxxx')
+        expect(matches.count).to be == 1
+        expect(match.first.index).to be == 0
+      end
+
+      it "... and trailing ones."
+        hydra = Hydra.new 'a1bcd.'
+        matches = hydra.hydrae('xxa-bcd')
+        expect(matches.count).to be == 1
+        expect(match.first.index).to be == 2
+      end
     end
 
     describe '#index' do
