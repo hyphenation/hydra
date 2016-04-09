@@ -783,7 +783,15 @@ describe Hydra do
     it "also deletes good and bad counts" do
       hydra = Hydra.new ['abc', 'def']
       cneck = hydra.getneck('a').getneck('b').getneck('c')
-      cneck.
+      cneck.inc_good_count
+      hydra.delete "abc"
+      expect(cneck.good_count).to be == 0
+    end
+
+    it "deletes the whole neck if it doesn’t have any other descendants" do
+      hydra = Hydra.new ['abc', 'abcd', 'def', 'ghi']
+      hydra.delete "def"
+      expect(hydra.getneck).to be_nil
     end
   end
 
