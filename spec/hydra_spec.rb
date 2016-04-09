@@ -661,7 +661,7 @@ describe Hydra do
     end
   end
 
-  describe '#each' do # TODO Also #map
+  describe '#each' do # TODO Also #map, #select.  Enumerator mixin?
     context "with a simple Hydra" do
       let(:initial_words) { ['abc', 'def', 'ghij', 'klm'] }
       let(:hydra) { Hydra.new initial_words }
