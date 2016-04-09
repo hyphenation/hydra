@@ -593,6 +593,14 @@ describe Hydra do
     end
   end
 
+  describe '#chopneck' do
+    it "chops off a neck of the hydra" do
+      hydra = Hydra.new ['abc', 'def']
+      hydra.chopneck('a')
+      expect(hydra.letters).to be == ['d']
+    end
+  end
+
   describe '#good_count' do
     it "returns the good count" do
       hydra = Hydra.new ['abc', 'def', 'ghi']

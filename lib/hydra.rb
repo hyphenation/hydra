@@ -356,6 +356,10 @@ class Hydra
     propagate_chop
   end
 
+  def chopneck(letter)
+    @necks.delete(letter)
+  end
+
   def propagate_chop
     if @necks.count == 0
       if parent
