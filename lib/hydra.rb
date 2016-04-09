@@ -598,11 +598,7 @@ class Heracles
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
-            # byebug if word.get_word == "xxabcdexxx" && pattern_length == 2 && dot == 0
             matches = @final_hydra.hydrae(word.get_word)
-            # byebug if line == "xxab-cd-de-fg-hixxx"
-            # byebug if word.get_word == "xxab-cd-de-fg-hixxx"
-            # matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
               digits = (pattern_length + 1).times.map { |i| if i == dot then hyphenation_level else 0 end }
               count_pattern = Pattern.new word.word_to(pattern_length), digits
@@ -610,32 +606,18 @@ class Heracles
               # TODO Method in Hydra for that
               hydra = @count_hydra
               @check = ["bx", "ex"].include?(word.word_to(pattern_length)) && dot == 0
-              puts count_pattern.to_s if @check
               word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
-                byebug unless hydra
                 hydra = hydra.getneck(byte.chr)
               end
-              # byebug if hydra.good_count + hydra.bad_count > 0 && @check
-              puts 'foo'
-              # byebug if hydra.spattern == "cd1"
-              # byebug if hydra.spattern == "xb1"
-              byebug if hydra.spattern == "1cd"
-              # byebug if count_pattern == "1cd"
-              puts 'bar'
               currpos = word.index + dot
               relevant_matches = matches.select do |match|
-                # byebug if hydra.spattern == "1ex"
-                # match.index >= word.index && match.index <= word.index + pattern_length
                 match.gethead[currpos - match.index] == hyphenation_level
               end
-              # byebug if hydra.spattern == "1ex"
               if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
-              # matches.each(&:shift)
               word.shift
             end
           end
 
-          # byebug
           @count_hydra.each do |hydra|
             if hydra.good_count < @threshold
               @count_hydra.delete hydra.spattern
@@ -645,7 +627,6 @@ class Heracles
               @count_hydra.delete pattern
             end
           end
-          # byebug
         end
       end
     end
