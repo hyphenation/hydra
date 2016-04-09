@@ -580,16 +580,21 @@ class Heracles
               @count_hydra.ingest count_pattern
               # TODO Method in Hydra for that
               hydra = @count_hydra
+              @check = ["bx", "ex"].include?(word.word_to(pattern_length)) && dot == 0
+              puts count_pattern.to_s if @check
               word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
                 byebug unless hydra
                 hydra = hydra.getneck(byte.chr)
               end
+              # byebug if hydra.good_count + hydra.bad_count > 0 && @check
+              byebug if hydra.spattern == "1bx"
               if matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               matches.each(&:shift)
               word.shift
             end
           end
 
+          # byebug
           @count_hydra.each do |hydra|
             if hydra.good_count < @threshold
               @count_hydra.delete hydra.spattern
@@ -599,6 +604,7 @@ class Heracles
               @count_hydra.delete pattern
             end
           end
+          # byebug
         end
       end
     end
