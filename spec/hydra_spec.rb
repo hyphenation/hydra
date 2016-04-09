@@ -435,9 +435,9 @@ describe HyphenatedWord do
       expect(pattern.dot(1)).to be == :is
     end
 
-    it "returns 0 if there’s nothing there" do
+    it "returns :no if there’s nothing there" do
       pattern = HyphenatedWord.new('foo-bar')
-      expect(pattern.dot(2)).to be == 0
+      expect(pattern.dot(2)).to be == :no
     end
   end
 end

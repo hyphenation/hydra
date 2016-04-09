@@ -239,7 +239,7 @@ class HyphenatedWord < Pattern
         @digits << :is
         i += 1
       else
-        @digits << 0
+        @digits << :no
       end
       @word += @pattern[i] if @pattern[i]
       i += 1
