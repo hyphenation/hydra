@@ -585,7 +585,7 @@ class Heracles
             puts "#{word.get_word} (matches.count = #{matches.count})" if word.get_word =~ /gh/
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
               puts word.index if word.get_word =~ /gh/
-              # if word.dot(dot) == :is
+              if word.dot(dot) == :is
                 puts "hyphen found (currletter = #{word.currletter})" if word.get_word =~ /gh/
                 covered = false
                 matches.each do |match|
@@ -600,19 +600,25 @@ class Heracles
                 end
                 # count_pattern = Pattern.new word.word_to(pattern_length), word.digits_to(pattern_length).map { |digit| if digit == :is then hyphenation_level else digit end } # unless covered
                 digits = (pattern_length + 1).times.map { 0 }
-                digits[dot] = hyphenation_level if word.dot(dot) == :is
+                digits[dot] = hyphenation_level
                 count_pattern = Pattern.new word.word_to(pattern_length), digits
                 @count_hydra.ingest count_pattern
-                @count_hydra.match(word.word_to(pattern_length)).each do |head|
-                  puts '+1'
-                  head.inc_good_count
+                # TODO Method in Hydra for that
+                hydra = @count_hydra
+                puts word.word_to(pattern_length)
+                word.word_to(pattern_length).each_byte do |byte| # FIXME Should really by char!
+                  puts byte.chr
+                  hydra = hydra.getneck(byte.chr)
                 end
-              # end
+                # byebug
+                hydra.inc_good_count
+              end
               matches.each(&:shift)
               word.shift
             end
           end
 
+          byebug
           @count_hydra.each do |hydra|
             if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
