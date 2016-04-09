@@ -1071,7 +1071,7 @@ describe Heracles do
     it "returns :err when hyphenation level is even" do
       heracles = Heracles.new
       heracles.instance_variable_set :@hyphenation_level, 2
-      expect(heracles.bad).to be == :err
+      expect(heracles.good).to be == :err
     end
   end
 
@@ -1079,7 +1079,7 @@ describe Heracles do
     it "returns :no when hyphenation level is odd" do
       heracles = Heracles.new
       heracles.instance_variable_set :@hyphenation_level, 1
-      expect(heracles.good).to be == :no
+      expect(heracles.bad).to be == :no
     end
 
     it "returns :hyph when hyphenation level is even" do
