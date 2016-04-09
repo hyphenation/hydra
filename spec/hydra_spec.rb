@@ -941,7 +941,7 @@ describe Hydra do
 
       it "sets the index correctly ..." do
         hydra = Hydra.new ['a1b', 'c1de', 'fg1hi']
-        matches = hydra.hydrae('xxa-bc-defg-hixxx')
+        matches = hydra.hydrae('xxabcdefghixxx')
         expect(matches.count).to be == 3
         expect(matches[0].index).to be == 2
         expect(matches[1].index).to be == 4
@@ -950,14 +950,14 @@ describe Hydra do
 
       it "... even with initial dots ..." do
         hydra = Hydra.new '.ab1'
-        matches = hydra.hydrae('ab-cdxxx')
+        matches = hydra.hydrae('abcdxxx')
         expect(matches.count).to be == 1
         expect(match.first.index).to be == 0
       end
 
       it "... and trailing ones." do
         hydra = Hydra.new 'a1bcd.'
-        matches = hydra.hydrae('xxa-bcd')
+        matches = hydra.hydrae('xxabcd')
         expect(matches.count).to be == 1
         expect(match.first.index).to be == 2
       end
