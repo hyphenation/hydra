@@ -566,6 +566,7 @@ class Heracles
   def run_array(array, parameters = [])
     set_parameters(parameters)
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
+      @hyphenation_level = hyphenation_level
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
           array.each do |line|
@@ -574,7 +575,6 @@ class Heracles
             matches = @final_hydra.hydrae(word.get_word)
             matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
-              good = matches.count == 0 && word.dot(dot) == :is
               digits = (pattern_length + 1).times.map { |i| if word.dot(i) == :is then hyphenation_level else 0 end }
               count_pattern = Pattern.new word.word_to(pattern_length), digits
               @count_hydra.ingest count_pattern
@@ -584,7 +584,7 @@ class Heracles
                 byebug unless hydra
                 hydra = hydra.getneck(byte.chr)
               end
-              if good then hydra.inc_good_count else hydra.inc_bad_count end
+              if matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               matches.each(&:shift)
               word.shift
             end
