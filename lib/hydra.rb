@@ -455,7 +455,7 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        @index = pattern.index
+        @index = pattern.index - pattern.length # FIXME
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -476,7 +476,7 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
-            @index = -pattern.index
+            @index = pattern.index - pattern.length
             matches << self
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
@@ -616,7 +616,9 @@ class Heracles
               # byebug if hydra.good_count + hydra.bad_count > 0 && @check
               puts 'foo'
               # byebug if hydra.spattern == "cd1"
-              byebug if hydra.spattern == "xb1"
+              # byebug if hydra.spattern == "xb1"
+              byebug if hydra.spattern == "1cd"
+              # byebug if count_pattern == "1cd"
               puts 'bar'
               relevant_matches = matches.select do |match|
                 # byebug if hydra.spattern == "1ex"
