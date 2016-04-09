@@ -591,7 +591,7 @@ class Heracles
                 @count_hydra.ingest count_pattern
                 # TODO Method in Hydra for that
                 hydra = @count_hydra
-                word.word_to(pattern_length).each_byte do |byte| # FIXME Should really by char!
+                word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
                   hydra = hydra.getneck(byte.chr)
                 end
                 hydra.inc_good_count
