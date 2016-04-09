@@ -612,4 +612,20 @@ class Heracles
       (dot, dot1 = dot1 - dot, 2 * n - dot1 - 1).first
     end
   end
+
+  def good
+    if @hyphenation_level % 2 == 1
+      :is
+    else
+      :err
+    end
+  end
+
+  def bad
+    if @hyphenation_level % 2 == 1
+      :no
+    else
+      :hyph
+    end
+  end
 end

@@ -1062,14 +1062,30 @@ describe Heracles do
   end
 
   describe '#good' do
-    it "returns :is when hyphenation level is odd"
+    it "returns :is when hyphenation level is odd" do
+      heracles = Heracles.new
+      heracles.instance_variable_set :@hyphenation_level, 1
+      expect(heracles.good).to be == :is
+    end
 
-    it "returns :err when hyphenation level is even"
+    it "returns :err when hyphenation level is even" do
+      heracles = Heracles.new
+      heracles.instance_variable_set :@hyphenation_level, 2
+      expect(heracles.bad).to be == :err
+    end
   end
 
   describe '#bad' do
-    it "returns :no when hyphenation level is odd"
+    it "returns :no when hyphenation level is odd" do
+      heracles = Heracles.new
+      heracles.instance_variable_set :@hyphenation_level, 1
+      expect(heracles.good).to be == :no
+    end
 
-    it "returns :hyph when hyphenation level is even"
+    it "returns :hyph when hyphenation level is even" do
+      heracles = Heracles.new
+      heracles.instance_variable_set :@hyphenation_level, 2
+      expect(heracles.bad).to be == :hyph
+    end
   end
 end
