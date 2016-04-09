@@ -455,7 +455,6 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
-        byebug
         @index = pattern.index - depth # FIXME
         matches << self
       when :hyphenate
