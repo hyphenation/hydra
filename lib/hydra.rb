@@ -585,7 +585,7 @@ class Heracles
             puts "#{word.get_word} (matches.count = #{matches.count})" if word.get_word =~ /gh/
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
               puts word.index if word.get_word =~ /gh/
-              if word.dot(dot) == :is
+              if matches.count == 0 && word.dot(dot) == :is
                 puts "hyphen found (currletter = #{word.currletter})" if word.get_word =~ /gh/
                 covered = false
                 matches.each do |match|
