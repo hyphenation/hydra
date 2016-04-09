@@ -1060,4 +1060,16 @@ describe Heracles do
       expect(Heracles.organ(13)).to be == [6, 7, 5, 8, 4, 9, 3, 10, 2, 11, 1, 12, 0, 13]
     end
   end
+
+  describe '#good' do
+    it "returns :is when hyphenation level is odd"
+
+    it "returns :err when hyphenation level is even"
+  end
+
+  describe '#bad' do
+    it "returns :no when hyphenation level is odd"
+
+    it "returns :hyph when hyphenation level is even"
+  end
 end
