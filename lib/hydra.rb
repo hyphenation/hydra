@@ -609,7 +609,12 @@ class Heracles
               end
               # byebug if hydra.good_count + hydra.bad_count > 0 && @check
               # byebug if hydra.spattern == "1ex"
-              if matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+              relevant_matches = matches.select do |match|
+                # byebug if hydra.spattern == "1ex"
+                match.index >= 0 && match.index <= pattern_length
+              end
+              byebug if hydra.spattern == "1ex"
+              if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               matches.each(&:shift)
               word.shift
             end

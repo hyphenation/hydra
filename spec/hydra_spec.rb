@@ -1057,7 +1057,7 @@ describe Heracles do
       f.close
       heracles = Heracles.new
       hydra = heracles.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
-      # Getting ["a1bx", "b1c", "c1d", "f1g"] now
+      # Getting ["b1c", "1bx", "c1d", "1de", "d1ex", "ef1g", "ef1gh", "1ex", "f1g", "f1gh", "1gh", "1ghi", "1ghx"] now
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
     end
   end
