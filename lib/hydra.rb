@@ -572,27 +572,13 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @final_hydra.hydrae(word.get_word)
-            if word.get_word =~ /gh/
-              puts '+++++'
-              matches.each { |match| puts match.index }
-              puts '-----'
-            end
             matches.each { |match| dot.times { match.shift } }
-            if word.get_word =~ /gh/
-              matches.each { |match| puts match.index }
-              puts '+++++'
-            end
-            puts "#{word.get_word} (matches.count = #{matches.count})" if word.get_word =~ /gh/
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
-              puts word.index if word.get_word =~ /gh/
               if matches.count == 0 && word.dot(dot) == :is
-                puts "hyphen found (currletter = #{word.currletter})" if word.get_word =~ /gh/
                 covered = false
                 matches.each do |match|
-                  if match.parent.getneck('h') == match then puts 'yes' end
                   next if match.index < 0 || match.index > pattern_length
                   if word.dot(dot) == :is && match.currdigit != 0
-                    # byebug if match.spattern == "xx"
                     match.inc_good_count
                     covered = true
                     # break
@@ -605,12 +591,9 @@ class Heracles
                 @count_hydra.ingest count_pattern
                 # TODO Method in Hydra for that
                 hydra = @count_hydra
-                puts word.word_to(pattern_length)
                 word.word_to(pattern_length).each_byte do |byte| # FIXME Should really by char!
-                  puts byte.chr
                   hydra = hydra.getneck(byte.chr)
                 end
-                # byebug
                 hydra.inc_good_count
               end
               matches.each(&:shift)
@@ -618,7 +601,6 @@ class Heracles
             end
           end
 
-          byebug
           @count_hydra.each do |hydra|
             if hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               @final_hydra.ingest Pattern.new(hydra.spattern) # FIXME add atlas and use it instead of spattern
