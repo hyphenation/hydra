@@ -594,7 +594,7 @@ class Heracles
             next unless word.length >= pattern_length
             # byebug if word.get_word == "xxabcdexxx" && pattern_length == 2 && dot == 0
             matches = @final_hydra.hydrae(word.get_word)
-            matches.each { |match| dot.times { match.shift } }
+            # matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
               digits = (pattern_length + 1).times.map { |i| if i == dot then hyphenation_level else 0 end }
               count_pattern = Pattern.new word.word_to(pattern_length), digits
