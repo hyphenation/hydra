@@ -455,6 +455,7 @@ class Hydra
       when :match
         matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
       when :hydrae
+        byebug if "xxabcdexxx" =~ /#{pattern.to_s}/
         @index = -pattern.index
         matches << self
       when :hyphenate
@@ -592,6 +593,7 @@ class Heracles
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
+            # byebug if word.get_word == "xxabcdexxx" && pattern_length == 2 && dot == 0
             matches = @final_hydra.hydrae(word.get_word)
             matches.each { |match| dot.times { match.shift } }
             (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
@@ -607,7 +609,7 @@ class Heracles
                 hydra = hydra.getneck(byte.chr)
               end
               # byebug if hydra.good_count + hydra.bad_count > 0 && @check
-              byebug if hydra.spattern == "1bx"
+              # byebug if hydra.spattern == "1ex"
               if matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               matches.each(&:shift)
               word.shift
