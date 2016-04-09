@@ -779,6 +779,12 @@ describe Hydra do
       hydra.ingest 'b2a1c'
       expect { hydra.delete 'ba4c3' }.to raise_exception Hydra::ConflictingPattern
     end
+
+    it "also deletes good and bad counts" do
+      hydra = Hydra.new ['abc', 'def']
+      cneck = hydra.getneck('a').getneck('b').getneck('c')
+      cneck.
+    end
   end
 
   describe '#regest' do
