@@ -357,7 +357,20 @@ class Hydra
   end
 
   def propagate_chop
-    parent.propagate_chop if parent && @necks.count == 0
+    if @necks.count == 0
+      if parent
+        neck = nil
+        parent.letters.each do |letter| # TODO Use atlas when existing
+          if parent.getneck(letter) == self
+            neck = letter
+            break
+          end
+        end
+        # parent.chopneck(letter) # TODO
+      end
+
+      parent.propagate_chop
+    end
   end
 
   def good_count
