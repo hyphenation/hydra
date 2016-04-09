@@ -351,6 +351,9 @@ class Hydra
 
   def chophead
     @head = nil
+    @good_count = 0
+    @bad_count = 0
+    propagate_chop
   end
 
   def good_count
