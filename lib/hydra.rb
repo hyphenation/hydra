@@ -621,6 +621,7 @@ class Heracles
               relevant_matches = matches.select do |match|
                 # byebug if hydra.spattern == "1ex"
                 # match.index >= word.index && match.index <= word.index + pattern_length
+                match.index == word.index + dot
               end
               # byebug if hydra.spattern == "1ex"
               if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
