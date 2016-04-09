@@ -370,10 +370,9 @@ class Hydra
             break
           end
         end
-        # parent.chopneck(letter) # TODO
+        # parent.chopneck(neck) # TODO
+        parent.propagate_chop
       end
-
-      parent.propagate_chop
     end
   end
 
