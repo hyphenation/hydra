@@ -1055,6 +1055,19 @@ describe Hydra do
       # FIXME Also if larger than end of digits array
     end
 
+    describe '#read' do
+      it "reads a word, returning a hydra" do
+        hydra = Hydra.new 'abc'
+        chydra = hydra.getneck('a').getneck('b').getneck('c')
+        expect(hydra.read('abc')).to be == chydra
+      end
+
+      it "returns nil if word isn’t found" do
+        hydra = Hydra.new 'foo'
+        expect(hydra.read('bar')).to be_nil
+      end
+    end
+
     describe '#spattern' do
       it "returns the pattern associated with that head, as string" do
         hydra = Hydra.new '5fo2o3'

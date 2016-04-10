@@ -544,6 +544,15 @@ class Hydra
     pattern
   end
 
+  def read(word)
+    if word == ""
+      self
+    else
+      neck = getneck(word[0])
+      neck.read(word[1..-1]) if neck
+    end
+  end
+
   # Debug methods
   def spattern(sneck = "", digits = nil)
     if digits
