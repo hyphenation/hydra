@@ -600,7 +600,7 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @final_hydra.hydrae(word.get_word)
-            (word.length - pattern_length).times do |i| # TODO Take hyphenmins into account
+            (word.length - pattern_length).times do # TODO Take hyphenmins into account
               digits = (pattern_length + 1).times.map { |i| if i == dot then hyphenation_level else 0 end }
               count_pattern = Pattern.new word.word_to(pattern_length), digits
               @count_hydra.ingest count_pattern
@@ -609,13 +609,11 @@ class Heracles
               word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
                 hydra = hydra.getneck(byte.chr)
               end
-              # byebug if hydra.spattern == "1bcdex"
               currpos = word.index + dot
-              relevant_matches = matches.select do |match|
+              relevant_matches = matches.count do |match|
                 currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
               end
-              # byebug if hydra.spattern == "1bcdex"
-              if relevant_matches.count == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+              if relevant_matches == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
             end
           end
