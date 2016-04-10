@@ -841,8 +841,7 @@ describe Hydra do
     it "deletes the whole neck if it doesn’t have any other descendants" do
       hydra = Hydra.new ['abc', 'abcd', 'def', 'ghi']
       hydra.delete "def"
-      pending "Need one more method"
-      expect(hydra.getneck('a')).to be_nil
+      expect(hydra.getneck('d')).to be_nil
     end
   end
 
