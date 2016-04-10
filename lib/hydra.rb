@@ -606,8 +606,8 @@ class Heracles
               @count_hydra.ingest count_pattern
               # TODO Method in Hydra for that
               hydra = @count_hydra
-              word.word_to(pattern_length).each_byte do |byte| # FIXME Should really be char!
-                hydra = hydra.getneck(byte.chr)
+              word.word_to(pattern_length).each_char do |char|
+                hydra = hydra.getneck(char)
               end
               currpos = word.index + dot
               relevant_matches = matches.count do |match|
