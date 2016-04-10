@@ -264,7 +264,7 @@ class Hydra
   class OutOfBounds < StandardError
   end
 
-  def initialize(words = nil, mode = :lax)
+  def initialize(words = nil, mode = :lax, atlas = nil)
     @necks = { }
     @mode = mode
     @lefthyphenmin = 2
@@ -272,6 +272,7 @@ class Hydra
     @good_count = @bad_count = 0
     @index = 0
     ingest words if words
+    @atlas = atlas if atlas
   end
 
   def index

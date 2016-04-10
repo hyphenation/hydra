@@ -465,6 +465,11 @@ describe Hydra do
       hydra = Hydra.new(['foo', 'bar', 'baz', 'quux'])
       expect(hydra.count).to be == 4
     end
+
+    it "optionally sets the atlas vertebra that supports the head" do
+      hydra = Hydra.new([], :lax, 'a')
+      expect(hydra.instance_variable_get :@atlas).to be == 'a'
+    end
   end
 
   describe '#lefthyphenmin' do
