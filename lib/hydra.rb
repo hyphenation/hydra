@@ -562,7 +562,7 @@ class Hydra
         Pattern.new(sneck, digits).to_s
       end
     else
-      if gethead
+      if gethead # FIXME Figure something out if current head stores e. g. "ab" and "ab."
         spattern('', gethead)
       elsif getneck('.')
         if getneck('.').gethead
