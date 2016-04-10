@@ -329,7 +329,7 @@ class Hydra
   end
 
   def ensure_neck(letter)
-    @necks[letter] = Hydra.new(nil, @mode) unless @necks[letter]
+    @necks[letter] = Hydra.new(nil, @mode, letter) unless @necks[letter]
     @necks[letter].setparent(self)
   end
 
@@ -544,14 +544,7 @@ class Hydra
   def spattern(sneck = "", digits = nil)
     if digits
       if parent
-        letter = nil
-        parent.letters.each do |l|
-          if parent.getneck(l) == self
-            letter = l
-            break
-          end
-        end
-        parent.spattern(letter + sneck, digits)
+        parent.spattern(@atlas + sneck, digits)
       else
         Pattern.new(sneck, digits).to_s
       end
