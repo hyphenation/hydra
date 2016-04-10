@@ -611,10 +611,10 @@ class Heracles
             matches = @final_hydra.hydrae(word.get_word)
             (word.length - pattern_length).times do # TODO Take hyphenmins into account
               digits = (pattern_length + 1).times.map { |i| if i == dot then hyphenation_level else 0 end }
-              count_pattern = Pattern.new word.word_to(pattern_length), digits
+              currword = word.word_to(pattern_length)
+              count_pattern = Pattern.new currword, digits
               @count_hydra.ingest count_pattern
-              # TODO Method in Hydra for that
-              hydra = @count_hydra.read(word.word_to(pattern_length))
+              hydra = @count_hydra.read(currword)
               currpos = word.index + dot
               relevant_matches = matches.count do |match|
                 currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
