@@ -1144,13 +1144,19 @@ describe Heracles do
     it "runs a slightly more complex list of words" do
       dictionary = ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi']
       dictionary.map! { |word| word = 'xx' + word + 'xxx' }
-      f = File.open('files/dummy2.dic', 'w')
-      dictionary.each { |word| f.puts(word) }
-      f.close
       heracles = Heracles.new
       hydra = heracles.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
       # Getting it right now!
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
+    end
+
+    it "handles hyphenmins correctly" do
+      dictionary = ['a-b', 'a-b-cxxx']
+      f = File.open('files/dummy3.dic', 'w')
+      dictionary.each { |word| f.puts(word) }
+      f.close
+      hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c']
     end
   end
 
