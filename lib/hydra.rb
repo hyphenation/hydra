@@ -116,7 +116,7 @@ class Pattern
     Pattern.new(String.new(@word), digits)
   end
 
-  def freeze(digits) # FIXME Actually freeze!
+  def freeze(digits)
     @digits = digits
     @frozen = true
     self
