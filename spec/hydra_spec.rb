@@ -164,6 +164,12 @@ describe Pattern do
       it "returns the pattern" do
         expect(pattern.grow('taller')).to be_a Pattern # Adding more than one letter: not recommended!
       end
+
+      it "raises an exception if pattern is frozen" do
+        pattern = Pattern.new 'def'
+        pattern.freeze [0, 1, 2, 3]
+        expect { pattern.grow('g') }.to raise_exception Hydra::FrozenPattern
+      end
     end
 
     describe '#grow!' do
@@ -171,6 +177,12 @@ describe Pattern do
         pattern = Pattern.new 'f'
         pattern.grow!('g')
         expect(pattern.get_word.length).to eq 2
+      end
+
+      it "raises and exception if pattern is frozen" do
+        pattern = Pattern.new 'ijk'
+        pattern.freeze [4, 6, 7, 8]
+        expect { pattern.grow 'l' }.to raise_exception Hydra::FrozenPattern
       end
     end
 
@@ -212,12 +224,37 @@ describe Pattern do
         pattern = Pattern.new('ba6z5quux')
         expect(pattern.freeze [4, 5, 6, 7, 8, 9, 0, 0]).to be_a Pattern
       end
+
+      it "actually freezes" do
+        pattern = Pattern.new('foo5bar')
+        pattern.freeze [0, 1, 2, 3, 4, 5, 6]
+        expect(pattern.instance_variable_get :@frozen).to be_truthy
+      end
     end
 
     describe '#freeze!' do
       it "just sets the digits" do
         pattern = Pattern.new('1ing')
         expect(pattern.freeze! [4, 5, 6, 0]).to eq [4, 5, 6, 0]
+      end
+
+      it "actually freezes" do
+        pattern = Pattern.new('t1t2ing')
+        pattern.freeze! [0, 1, 2, 0, 0, 0]
+        expect(pattern.instance_variable_get :@frozen).to be_truthy
+      end
+    end
+
+    describe '#frozen?' do
+      it "says whether the pattern is frozen" do
+        pattern = Pattern.new 'abc'
+        pattern.freeze! [0, 1, 2, 3]
+        expect(pattern.frozen?).to be_truthy
+      end
+
+      it "returns nil on initialisation" do
+        pattern = Pattern.new
+        expect(pattern.frozen?).to be_falsey
       end
     end
 

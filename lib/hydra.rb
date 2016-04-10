@@ -94,12 +94,14 @@ class Pattern
   end
 
   def grow(letter)
+    raise Hydra::FrozenPattern if @frozen
     breakup unless @word # Shouldn’t be necessary, really
     @word += letter
     self
   end
 
   def grow!(letter)
+    raise Hydra::FrozenPattern if @frozen
     breakup unless @word
     @word += letter
   end
@@ -116,11 +118,17 @@ class Pattern
 
   def freeze(digits) # FIXME Actually freeze!
     @digits = digits
+    @frozen = true
     self
   end
 
   def freeze!(digits)
+    @frozen = true
     @digits = digits
+  end
+
+  def frozen?
+    @frozen
   end
 
   def word_so_far
@@ -262,6 +270,9 @@ class Hydra
   end
 
   class OutOfBounds < StandardError
+  end
+
+  class FrozenPattern < StandardError
   end
 
   def initialize(words = nil, mode = :lax, atlas = nil)
