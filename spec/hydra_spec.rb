@@ -573,7 +573,7 @@ describe Hydra do
   describe '#depth' do
     it "returns the depth" do
       hydra = Hydra.new 'abv'
-      deep_water = hydra.getneck('a').getneck('b').getneck('v')
+      deep_water = hydra.read('abv')
       expect(deep_water.depth).to be == 3
     end
 
@@ -646,8 +646,8 @@ describe Hydra do
   describe '#good_count' do
     it "returns the good count" do
       hydra = Hydra.new ['abc', 'def', 'ghi']
-      3.times { hydra.getneck('a').getneck('b').getneck('c').inc_good_count } # TODO Convenience method for that?
-      expect(hydra.getneck('a').getneck('b').getneck('c').good_count).to be == 3
+      3.times { hydra.read('abc').inc_good_count } # TODO Convenience method for that?
+      expect(hydra.read('abc').good_count).to be == 3
     end
 
     it "returns 0 for new heads" do
@@ -669,8 +669,8 @@ describe Hydra do
   describe '#bad_count' do
     it "returns the bad count" do
       hydra = Hydra.new 'ooo'
-      3.times { hydra.getneck('o').getneck('o').getneck('o').inc_bad_count }
-      expect(hydra.getneck('o').getneck('o').getneck('o').bad_count).to be == 3
+      3.times { hydra.read('ooo').inc_bad_count }
+      expect(hydra.read('ooo').bad_count).to be == 3
     end
 
     it "returns 0 for new heads" do
@@ -832,7 +832,7 @@ describe Hydra do
 
     it "also deletes good and bad counts" do
       hydra = Hydra.new ['abc', 'def']
-      cneck = hydra.getneck('a').getneck('b').getneck('c')
+      cneck = hydra.read('abc')
       cneck.inc_good_count
       hydra.delete "abc"
       expect(cneck.good_count).to be == 0
@@ -1041,7 +1041,7 @@ describe Hydra do
     describe '#currdigit' do
       it "returns the digit at the current index position" do
         hydra = Hydra.new 'ab3c'
-        chydra = hydra.getneck('a').getneck('b').getneck('c')
+        chydra = hydra.read('abc')
         2.times { chydra.shift }
         expect(chydra.currdigit).to be == 3
       end
@@ -1071,25 +1071,25 @@ describe Hydra do
     describe '#spattern' do
       it "returns the pattern associated with that head, as string" do
         hydra = Hydra.new '5fo2o3'
-        fooneck = hydra.getneck('f').getneck('o').getneck('o')
+        fooneck = hydra.read('foo')
         expect(fooneck.spattern).to eq "5fo2o3"
       end
 
       it "returns the empty string if no head" do
         hydra = Hydra.new 'abc'
-        bneck = hydra.getneck('a').getneck('b')
+        bneck = hydra.read('ab')
         expect(bneck.spattern).to be == ""
       end
 
       it "works with initial dots" do
         hydra = Hydra.new '.ba2'
-        aneck = hydra.getneck('.').getneck('b').getneck('a')
+        aneck = hydra.read('.ba')
         expect(aneck.spattern).to be == ".ba2"
       end
 
       it "works with final dots" do
         hydra = Hydra.new 'f4o.'
-        oneck = hydra.getneck('f').getneck('o')
+        oneck = hydra.read('fo')
         expect(oneck.spattern).to be == "f4o."
       end
     end

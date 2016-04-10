@@ -614,10 +614,7 @@ class Heracles
               count_pattern = Pattern.new word.word_to(pattern_length), digits
               @count_hydra.ingest count_pattern
               # TODO Method in Hydra for that
-              hydra = @count_hydra
-              word.word_to(pattern_length).each_char do |char|
-                hydra = hydra.getneck(char)
-              end
+              hydra = @count_hydra.read(word.word_to(pattern_length))
               currpos = word.index + dot
               relevant_matches = matches.count do |match|
                 currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
