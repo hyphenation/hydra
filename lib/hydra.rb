@@ -264,7 +264,7 @@ class HyphenatedWord < Pattern
     @digits[@index + n]
   end
 
-  def mask(pattern)
+  def mask(pattern) # TODO Something to make consecutive maskings work better
     reset
     shift(pattern.index)
     pattern.reset # TODO Rename all that stuff: we should have a cursor and an anchor
