@@ -267,7 +267,7 @@ class HyphenatedWord < Pattern
   def mask(pattern)
     reset
     shift(pattern.index)
-    pattern.reset
+    pattern.reset # TODO Rename all that stuff: we should have a cursor and an anchor
     (pattern.length + 1).times do
       pattern_digit = pattern.currdigit
       break unless pattern_digit
