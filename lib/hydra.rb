@@ -618,7 +618,7 @@ class Heracles
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
             word_end = word.length - @final_hydra.righthyphenmin if word_end > word.length - @final_hydra.righthyphenmin
             (word_start - dot).times { word.shift }
-            (word_start..word_end).each do # TODO Take hyphenmins into account
+            (word_start..word_end).each do
               currword = word.word_to(pattern_length)
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               @count_hydra.ingest count_pattern
