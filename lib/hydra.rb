@@ -614,7 +614,11 @@ class Heracles
             next unless word.length >= pattern_length
             matches = @final_hydra.hydrae(word.get_word)
             (@final_hydra.lefthyphenmin - dot).times { word.shift }
-            (word.length - @final_hydra.lefthyphenmin - @final_hydra.righthyphenmin).times do # TODO Take hyphenmins into account
+            word_start = dot
+            word_end = word.length - (pattern_length - dot)
+            word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
+            word_end = word.length - @final_hydra.righthyphenmin if word_end > word.length - @final_hydra.righthyphenmin
+            (word_start..word_end).each do # TODO Take hyphenmins into account
               currword = word.word_to(pattern_length)
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               @count_hydra.ingest count_pattern
