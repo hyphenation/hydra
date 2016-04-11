@@ -137,17 +137,17 @@ class Pattern
 
   def word_so_far
     breakup unless @word
-    @word[0..index-1]
+    @word[0..@index-1]
   end
 
   def word_to(n)
     breakup unless @word
-    @word[index..index + n - 1]
+    @word[@index..@index + n - 1]
   end
 
   def digits_to(n)
     breakup unless @word
-    @digits[index..index + n]
+    @digits[@index..@index + n]
   end
 
   def mask(a)
