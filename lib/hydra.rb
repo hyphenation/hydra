@@ -635,6 +635,7 @@ class Heracles
               pattern = hydra.spattern
               @final_hydra.ingest Pattern.new(pattern) # FIXME add atlas and use it instead of spattern
               @count_hydra.delete pattern
+            # FIXME else clear good and bad counts?
             end
           end
         end
