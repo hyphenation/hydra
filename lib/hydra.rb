@@ -609,7 +609,8 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @final_hydra.hydrae(word.get_word)
-            (word.length - pattern_length).times do # TODO Take hyphenmins into account
+            (@final_hydra.lefthyphenmin - dot).times { word.shift }
+            (word.length - @final_hydra.lefthyphenmin - @final_hydra.righthyphenmin).times do # TODO Take hyphenmins into account
               digits = (pattern_length + 1).times.map { |i| if i == dot then hyphenation_level else 0 end }
               currword = word.word_to(pattern_length)
               count_pattern = Pattern.new currword, digits

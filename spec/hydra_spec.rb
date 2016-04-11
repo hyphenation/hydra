@@ -1152,9 +1152,6 @@ describe Heracles do
 
     it "handles hyphenmins correctly" do
       dictionary = ['a-b', 'a-b-cxxx']
-      f = File.open('files/dummy3.dic', 'w')
-      dictionary.each { |word| f.puts(word) }
-      f.close
       hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c']
     end
