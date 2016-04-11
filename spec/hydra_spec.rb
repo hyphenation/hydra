@@ -1163,6 +1163,12 @@ describe Heracles do
       hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c']
     end
+
+    it "handles hyphenmins correctly on a more complex example" do
+      dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
+      hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
+    end
   end
 
   describe '.organ' do
