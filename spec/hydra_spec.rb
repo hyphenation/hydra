@@ -1149,25 +1149,35 @@ describe Heracles do
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
 
-    it "runs a slightly more complex list of words" do
-      dictionary = ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi']
-      dictionary.map! { |word| word = 'xx' + word + 'xxx' }
-      heracles = Heracles.new
-      hydra = heracles.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
-      # Getting it right now!
-      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
-    end
+    context "with a complex dictionary" do
+      before(:each) do
+        @complex_dictionary = ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi']
+        @complex_dictionary.map! { |word| word = 'xx' + word + 'xxx' }
+      end
 
-    it "handles hyphenmins correctly" do
-      dictionary = ['a-b', 'a-b-cxxx']
-      hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
-      expect(hydra.digest).to be == ['b1c']
-    end
+      it "runs a slightly more complex list of words" do
+        heracles = Heracles.new
+        hydra = heracles.run_array(@complex_dictionary, [1, 1, 2, 5, 1, 1, 1])
+        # Getting it right now!
+        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
+      end
 
-    it "handles hyphenmins correctly on a more complex example" do
-      dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
-      hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
-      expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
+      it "handles hyphenmins correctly" do
+        dictionary = ['a-b', 'a-b-cxxx']
+        hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
+        expect(hydra.digest).to be == ['b1c']
+      end
+
+      it "handles hyphenmins correctly on a more complex example" do
+        dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
+        hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
+        expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
+      end
+
+      it "generates level 2" do
+        hydra = Heracles.new.run_array(@complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
+        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
+      end
     end
   end
 

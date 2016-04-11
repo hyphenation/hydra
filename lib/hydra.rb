@@ -592,13 +592,8 @@ class Heracles
   end
 
   def set_parameters(parameters)
-    @hyphenation_level_start = parameters[0]
-    @hyphenation_level_end = parameters[1]
-    @pattern_length_start = parameters[2]
-    @pattern_length_end = parameters[3]
-    @good_weight = parameters[4]
-    @bad_weight = parameters[5]
-    @threshold = parameters[6]
+    @hyphenation_level_start = parameters.shift
+    @hyphenation_level_end = parameters.shift
     @count_hydra = Hydra.new
     @final_hydra = Hydra.new
   end
@@ -607,6 +602,11 @@ class Heracles
     set_parameters(parameters)
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       @hyphenation_level = hyphenation_level
+      @pattern_length_start = parameters.shift
+      @pattern_length_end = parameters.shift
+      @good_weight = parameters.shift
+      @bad_weight = parameters.shift
+      @threshold = parameters.shift
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
           array.each do |line|
