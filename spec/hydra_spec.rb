@@ -516,6 +516,8 @@ describe HyphenatedWord do
       word.mask(pattern)
       expect(word.get_digits).to be == [:no, :no, :no, :found, :no, :no, :no]
     end
+
+    # TODO Multiple masks
   end
 end
 
