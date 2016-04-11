@@ -487,7 +487,7 @@ describe HyphenatedWord do
   end
 
   describe '#mask' do
-    it "takes a pattern to mask current positions" do
+    it "masks a word with values from a pattern" do
       word = HyphenatedWord.new('foo-bar')
       pattern = Pattern.new('foo1')
       word.mask(pattern)
@@ -498,7 +498,7 @@ describe HyphenatedWord do
       word = HyphenatedWord.new('foo-bar')
       pattern = Pattern.new('fo1')
       word.mask(pattern)
-      expect(word.get_digits).to be == [:no, :no, :err, :err, :no, :no, :no]
+      expect(word.get_digits).to be == [:no, :no, :err, :is, :no, :no, :no]
     end
 
 
