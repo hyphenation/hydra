@@ -485,6 +485,29 @@ describe HyphenatedWord do
       expect(pattern.dot(2)).to be == :no
     end
   end
+
+  describe '#mask' do
+    it "takes a pattern to mask current positions" do
+      word = HyphenatedWord.new('foo-bar')
+      pattern = Pattern.new('foo1')
+      word.mask(pattern)
+      expect(word.get_digits).to be == [:no, :no, :no, :found, :no, :no, :no]
+    end
+
+    it "marks erroneous breaks as such" do
+      word = HyphenatedWord.new('foo-bar')
+      pattern = Pattern.new('fo1')
+      word.mask(pattern)
+      expect(word.get_digits).to be == [:no, :no, :err, :err, :no, :no, :no]
+    end
+
+
+    it "marks erroneous non-breaks as such" do
+      word = HyphenatedWord.new('foo-bar')
+      pattern = Pattern.new('foo2')
+      word.mask(pattern).to be == [:no, :no, :no, :err, :no, :no, :no]
+    end
+  end
 end
 
 describe Hydra do
