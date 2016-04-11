@@ -507,6 +507,13 @@ describe HyphenatedWord do
       pattern = Pattern.new('foo2')
       word.mask(pattern).to be == [:no, :no, :no, :err, :no, :no, :no]
     end
+
+    it "works with non-initial patterns as well" do
+      word = HyphenatedWord.new('foo-bar')
+      pattern = Pattern.new('5bar')
+      pattern.shift(3)
+      word.mask(pattern).to be == [:no, :no, :no, :found, :no, :no, :no]
+    end
   end
 end
 

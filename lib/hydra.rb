@@ -245,7 +245,7 @@ class HyphenatedWord < Pattern
   def initialize(pattern)
     @pattern = pattern
     @word, i, @digits = '', 0, []
-    while i < @pattern.length
+    while i <= @pattern.length # FIXME Test for <= (was <)
       char = @pattern[i]
       if char == '-'
         @digits << :is
@@ -262,6 +262,23 @@ class HyphenatedWord < Pattern
 
   def dot(n)
     @digits[@index + n]
+  end
+
+  def mask(pattern)
+    reset
+    shift(pattern.index)
+    pattern_digits = pattern.get_digits
+    pattern_digits.each do |digit|
+      byebug
+      pattern_digit = pattern_digits.shift
+      if currdigit == :is
+        if pattern_digit % 2 == 1 then @digits[@index] = :found end # TODO setdigit
+      elsif currdigit == :no # It really can’t be anything else, but for symmetry
+        if pattern_digit % 2 == 1 then @digits[@index] = :err end
+      end
+      pattern.shift
+      shift
+    end
   end
 end
 
@@ -621,6 +638,7 @@ class Heracles
             (word_start..word_end).each do
               currword = word.word_to(pattern_length)
               count_pattern = Pattern.simple currword, dot, hyphenation_level
+              # byebug if count_pattern.to_s == "2dx"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               currpos = word.index + dot
