@@ -626,7 +626,7 @@ class Heracles
           end
 
           @count_hydra.each do |hydra|
-            if hydra.good_count < @threshold
+            if hydra.good_count * @good_weight < @threshold
               @count_hydra.delete hydra.spattern
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               pattern = hydra.spattern
