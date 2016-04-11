@@ -29,6 +29,14 @@ describe Pattern do
     end
   end
 
+  describe '.simple' do
+    it "returns a simple pattern" do
+      pattern = Pattern.simple 'abc', 2, 1
+      expect(pattern.get_word).to eq 'abc'
+      expect(pattern.get_digits).to be == [0, 0, 1, 0]
+    end
+  end
+
   context "with a predefined pattern" do
     describe '#index' do
       it "returns the index" do

@@ -41,6 +41,10 @@ class Pattern
     new word, (word.length + 1).times.map { 0 } # I’m sure there is syntactic sugar for that ...
   end
 
+  def self.simple(word, position, value)
+    new word, (word.length + 1).times.map { |i| if i == position then value else 0 end }
+  end
+
   def get_digits
     breakup unless @digits
     @digits
