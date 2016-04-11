@@ -267,10 +267,10 @@ class HyphenatedWord < Pattern
   def mask(pattern)
     reset
     shift(pattern.index)
-    pattern_digits = pattern.get_digits
-    pattern_digits.each do |digit|
-      byebug
-      pattern_digit = pattern_digits.shift
+    pattern.reset
+    (pattern.length + 1).times do
+      pattern_digit = pattern.currdigit
+      break unless pattern_digit
       if currdigit == :is
         if pattern_digit % 2 == 1 then @digits[@index] = :found end # TODO setdigit
       elsif currdigit == :no # It really can’t be anything else, but for symmetry
