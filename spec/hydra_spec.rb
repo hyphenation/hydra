@@ -1046,28 +1046,28 @@ describe Hydra do
         expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
       end
 
-      it "sets the index correctly" do
+      it "sets the cursor correctly" do
         hydra = Hydra.new ['oba']
         match = hydra.match('foobar').first
-        expect(match.index).to be == 2
+        expect(match.cursor).to be == 2
       end
 
       it "... also with initial dot" do
         hydra = Hydra.new '.foo'
         match = hydra.match('foobar').first
-        expect(match.index).to be == 0
+        expect(match.cursor).to be == 0
       end
 
       it "... and final dots" do
         hydra = Hydra.new 'bar.'
         match = hydra.match('foobar').first
-        expect(match.index).to be == 3
+        expect(match.cursor).to be == 3
       end
 
       it "... and dots at both ends" do
         hydra = Hydra.new '.foo.'
         match = hydra.match('foo').first
-        expect(match.index).to be == 0
+        expect(match.cursor).to be == 0
       end
     end
 
