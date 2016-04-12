@@ -344,6 +344,13 @@ describe Pattern do
         expect(pattern.to_s).to eq 'sup3ercal'
       end
 
+      it "also works with a pattern" do
+        pattern = Pattern.dummy 'foobar'
+        3.times { pattern.shift }
+        pattern.mask Pattern.new "foo5" # FIXME That’s awkward
+        expect(pattern.to_s).to eq "foo5bar"
+      end
+
       it "applies several masks successively" do
         pattern = Pattern.dummy 'supercal'
         2.times { pattern.shift }

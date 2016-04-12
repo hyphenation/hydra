@@ -167,10 +167,14 @@ class Pattern
   end
 
   def mask(a)
-    offset = a.length - 1
-    a.length.times do |i|
-      j = index - offset + i
-      @digits[j] = [a[i], @digits[j] || 0].max
+    if a.is_a? Pattern
+      mask(a.get_digits)
+    else
+      offset = a.length - 1
+      a.length.times do |i|
+        j = index - offset + i
+        @digits[j] = [a[i], @digits[j] || 0].max
+      end
     end
   end
 
