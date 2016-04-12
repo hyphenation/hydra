@@ -20,6 +20,14 @@ class Pattern
     @cursor
   end
 
+  def anchor
+    @anchor
+  end
+
+  def setanchor(anchor)
+    @anchor = anchor
+  end
+
   def set_variables(index, cursor = 0)
     @index = index
     @cursor = cursor

@@ -53,6 +53,22 @@ describe Pattern do
     end
   end
 
+  describe '#anchor' do
+    it "returns the anchor" do
+      pattern = Pattern.new 'foo3'
+      pattern.instance_variable_set :@anchor, 4
+      expect(pattern.anchor).to be == 4
+    end
+  end
+
+  describe '#setanchor' do
+    it "sets the anchor" do
+      pattern = Pattern.new '5bar'
+      pattern.setanchor(5)
+      expect(pattern.instance_variable_get :@anchor).to be == 5
+    end
+  end
+
   context "with a predefined pattern" do
     describe '#index' do
       it "returns the index" do
