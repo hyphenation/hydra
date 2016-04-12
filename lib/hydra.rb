@@ -551,6 +551,7 @@ class Hydra
     l.times.each do |n|
       temp = []
       regest(Pattern.dummy(word[n..l-1]), :match, temp)
+      temp.each { |match| match.setanchor(n) }
       matches += temp
     end
 
