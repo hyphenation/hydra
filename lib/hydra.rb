@@ -212,6 +212,7 @@ class Pattern
 
   def currdigit
     breakup unless @digits
+    raise unless @index == @cursor
     @digits[@index]
   end
 
