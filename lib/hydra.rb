@@ -82,6 +82,7 @@ class Pattern
 
   def reset
     @index = 0
+    @cursor = 0
   end
 
   def letter(n)

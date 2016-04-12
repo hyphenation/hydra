@@ -108,6 +108,12 @@ describe Pattern do
         pattern.reset
         expect(pattern.index).to eq 0
       end
+
+      it "resets the cursor too" do
+        2.times { pattern.shift }
+        pattern.reset
+        expect(pattern.cursor).to be == 0
+      end
     end
 
     describe '#letter' do
