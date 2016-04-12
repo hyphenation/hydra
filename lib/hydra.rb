@@ -207,13 +207,12 @@ class Pattern
 
   def currletter
     breakup unless @word
-    @word[@index]
+    @word[@cursor]
   end
 
   def currdigit
     breakup unless @digits
-    raise unless @index == @cursor
-    @digits[@index]
+    @digits[@cursor]
   end
 
   def to_s
