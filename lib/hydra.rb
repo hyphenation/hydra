@@ -520,7 +520,7 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
+            matches << Pattern.new(pattern.word_so_far, head[0..-2], -pattern.index).final
           elsif mode == :hydrae
             @index = pattern.index - depth
             @index += 1 if spattern =~ /^\./ # FIXME See above
@@ -546,6 +546,7 @@ class Hydra
   def match(word)
     matches = []
     getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
+    matches.each { |match| match.setanchor(0) }
     matches.each { |pattern| pattern.initial! }
     l = word.length
     l.times.each do |n|
