@@ -6,7 +6,8 @@ class Pattern
     if digits
       @word = word
       @digits = digits
-      raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
+      byebug unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
+      # raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
     elsif word
       @pattern = word
     else
@@ -482,7 +483,7 @@ class Hydra
     if digits
       case mode
       when :match
-        matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
+        matches << Pattern.new(pattern.word_so_far, digits[0..depth], pattern.index - depth) # FIXME That’s ugly
       when :hydrae
         @index = pattern.index - depth
         @index += 1 if spattern =~ /^\./ # FIXME awful
@@ -504,7 +505,7 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
+            matches << Pattern.new(pattern.word_so_far, head[0..depth], pattern.index).final # FIXME That’s ugly
           elsif mode == :hydrae
             @index = pattern.index - depth
             @index += 1 if spattern =~ /^\./ # FIXME See above
@@ -529,11 +530,14 @@ class Hydra
 
   def match(word)
     matches = []
-    getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
+    pattern = Pattern.dummy(word)
+    getneck('.').regest(pattern, :match, matches) if getneck('.')
     matches.each { |pattern| pattern.initial! }
-    e = word.length - 1
-    (e + 1).times.each do |n|
-      regest(Pattern.dummy(word[n..e]), :match, matches)
+    l = word.length
+    l.times.each do |n|
+      pattern.reset
+      pattern.shift(n)
+      regest(pattern, :match, matches)
     end
 
     matches.flatten.compact.sort
@@ -541,7 +545,7 @@ class Hydra
 
   def hydrae(word)
     matches = []
-    getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if getneck('.')
+    getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if getneck('.') # FIXME Feels fishy
     l = word.length
     pattern = Pattern.dummy(word)
     l.times.each do |n|

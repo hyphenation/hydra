@@ -1001,13 +1001,6 @@ describe Hydra do
       it "matches a more complex example with dots" do
         expect(complex_hydra.match('foobar').map(&:to_s)).to eq ['a2r.', 'ba1', '3ba2r.', '.fo1', '.foo3', 'fo2o1', 'o2o']
       end
-    end
-
-    describe '#prehyphenate' do
-      it "pre-hyphenates the string" do
-        hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
-        expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
-      end
 
       it "... also with a final dot" do
         hydra.ingest ['fo1', 'o2o3', '5bar.']
@@ -1021,6 +1014,37 @@ describe Hydra do
         pattern = hydra.prehyphenate('foobar')
         expect(pattern.get_word).to be == "foobar"
         expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
+      end
+
+      it "sets the index correctly" do
+        hydra = Hydra.new ['oba']
+        match = hydra.match('foobar').first
+        expect(match.index).to be == 2
+      end
+
+      it "... also with initial dot" do
+        hydra = Hydra.new '.foo'
+        match = hydra.match('foobar').first
+        expect(match.index).to be == 0
+      end
+
+      it "... and final dots" do
+        hydra = Hydra.new 'bar.'
+        match = hydra.match('foobar').first
+        expect(match.index).to be == 3
+      end
+
+      it "... and dots at both ends" do
+        hydra = Hydra.new '.foo.'
+        match = hydra.match('foo').first
+        expect(match.index).to be == 0
+      end
+    end
+
+    describe '#prehyphenate' do
+      it "pre-hyphenates the string" do
+        hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
+        expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
       end
     end
 
