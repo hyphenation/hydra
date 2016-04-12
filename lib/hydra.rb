@@ -630,6 +630,7 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
             matches = @final_hydra.hydrae(word.get_word)
+            matches_as_pattern = @final_hydra.match(word.get_word)
             word_start = dot
             word_end = word.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
@@ -643,15 +644,15 @@ class Heracles
               hydra = @count_hydra.read(currword)
               currpos = word.index + dot
               relevant_matches = matches.count do |match|
-                # currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
+                currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
               end
-              # if relevant_matches == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+              if relevant_matches == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               pattern = Pattern.dummy word.get_word
-              matches.each do |match|
-                pattern.mask match
+              matches_as_pattern.each do |match|
+              #   pattern.mask match
               end
-              word.mask pattern
-              if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+              # word.mask pattern
+              # if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
             end
           end
