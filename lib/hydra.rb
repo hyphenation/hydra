@@ -543,7 +543,7 @@ class Hydra
     l.times.each do |n|
       temp = []
       regest(Pattern.dummy(word[n..l-1]), :match, temp)
-      matches
+      matches += temp
     end
 
     matches.flatten.compact.sort
