@@ -2,7 +2,7 @@ require 'byebug'
 require 'pp'
 
 class Pattern
-  def initialize(word = nil, digits = nil, index = 0)
+  def initialize(word = nil, digits = nil, index = 0, cursor = 0)
     if digits
       @word = word
       @digits = digits
@@ -13,11 +13,16 @@ class Pattern
       @word = ''
     end
 
-    set_variables(index)
+    set_variables(index, cursor)
   end
 
-  def set_variables(index)
+  def cursor
+    @cursor
+  end
+
+  def set_variables(index, cursor = 0)
     @index = index
+    @cursor = cursor
     @good_count = @bad_count = 0
   end
 
@@ -66,11 +71,13 @@ class Pattern
 
   def shift(n = 1)
     @index += n
+    @cursor += n
     self
   end
 
   def shift!(n = 1)
     @index += n
+    @cursor += n
   end
 
   def reset

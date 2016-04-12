@@ -19,6 +19,14 @@ describe Pattern do
       expect(pattern.to_s).to be == "5fo2o3"
       expect(pattern.index).to be == 2
     end
+
+    it "can set the cursor" do
+      pattern = Pattern.new('foo', [5, 0, 2, 3], 2, 1)
+      expect(pattern).to be_a Pattern
+      expect(pattern.to_s).to be == "5fo2o3"
+      expect(pattern.index).to be == 2
+      expect(pattern.instance_variable_get(:@cursor)).to be == 1
+    end
   end
 
   describe '.dummy' do
@@ -34,6 +42,14 @@ describe Pattern do
       pattern = Pattern.simple 'abc', 2, 1
       expect(pattern.get_word).to eq 'abc'
       expect(pattern.get_digits).to be == [0, 0, 1, 0]
+    end
+  end
+
+  describe '#cursor' do
+    it "returns the cursor" do
+      pattern = Pattern.dummy 'abc'
+      pattern.instance_variable_set :@cursor, 3
+      expect(pattern.cursor).to be == 3
     end
   end
 
@@ -55,6 +71,10 @@ describe Pattern do
         expect(pattern.index).to eq 1
       end
 
+      it "shifts the cursor by one" do
+        expect { pattern.shift }.to change(pattern, :cursor).by(1)
+      end
+
       it "returns the pattern" do
         expect(pattern.shift).to be_a Pattern
       end
@@ -70,6 +90,10 @@ describe Pattern do
         pattern = Pattern.new 'q8u1u2x'
         pattern.shift!
         expect(pattern.index).to eq 1
+      end
+
+      it "also shifts the cursor" do
+        expect { pattern.shift }.to change(pattern, :cursor).by(1)
       end
 
       it "takes an optional number as argument" do
