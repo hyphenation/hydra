@@ -286,6 +286,7 @@ class HyphenatedWord < Pattern
 
   def mask(pattern) # TODO Something to make consecutive maskings work better
     save_index = @index # FIXME Awful
+    save_cursor = @cursor
     reset
     shift(pattern.index)
     pattern.reset # TODO Rename all that stuff: we should have a cursor and an anchor
@@ -301,6 +302,7 @@ class HyphenatedWord < Pattern
       shift
     end
     @index = save_index
+    @cursor = save_cursor
   end
 end
 
