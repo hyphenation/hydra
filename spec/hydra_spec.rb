@@ -589,7 +589,7 @@ describe Lemma do
 
   it "sets all breakpoints to :no initially" do
     lemma = Lemma.new 'foobar'
-    expect(lemma.get_breakpoints).to be == 7.times.map { :no }
+    expect(lemma.instance_variable_get :@breakpoints).to be == 7.times.map { :no }
   end
 
   it "sets actual breakpoints to :is" do
@@ -857,6 +857,20 @@ describe Hydra do
 
     it "says a isn’t a digit" do
       expect(Hydra.isdigit('a')).to be_falsey
+    end
+  end
+
+  describe '.isbreak' do
+    it "says - is a nobreak" do
+      expect(Hydra.isbreak('-')).to be == :is
+    end
+
+    it "says * is a found break" do
+      expect(Hydra.isbreak('*')).to be == :found
+    end
+
+    it "says . is an error break" do
+      expect(Hydra.isbreak('.')).to be == :err
     end
   end
 

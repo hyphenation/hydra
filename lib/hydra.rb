@@ -306,6 +306,12 @@ class HyphenatedWord < Pattern
   end
 end
 
+class Lemma < Pattern
+  def initialize(*params)
+    super(*params)
+  end
+end
+
 # TODO Comparison function for Hydra.  Criterion: basically, the list of generated patterns is identical
 class Hydra
   class ConflictingPattern < StandardError
@@ -448,6 +454,17 @@ class Hydra
 
   def self.isdigit(char)
     char >= '0' && char <= '9'
+  end
+
+  def self.isbreak(char)
+    case char
+      when '-'
+        :is
+      when '*'
+        :found
+      when '.'
+        :err
+    end
   end
 
   def count
