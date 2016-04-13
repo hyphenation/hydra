@@ -587,9 +587,14 @@ describe Lemma do
     expect(lemma.get_digits).to be == 7.times.map { 0 } # FIXME Refactor rename digits
   end
 
-  it "sets breakpoints" do
+  it "sets all breakpoints to :no initially" do
+    lemma = Lemma.new 'foobar'
+    expect(lemma.get_breakpoints).to be == 7.times.map { :no }
+  end
+
+  it "sets actual breakpoints to :is" do
     lemma = Lemma.new 'foo-bar'
-    expect(lemma.get_break)
+    expect(lemma.break(3)).to be == :is
   end
 end
 
