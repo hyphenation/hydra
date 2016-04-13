@@ -589,6 +589,7 @@ describe Lemma do
 
   it "sets all breakpoints to :no initially" do
     lemma = Lemma.new 'foobar'
+    lemma.breakup # FIXME Refactor Could be parse, really
     expect(lemma.instance_variable_get :@breakpoints).to be == 7.times.map { :no }
   end
 

@@ -244,16 +244,21 @@ class Pattern
 
   def breakup
     @word, i, @digits = '', 0, []
+    @breakpoints = [] if is_a? Lemma
     while i < @pattern.length
       char = @pattern[i]
       if Hydra.isdigit(char)
         @digits << char.to_i
         i += 1
       else
-        break = Hydra.isbreak(char)
-        if break
-          @breakpoints = @digits.length.times.map { :no } unless @breakpoints
-          @breakpoints
+        if @breakpoints
+          breakpoint = Hydra.isbreak(char)
+          if breakpoint
+            @breakpoints << breakpoint
+            i += 1
+          else
+            @breakpoints << :no
+          end
         end
         @digits << 0
       end
@@ -261,6 +266,7 @@ class Pattern
       i += 1
     end
     @digits << 0 if @digits.length == @word.length # Ensure explicit 0 after end of pattern
+    @breakpoints << :no if @breakpoints
     raise BadPattern unless @digits.length == @word.length + 1
     # FIXME Test for that
   end
@@ -314,6 +320,11 @@ end
 class Lemma < Pattern
   def initialize(*params)
     super(*params)
+  end
+
+  def break(n)
+    breakup unless @breakpoints
+    @breakpoints[n]
   end
 end
 
