@@ -167,6 +167,7 @@ class Pattern
   end
 
   def mask(a)
+    breakup unless @digits
     if a.is_a? Pattern
       mask(a.get_digits)
     else
@@ -325,6 +326,21 @@ class Lemma < Pattern
   def break(n)
     breakup unless @breakpoints
     @breakpoints[n]
+  end
+
+  def mark_breaks
+    breakup unless @breakpoints
+    @breakpoints.length.times do |i|
+      if @breakpoints[i] == :is
+        if @digits[i] % 2 == 1
+          @breakpoints[i] = :found
+        end
+      elsif @breakpoints[i] == :no
+        if @digits[i] % 2 == 1
+          @breakpoints[i] == :err
+        end
+      end
+    end
   end
 end
 
