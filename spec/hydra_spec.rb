@@ -574,6 +574,25 @@ describe HyphenatedWord do
   end
 end
 
+describe Lemma do
+  describe '.new' do
+    it "creates a new dictionary word" do
+      lemma = Lemma.new
+      expect(lemma).to be_a Lemma # FIXME Should test the superclass eventually.  Name?
+    end
+  end
+
+  it "sets all digits to 0 initially" do
+    lemma = Lemma.new 'foo-bar'
+    expect(lemma.get_digits).to be == 7.times.map { 0 } # FIXME Refactor rename digits
+  end
+
+  it "sets breakpoints" do
+    lemma = Lemma.new 'foo-bar'
+    expect(lemma.get_break)
+  end
+end
+
 describe Hydra do
   let(:hydra)  { Hydra.new }
 
