@@ -285,6 +285,7 @@ class HyphenatedWord < Pattern
   end
 
   def mask(pattern) # TODO Something to make consecutive maskings work better
+    save_index = @index # FIXME Awful
     reset
     shift(pattern.index)
     pattern.reset # TODO Rename all that stuff: we should have a cursor and an anchor
@@ -299,6 +300,7 @@ class HyphenatedWord < Pattern
       pattern.shift
       shift
     end
+    @index = save_index
   end
 end
 
@@ -660,8 +662,14 @@ class Heracles
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
             word_end = word.length - @final_hydra.righthyphenmin if word_end > word.length - @final_hydra.righthyphenmin
             (word_start - dot).times { word.shift }
+            pattern = Pattern.dummy word.get_word
+            matches_as_pattern.each do |match|
+              pattern.mask match
+            end
+            word.mask pattern
             (word_start..word_end).each do
               currword = word.word_to(pattern_length)
+              byebug unless currword
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               # byebug if count_pattern.to_s == "2dx"
               @count_hydra.ingest count_pattern
@@ -671,11 +679,6 @@ class Heracles
                 currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
               end
               if relevant_matches == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
-              pattern = Pattern.dummy word.get_word
-              matches_as_pattern.each do |match|
-              #   pattern.mask match
-              end
-              # word.mask pattern
               # if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
             end
