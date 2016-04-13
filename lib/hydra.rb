@@ -285,7 +285,7 @@ class HyphenatedWord < Pattern
   end
 
   def mask(pattern) # TODO Something to make consecutive maskings work better
-    save_index = @index # FIXME Awful
+    save_index = @index # FIXME Awful # TODO Test for all that
     save_cursor = @cursor
     reset
     shift(pattern.index)
@@ -674,6 +674,7 @@ class Heracles
               byebug unless currword
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               # byebug if count_pattern.to_s == "2dx"
+              # byebug if count_pattern.to_s == "ab1"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               currpos = word.index + dot
