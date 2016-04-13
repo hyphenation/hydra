@@ -250,6 +250,11 @@ class Pattern
         @digits << char.to_i
         i += 1
       else
+        break = Hydra.isbreak(char)
+        if break
+          @breakpoints = @digits.length.times.map { :no } unless @breakpoints
+          @breakpoints
+        end
         @digits << 0
       end
       @word += @pattern[i] if @pattern[i]
