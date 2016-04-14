@@ -344,6 +344,19 @@ describe Pattern do
         expect(pattern.to_s).to eq 'sup3ercal'
       end
 
+      it "takes an optional anchor as second argument" do
+        pattern = Pattern.dummy 'supercal'
+        pattern.mask [0, 0, 0, 3], 3
+        expect(pattern.to_s).to eq 'sup3ercal' # Yes, that is the same example :-)
+      end
+
+      it "works the same way if the argument has a non-zero anchor" do
+        pattern = Pattern.dummy 'supercal'
+        pattern.setanchor(3)
+        pattern.mask [0, 0, 0, 3]
+        expect(pattern.to_s).to be == 'sup3ercal' # Let’s not try and specify what happens if we give both a second argument and a patteren with a second anchor ;-)
+      end
+
       it "also works with a pattern" do
         pattern = Pattern.dummy 'foobar'
         3.times { pattern.shift }
