@@ -617,7 +617,7 @@ describe Lemma do
   describe '#mark_breaks' do
     it "marks breakpoints according to the digit values" do
       lemma = Lemma.new 'foo-bar-baz'
-      mask1 = Pattern.new 'fo2'
+      mask1 = Pattern.new 'fo1'
       mask1.setanchor 0
       mask2 = Pattern.new 'foo3'
       mask2.setanchor 0

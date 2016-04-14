@@ -342,7 +342,7 @@ class Lemma < Pattern
         end
       elsif @breakpoints[i] == :no
         if @digits[i] % 2 == 1
-          @breakpoints[i] == :err
+          @breakpoints[i] = :err
         end
       end
     end
