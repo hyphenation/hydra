@@ -710,8 +710,12 @@ class Heracles
         Heracles.organ(pattern_length).each do |dot|
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
+            lemma = Lemma.new(line.strip.downcase)
+            raise unless word.length == lemma.length
             next unless word.length >= pattern_length
             matches_as_pattern = @final_hydra.match(word.get_word)
+            lemma_matches = @final_hydra.match(lemma.get_word)
+            raise unless matches_as_pattern == lemma_matches
             word_start = dot
             word_end = word.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
@@ -722,6 +726,8 @@ class Heracles
               pattern.mask match
             end
             word.mask pattern
+            lemma.mask pattern
+            raise unless word.get_digits == lemma.get_digits
             (word_start..word_end).each do
               currword = word.word_to(pattern_length)
               byebug unless currword
