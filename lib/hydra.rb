@@ -711,7 +711,6 @@ class Heracles
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             next unless word.length >= pattern_length
-            matches = @final_hydra.hydrae(word.get_word)
             matches_as_pattern = @final_hydra.match(word.get_word)
             word_start = dot
             word_end = word.length - (pattern_length - dot)
@@ -731,12 +730,7 @@ class Heracles
               # byebug if count_pattern.to_s == "ab1"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
-              currpos = word.index + dot
-              relevant_matches = matches.count do |match|
-                currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
-              end
               if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
-              # if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
             end
           end
