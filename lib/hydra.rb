@@ -169,7 +169,7 @@ class Pattern
   def mask(a, anchor = nil)
     breakup unless @digits
     if a.is_a? Pattern
-      mask(a.get_digits, anchor)
+      mask(a.get_digits, a.anchor)
     else
       offset = a.length - 1
       anchor = index unless anchor
