@@ -166,14 +166,21 @@ class Pattern
     @digits[@index..@index + n]
   end
 
-  def mask(a, anchor = 0)
+  def mask(a, anchor = nil)
     breakup unless @digits
     if a.is_a? Pattern
-      anchor = a.anchor unless pattern.anchor == 0
-      mask(a.get_digits)
+      if anchor
+        mask(a.get_digits, anchor)
+      else
+        if a.anchor == 0
+          mask(a.get_digits)
+        else
+          mask(a.get_digits, a.anchor)
+        end
+      end
     else
       offset = a.length - 1
-      anchor = index if anchor == 0
+      anchor = index unless anchor && anchor > 0
       a.length.times do |i|
         j = anchor - offset + i
         @digits[j] = [a[i], @digits[j] || 0].max
