@@ -735,7 +735,7 @@ class Heracles
               relevant_matches = matches.count do |match|
                 currpos >= match.index && match.gethead[currpos - match.index] == hyphenation_level
               end
-              if relevant_matches == 0 && word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+              if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               # if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
             end
