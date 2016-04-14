@@ -172,9 +172,13 @@ class Pattern
       mask(a.get_digits, a.anchor)
     else
       offset = a.length - 1
-      anchor = index unless anchor
+      if anchor
+        local_anchor = anchor + offset
+      else
+        local_anchor = index
+      end
       a.length.times do |i|
-        j = anchor - offset + i
+        j = local_anchor - offset + i
         @digits[j] = [a[i], @digits[j] || 0].max
       end
     end
