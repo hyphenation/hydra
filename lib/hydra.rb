@@ -715,7 +715,7 @@ class Heracles
             next unless word.length >= pattern_length
             matches_as_pattern = @final_hydra.match(word.get_word)
             lemma_matches = @final_hydra.match(lemma.get_word)
-            raise unless matches_as_pattern == lemma_matches
+            raise unless matches_as_pattern.map(&:to_s) == lemma_matches.map(&:to_s)
             word_start = dot
             word_end = word.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
@@ -726,8 +726,9 @@ class Heracles
               pattern.mask match
             end
             word.mask pattern
+            lemma.mark_breaks
             lemma.mask pattern
-            raise unless word.get_digits == lemma.get_digits
+            byebug unless word.get_digits == lemma.instance_variable_get(:@breakpoints)
             (word_start..word_end).each do
               currword = word.word_to(pattern_length)
               byebug unless currword
