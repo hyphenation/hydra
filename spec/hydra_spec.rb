@@ -624,7 +624,6 @@ describe Lemma do
       lemma.mask mask1
       lemma.mask mask2
       lemma.mark_breaks
-      lemma.breakup
       expect(lemma.instance_variable_get :@breakpoints).to be == [:no, :no, :err, :found, :no, :no, :is, :no, :no, :no]
     end
   end
