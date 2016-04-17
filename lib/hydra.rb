@@ -744,7 +744,7 @@ class Heracles
               # byebug if count_pattern.to_s == "b1c"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
-              # raise unless word.dot(dot) == lemma.break(dot)
+              raise unless word.dot(dot) == lemma.break(dot)
               if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
               lemma.shift
