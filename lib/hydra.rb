@@ -716,7 +716,10 @@ class Heracles
             next unless word.length >= pattern_length
             matches_as_pattern = @final_hydra.match(word.get_word)
             lemma_matches = @final_hydra.match(lemma.get_word)
+            # byebug if word.get_word == "xxabcddefghixxx"
             @final_hydra.prehyphenate(lemma)
+            lemma.mark_breaks
+            # byebug if word.get_word == "xxabcddefghixxx"
             raise unless matches_as_pattern.map(&:to_s) == lemma_matches.map(&:to_s)
             word_start = dot
             word_end = word.length - (pattern_length - dot)
@@ -741,6 +744,7 @@ class Heracles
               # byebug if count_pattern.to_s == "b1c"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
+              # raise unless word.dot(dot) == lemma.break(dot)
               if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
               lemma.shift
