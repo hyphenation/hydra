@@ -718,7 +718,7 @@ class Heracles
             lemma_matches = @final_hydra.match(lemma.get_word)
             # byebug if word.get_word == "xxabcddefghixxx"
             @final_hydra.prehyphenate(lemma)
-            lemma.mark_breaks
+            lemma.mark_breaks # FIXME Should ideally not be necessary
             # byebug if word.get_word == "xxabcddefghixxx"
             raise unless matches_as_pattern.map(&:to_s) == lemma_matches.map(&:to_s)
             word_start = dot
