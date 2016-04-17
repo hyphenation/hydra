@@ -713,7 +713,7 @@ class Heracles
             word = HyphenatedWord.new(line.strip.downcase)
             lemma = Lemma.new(line.strip.downcase)
             raise unless word.length == lemma.length
-            next unless word.length >= pattern_length
+            next unless lemma.length >= pattern_length
             matches_as_pattern = @final_hydra.match(word.get_word)
             lemma_matches = @final_hydra.match(lemma.get_word)
             # byebug if word.get_word == "xxabcddefghixxx"
