@@ -677,7 +677,6 @@ class Heracles
             pattern = Pattern.dummy lemma.get_word
             (word_start..word_end).each do
               currword = lemma.word_to(pattern_length)
-              byebug unless currword
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
