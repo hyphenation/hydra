@@ -330,7 +330,7 @@ class Lemma < Pattern # FIXME Plural lemmata?
 
   def break(n)
     breakup unless @breakpoints
-    @breakpoints[n]
+    @breakpoints[n + @cursor]
   end
 
   def mark_breaks

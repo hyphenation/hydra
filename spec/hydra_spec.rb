@@ -612,6 +612,12 @@ describe Lemma do
       lemma = Lemma.new 'foo-bar'
       expect(lemma.break(3)).to be == :is
     end
+
+    it "takes the cursor position into account" do
+      lemma = Lemma.new 'foo-bar'
+      lemma.shift(2)
+      expect(lemma.break(1)).to be == :is
+    end
   end
 
   describe '#mark_breaks' do
