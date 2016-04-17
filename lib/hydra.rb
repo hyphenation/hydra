@@ -710,31 +710,20 @@ class Heracles
         Heracles.organ(pattern_length).each do |dot|
           # TODO Idea: call each pass a Club, and make Heracles have many clubs?
           array.each do |line|
-            word = HyphenatedWord.new(line.strip.downcase)
             lemma = Lemma.new(line.strip.downcase)
-            raise unless word.length == lemma.length
             next unless lemma.length >= pattern_length
-            matches_as_pattern = @final_hydra.match(word.get_word)
             lemma_matches = @final_hydra.match(lemma.get_word)
             # byebug if word.get_word == "xxabcddefghixxx"
             @final_hydra.prehyphenate(lemma)
             lemma.mark_breaks # FIXME Should ideally not be necessary
             # byebug if word.get_word == "xxabcddefghixxx"
-            raise unless matches_as_pattern.map(&:to_s) == lemma_matches.map(&:to_s)
             word_start = dot
             word_end = lemma.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
             word_end = lemma.length - @final_hydra.righthyphenmin if word_end > lemma.length - @final_hydra.righthyphenmin
             lemma.reset
-            (word_start - dot).times { word.shift; lemma.shift }
+            (word_start - dot).times { lemma.shift }
             pattern = Pattern.dummy lemma.get_word
-            matches_as_pattern.each do |match|
-              pattern.mask match
-            end
-            word.mask pattern
-            # lemma.mark_breaks
-            # lemma.mask pattern
-            # raise unless word.get_digits == lemma.instance_variable_get(:@breakpoints)
             (word_start..word_end).each do
               currword = lemma.word_to(pattern_length)
               byebug unless currword
@@ -744,11 +733,8 @@ class Heracles
               # byebug if count_pattern.to_s == "b1c"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
-              raise unless word.dot(dot) == lemma.break(dot)
               if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
-              word.shift
               lemma.shift
-              raise unless word.index == lemma.cursor
             end
           end
 
