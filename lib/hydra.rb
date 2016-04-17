@@ -745,7 +745,7 @@ class Heracles
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               raise unless word.dot(dot) == lemma.break(dot)
-              if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+              if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
               lemma.shift
               raise unless word.index == lemma.cursor
