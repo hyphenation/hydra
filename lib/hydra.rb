@@ -722,12 +722,12 @@ class Heracles
             # byebug if word.get_word == "xxabcddefghixxx"
             raise unless matches_as_pattern.map(&:to_s) == lemma_matches.map(&:to_s)
             word_start = dot
-            word_end = word.length - (pattern_length - dot)
+            word_end = lemma.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
-            word_end = word.length - @final_hydra.righthyphenmin if word_end > word.length - @final_hydra.righthyphenmin
+            word_end = lemma.length - @final_hydra.righthyphenmin if word_end > lemma.length - @final_hydra.righthyphenmin
             lemma.reset
             (word_start - dot).times { word.shift; lemma.shift }
-            pattern = Pattern.dummy word.get_word
+            pattern = Pattern.dummy lemma.get_word
             matches_as_pattern.each do |match|
               pattern.mask match
             end
@@ -736,7 +736,7 @@ class Heracles
             # lemma.mask pattern
             # raise unless word.get_digits == lemma.instance_variable_get(:@breakpoints)
             (word_start..word_end).each do
-              currword = word.word_to(pattern_length)
+              currword = lemma.word_to(pattern_length)
               byebug unless currword
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               # byebug if count_pattern.to_s == "2dx"
