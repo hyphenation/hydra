@@ -712,11 +712,8 @@ class Heracles
           array.each do |line|
             lemma = Lemma.new(line.strip.downcase)
             next unless lemma.length >= pattern_length
-            lemma_matches = @final_hydra.match(lemma.get_word)
-            # byebug if word.get_word == "xxabcddefghixxx"
             @final_hydra.prehyphenate(lemma)
             lemma.mark_breaks # FIXME Should ideally not be necessary
-            # byebug if word.get_word == "xxabcddefghixxx"
             word_start = dot
             word_end = lemma.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
@@ -728,9 +725,6 @@ class Heracles
               currword = lemma.word_to(pattern_length)
               byebug unless currword
               count_pattern = Pattern.simple currword, dot, hyphenation_level
-              # byebug if count_pattern.to_s == "2dx"
-              # byebug if count_pattern.to_s == "ab1"
-              # byebug if count_pattern.to_s == "b1c"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
