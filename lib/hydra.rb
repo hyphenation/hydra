@@ -225,6 +225,7 @@ class Pattern
 
   def currletter
     breakup unless @word
+    puts "#{self.class}, #{@word}"
     @word[@cursor]
   end
 
@@ -637,14 +638,14 @@ class Hydra
   end
 
   def prehyphenate(word)
-    pattern = Pattern.dummy(word)
+    word = Pattern.dummy(word) unless word.is_a? Pattern
     word.length.times do |n|
-      pattern.reset
-      pattern.shift(n)
-      regest(pattern, :hyphenate)
+      word.reset
+      word.shift(n)
+      regest(word, :hyphenate)
     end
 
-    pattern
+    word
   end
 
   def read(word)
@@ -715,6 +716,7 @@ class Heracles
             next unless word.length >= pattern_length
             matches_as_pattern = @final_hydra.match(word.get_word)
             lemma_matches = @final_hydra.match(lemma.get_word)
+            @final_hydra.prehyphenate(lemma)
             raise unless matches_as_pattern.map(&:to_s) == lemma_matches.map(&:to_s)
             word_start = dot
             word_end = word.length - (pattern_length - dot)
@@ -728,7 +730,7 @@ class Heracles
             word.mask pattern
             lemma.mark_breaks
             lemma.mask pattern
-            byebug unless word.get_digits == lemma.instance_variable_get(:@breakpoints)
+            # raise unless word.get_digits == lemma.instance_variable_get(:@breakpoints)
             (word_start..word_end).each do
               currword = word.word_to(pattern_length)
               byebug unless currword
