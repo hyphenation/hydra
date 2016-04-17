@@ -708,6 +708,7 @@ class Heracles
       @threshold = parameters.shift
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
         Heracles.organ(pattern_length).each do |dot|
+          # TODO Idea: call each pass a Club, and make Heracles have many clubs?
           array.each do |line|
             word = HyphenatedWord.new(line.strip.downcase)
             lemma = Lemma.new(line.strip.downcase)
@@ -727,8 +728,8 @@ class Heracles
               pattern.mask match
             end
             word.mask pattern
-            lemma.mark_breaks
-            lemma.mask pattern
+            # lemma.mark_breaks
+            # lemma.mask pattern
             # raise unless word.get_digits == lemma.instance_variable_get(:@breakpoints)
             (word_start..word_end).each do
               currword = word.word_to(pattern_length)
@@ -736,6 +737,7 @@ class Heracles
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               # byebug if count_pattern.to_s == "2dx"
               # byebug if count_pattern.to_s == "ab1"
+              byebug if count_pattern.to_s == "b1c"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
