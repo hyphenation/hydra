@@ -130,6 +130,13 @@ describe Pattern do
         pattern.reset
         expect(pattern.cursor).to be == 0
       end
+
+      it "takes an optional argument" do
+        pattern.shift(3)
+        pattern.reset(2)
+        expect(pattern.index).to be == 2
+        expect(pattern.cursor).to be == 2
+      end
     end
 
     describe '#letter' do
