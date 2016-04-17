@@ -722,7 +722,8 @@ class Heracles
             word_end = word.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
             word_end = word.length - @final_hydra.righthyphenmin if word_end > word.length - @final_hydra.righthyphenmin
-            (word_start - dot).times { word.shift }
+            lemma.reset
+            (word_start - dot).times { word.shift; lemma.shift }
             pattern = Pattern.dummy word.get_word
             matches_as_pattern.each do |match|
               pattern.mask match
@@ -737,11 +738,13 @@ class Heracles
               count_pattern = Pattern.simple currword, dot, hyphenation_level
               # byebug if count_pattern.to_s == "2dx"
               # byebug if count_pattern.to_s == "ab1"
-              byebug if count_pattern.to_s == "b1c"
+              # byebug if count_pattern.to_s == "b1c"
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               if word.dot(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
               word.shift
+              lemma.shift
+              raise unless word.index == lemma.cursor
             end
           end
 
