@@ -520,68 +520,6 @@ describe Pattern do
   end
 end
 
-describe HyphenatedWord do
-  describe '.new' do
-    it "creates a pattern from a hyphenation dictionary" do
-      pattern = HyphenatedWord.new('foo-bar')
-      expect(pattern.get_word).to be == "foobar"
-      expect(pattern.digit(3)).to be == :is
-    end
-  end
-
-  describe '#dot' do
-    it "returns the dot value at position i" do
-      pattern = HyphenatedWord.new('foo-bar')
-      expect(pattern.dot(3)).to be == :is
-    end
-
-    it "counts from the current index" do
-      pattern = HyphenatedWord.new('foo-bar')
-      2.times { pattern.shift }
-      expect(pattern.dot(1)).to be == :is
-    end
-
-    it "returns :no if there’s nothing there" do
-      pattern = HyphenatedWord.new('foo-bar')
-      expect(pattern.dot(2)).to be == :no
-    end
-  end
-
-  describe '#mask' do
-    it "masks a word with values from a pattern" do
-      word = HyphenatedWord.new('foo-bar')
-      pattern = Pattern.new('foo1')
-      word.mask(pattern)
-      expect(word.get_digits).to be == [:no, :no, :no, :found, :no, :no, :no]
-    end
-
-    it "marks erroneous breaks as such" do
-      word = HyphenatedWord.new('foo-bar')
-      pattern = Pattern.new('fo1')
-      word.mask(pattern)
-      expect(word.get_digits).to be == [:no, :no, :err, :is, :no, :no, :no]
-    end
-
-
-    it "marks erroneous non-breaks as such" do
-      word = HyphenatedWord.new('foo-bar')
-      pattern = Pattern.new('foo2')
-      word.mask(pattern)
-      expect(word.get_digits).to be == [:no, :no, :no, :is, :no, :no, :no]
-    end
-
-    it "works with non-initial patterns as well" do
-      word = HyphenatedWord.new('foo-bar')
-      pattern = Pattern.new('5bar')
-      pattern.shift(3)
-      word.mask(pattern)
-      expect(word.get_digits).to be == [:no, :no, :no, :found, :no, :no, :no]
-    end
-
-    # TODO Multiple masks
-  end
-end
-
 describe Lemma do
   describe '.new' do
     it "creates a new dictionary word" do

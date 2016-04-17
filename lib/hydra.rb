@@ -278,51 +278,6 @@ class Pattern
   end
 end
 
-class HyphenatedWord < Pattern
-  def initialize(pattern)
-    @pattern = pattern
-    @word, i, @digits = '', 0, []
-    while i <= @pattern.length # FIXME Test for <= (was <)
-      char = @pattern[i]
-      if char == '-'
-        @digits << :is
-        i += 1
-      else
-        @digits << :no
-      end
-      @word += @pattern[i] if @pattern[i]
-      i += 1
-    end
-
-    set_variables(0)
-  end
-
-  def dot(n)
-    @digits[@index + n]
-  end
-
-  def mask(pattern) # TODO Something to make consecutive maskings work better
-    save_index = @index # FIXME Awful # TODO Test for all that
-    save_cursor = @cursor
-    reset
-    shift(pattern.index)
-    pattern.reset # TODO Rename all that stuff: we should have a cursor and an anchor
-    (pattern.length + 1).times do
-      pattern_digit = pattern.currdigit
-      break unless pattern_digit
-      if currdigit == :is
-        if pattern_digit % 2 == 1 then @digits[@index] = :found end # TODO setdigit
-      elsif currdigit == :no # It really can’t be anything else, but for symmetry
-        if pattern_digit % 2 == 1 then @digits[@index] = :err end
-      end
-      pattern.shift
-      shift
-    end
-    @index = save_index
-    @cursor = save_cursor
-  end
-end
-
 class Lemma < Pattern # FIXME Plural lemmata?
   def initialize(*params)
     super(*params)
