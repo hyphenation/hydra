@@ -674,7 +674,7 @@ class Heracles
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
             word_end = lemma.length - @final_hydra.righthyphenmin if word_end > lemma.length - @final_hydra.righthyphenmin
             lemma.reset
-            (word_start - dot).times { lemma.shift }
+            lemma.shift(word_start - dot)
             pattern = Pattern.dummy lemma.get_word
             (word_start..word_end).each do
               currword = lemma.word_to(pattern_length)
