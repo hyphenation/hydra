@@ -225,7 +225,6 @@ class Pattern
 
   def currletter
     breakup unless @word
-    puts "#{self.class}, #{@word}"
     @word[@cursor]
   end
 
