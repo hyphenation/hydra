@@ -323,7 +323,7 @@ class HyphenatedWord < Pattern
   end
 end
 
-class Lemma < Pattern
+class Lemma < Pattern # FIXME Plural lemmata?
   def initialize(*params)
     super(*params)
   end
