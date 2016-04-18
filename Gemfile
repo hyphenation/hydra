@@ -1,4 +1,4 @@
-ruby '2.2.2'
+ruby '2.0.0'
 source 'https://rubygems.org'
 gem 'rspec'
 gem 'byebug', group: [:development, :test]

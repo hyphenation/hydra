@@ -1072,7 +1072,7 @@ describe Hydra do
       end
 
       it "matches a more complex example with dots" do
-        expect(complex_hydra.match('foobar').map(&:to_s)).to eq ['a2r.', 'ba1', '3ba2r.', '.fo1', '.foo3', 'fo2o1', 'o2o']
+        expect(complex_hydra.match('foobar').map(&:to_s)).to eq ['a2r.', 'ba1', '3ba2r.', '.fo1', '.foo3', 'fo2o1', 'o2o'] # Getting 'fo2o1' and '.foo3' swapped with Ruby 2.0.0!  But that’s badly specified anyway ...
       end
 
       it "... also with a final dot" do
