@@ -5,4 +5,4 @@ RSpec and byebug ([RVM](https://rvm.io/) is a nice tool to manage your Ruby
 environments), and run `rspec` for the test suite; the individual test cases
 are probably very obscure but documentation is forthcoming, I promise!
 
-Licence MIT (see LICENCE in this directory)
+Licence MIT (see [LICENCE](LICENCE) in this directory)
