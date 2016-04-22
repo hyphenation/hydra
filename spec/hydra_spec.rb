@@ -72,7 +72,7 @@ describe Pattern do
   context "with a predefined pattern" do
     describe '#index' do
       it "returns the index" do
-        pattern.shift; pattern.shift
+        pattern.shift(2)
         expect(pattern.index).to eq 2
       end
 
@@ -120,13 +120,13 @@ describe Pattern do
 
     describe '#reset' do
       it "resets the index" do
-        pattern.shift; pattern.shift
+        pattern.shift(2)
         pattern.reset
         expect(pattern.index).to eq 0
       end
 
       it "resets the cursor too" do
-        2.times { pattern.shift }
+        pattern.shift(2)
         pattern.reset
         expect(pattern.cursor).to be == 0
       end
@@ -156,7 +156,7 @@ describe Pattern do
     describe '#last?' do
       it "tells when we’re on the last character of the pattern" do
         pattern = Pattern.new '1f2i4n3'
-        2.times { pattern.shift }
+        pattern.shift(2)
         expect(pattern.last?).to be_truthy
       end
 
@@ -169,13 +169,13 @@ describe Pattern do
     describe '#end?' do
       it "tells whether we’re at the end of the pattern" do
         pattern = Pattern.new 'end3'
-        3.times { pattern.shift }
+        pattern.shift(3)
         expect(pattern.end?).to be_truthy
       end
 
       it "returns false otherwise" do
         pattern = Pattern.new 'Schluß'
-        3.times { pattern.shift }
+        pattern.shift(3)
         expect(pattern.end?).to be_falsey
       end
     end
@@ -183,7 +183,7 @@ describe Pattern do
     describe '#currletter' do
       it "returns the current letter" do
         pattern = Pattern.new 'a1n2a1n2a'
-        3.times { pattern.shift }
+        pattern.shift(3)
         expect(pattern.currletter).to eq 'n'
       end
     end
@@ -322,7 +322,7 @@ describe Pattern do
     describe '#word_so_far' do # TODO word_at?
       it "returns the word up to the current index" do
         pattern = Pattern.dummy 'sandrigham'
-        4.times { pattern.shift }
+        pattern.shift(4)
         expect(pattern.word_so_far).to eq 'sand'
       end
     end
@@ -330,7 +330,7 @@ describe Pattern do
     describe '#word_to' do
       it "returns the word from the current index with length n" do
         pattern = Pattern.dummy 'maskedball'
-        2.times { pattern.shift }
+        pattern.shift(2)
         expect(pattern.word_to(6)).to eq 'skedba'
       end
     end
@@ -338,7 +338,7 @@ describe Pattern do
     describe '#digits_to' do # TODO #digits_so_far as well
       it "returns the digits from the current index to length n" do
         pattern = Pattern.new 'po2l3ish9en4g3lish'
-        6.times { pattern.shift }
+        pattern.shift(6)
         expect(pattern.digits_to(4)).to be == [9, 0, 4, 3, 0]
       end
     end
@@ -346,14 +346,14 @@ describe Pattern do
     describe '#mask(array)' do
       it "masks the pattern’s digits with an array" do
         pattern = Pattern.dummy 'supercal'
-        3.times { pattern.shift }
+        pattern.shift(3)
         pattern.mask [0, 0, 0, 3]
         expect(pattern.to_s).to eq 'sup3ercal'
       end
 
       it "also works with a pattern" do
         pattern = Pattern.dummy 'foobar'
-        3.times { pattern.shift }
+        pattern.shift(3)
         pattern.mask Pattern.new "foo5" # FIXME That’s awkward
         expect(pattern.to_s).to eq "foo5bar"
       end
@@ -368,13 +368,13 @@ describe Pattern do
 
       it "applies several masks successively" do
         pattern = Pattern.dummy 'supercal'
-        2.times { pattern.shift }
+        pattern.shift(2)
         pattern.mask [0, 0, 1] # Potentially coming from a "su1"
         pattern.shift
         pattern.mask [0, 0, 2, 3] # "su2p3"
-        4.times { pattern.shift } # TODO Pattern#shift(n)!
+        pattern.shift(4)
         pattern.mask [0, 1, 2, 1] # "r1c2a"
-        1.times { pattern.shift }
+        pattern.shift
         pattern.mask [0, 2, 3] # "a2l3"
         expect(pattern.to_s).to eq "su2p3er1c2a2l3"
       end
@@ -395,8 +395,12 @@ describe Pattern do
           expect(Pattern.new('def').<=>(Pattern.new('abc'))).to eq 1
         end
 
-        it "returns 0 if the underlying words are the same" do # TODO sort digits!
-          expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq 0
+        it "compares the digits if the underlying words are the same" do
+          expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq -1
+        end
+
+        it "returns 0 if the underlying words and digits are the same" do
+          expect(Pattern.new('abc3').<=>(Pattern.new('abc3'))).to eq 0
         end
       end
 
@@ -747,7 +751,7 @@ describe Hydra do
   describe '#good_count' do
     it "returns the good count" do
       hydra = Hydra.new ['abc', 'def', 'ghi']
-      3.times { hydra.read('abc').inc_good_count } # TODO Convenience method for that?
+      3.times { hydra.read('abc').inc_good_count }
       expect(hydra.read('abc').good_count).to be == 3
     end
 
@@ -1022,52 +1026,44 @@ describe Hydra do
       end
 
       it "matches a pattern with an initial dot", dot: true do
-        hydra = Hydra.new # TODO Hydra.new(arg) → list of patterns
-        hydra.ingest ['.foo']
+        hydra = Hydra.new ['.foo']
         expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
       end
 
       it "matches a pattern with an initial dot and actual digits" do
-        hydra = Hydra.new
-        hydra.ingest '.foo1'
+        hydra = Hydra.new '.foo1'
         expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
       end
 
       it "finds no match if pattern is in the middle of the word" do
-        hydra = Hydra.new
-        hydra.ingest ['.oob']
+        hydra = Hydra.new ['.oob']
         expect(hydra.match('foobar')).to be_empty
       end
 
       it "finds no match if pattern is different after initial dot" do
-        hydra = Hydra.new
-        hydra.ingest ['.boo']
+        hydra = Hydra.new ['.boo']
         expect(hydra.match('foobar')).to be_empty
       end
 
       it "matches a closing dot" do
-        hydra = Hydra.new
-        hydra.ingest ['bar.']
+        hydra = Hydra.new ['bar.']
         expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
       end
 
       # TODO Stupid pattern bar1.?
 
       it "matches a final do with actual digits in the pattern" do
-        hydra = Hydra.new
-        hydra.ingest '1bar.'
+        hydra = Hydra.new '1bar.'
         expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
       end
 
       it "finds no match if pattern is in the middle of the word" do
-        hydra = Hydra.new
-        hydra.ingest ['oba.']
+        hydra = Hydra.new ['oba.']
         expect(hydra.match('foobar')).to be_empty
       end
 
       it "finds no match if pattern is different before final dot" do
-        hydra = Hydra.new
-        hydra.ingest ['far.']
+        hydra = Hydra.new ['far.']
         expect(hydra.match('foobar')).to be_empty
       end
 

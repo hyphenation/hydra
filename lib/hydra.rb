@@ -220,7 +220,12 @@ class Pattern
 
   def <=>(other)
     breakup unless @word
-    @word <=> other.get_word
+    word_order = @word <=> other.get_word
+    if word_order != 0
+      word_order
+    else
+      @digits <=> other.get_digits
+    end
   end
 
   def currletter
