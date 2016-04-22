@@ -20,7 +20,7 @@ describe Pattern do
       expect(pattern.index).to be == 2
     end
 
-    it "can set the cursor" do
+    it "can set the cursor" do # FIXME Not used in code actually
       pattern = Pattern.new('foo', [5, 0, 2, 3], 2, 1)
       expect(pattern).to be_a Pattern
       expect(pattern.to_s).to be == "5fo2o3"
