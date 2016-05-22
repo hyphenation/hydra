@@ -877,7 +877,15 @@ describe Hydra do
   describe '#map' do
     it "works as an enumerable" do
       hydra = Hydra.new ['bac', 'def', 'gijk']
-      expect(hydra.map { |word| word.spattern.upcase }).to eq ['BAC', 'DEF', 'GIJK']
+      expect(hydra.map { |head| head.spattern.upcase }).to eq ['BAC', 'DEF', 'GIJK']
+    end
+  end
+
+  describe '#select' do
+    it "selects heads from a hydra" do
+      hydra = Hydra.new ['abc', 'abz', 'def', 'defz', 'xyz']
+      zheads = hydra.select { |head| head.spattern =~ /z$/ }
+      expect(zheads.map(&:spattern)).to eq ['abz', 'defz', 'xyz']
     end
   end
 
