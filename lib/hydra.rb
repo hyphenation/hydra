@@ -286,12 +286,8 @@ class Pattern
     breakup unless @digits
     output = ''
     @digits.each_with_index do |digit, index|
-      if index > 0 and index < length
-        if digit % 2 == 1
-          output += '-'
-        end
-      end
-      output += @word[index].to_s
+      output += '-' if digit % 2 == 1 && index > 0 && index < length
+      output += @word[index] if index < length
     end
 
     output
