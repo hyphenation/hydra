@@ -1324,6 +1324,20 @@ describe Hydra do
       expect(nodothead.spattern).to eq 'ab'
       expect(hydra.spattern).to eq ''
     end
+
+    it "works correctly if only “ab.” is stored and we’re at the b head" do
+      hydra = Hydra.new 'ab.'
+      bhead = hydra.read 'ab'
+      pending "bug"
+      expect(bhead.spattern).to eq 'ab'
+    end
+
+    it "works correctly with non-heads location" do
+      hydra = Hydra.new 'abc'
+      bhead = hydra.read 'ab'
+      pending "bug"
+      expect(bhead.spattern).to eq 'ab'
+    end
   end
 
   describe '#disembowel' do
