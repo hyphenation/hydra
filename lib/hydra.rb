@@ -383,6 +383,10 @@ class Hydra
     end
   end
 
+  def coccyx
+    if parent then parent.coccyx else self end
+  end
+
   def ensure_neck(letter)
     @necks[letter] = Hydra.new(nil, @mode, letter) unless @necks[letter]
     @necks[letter].setparent(self)
@@ -612,7 +616,9 @@ class Hydra
   end
 
   def transplant(other)
-    ingest other.spattern
+    pattern = other.spattern
+    ingest pattern
+    other.coccyx.delete pattern
   end
 
   # Debug methods
@@ -693,7 +699,7 @@ class Heracles
               hydra.chophead
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               pattern = hydra.spattern
-              @final_hydra.ingest Pattern.new(pattern) # FIXME add atlas and use it instead of spattern
+              @final_hydra.transplant hydra # FIXME add atlas and use it instead of spattern
               @count_hydra.delete pattern
             # FIXME else clear good and bad counts?
             end

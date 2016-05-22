@@ -757,6 +757,14 @@ describe Hydra do
     end
   end
 
+  describe '#coccyx' do
+    it "goes back to the base of the hydra" do
+      hydra = Hydra.new 'foo'
+      fooneck = hydra.read 'foo'
+      expect(fooneck.coccyx).to eq hydra
+    end
+  end
+
   describe '#ensure_neck' do
     it "ensures there is a neck" do
       hydra.ensure_neck('a')
@@ -1291,21 +1299,29 @@ describe Hydra do
     end
   end
 
-  describe '#transplant' do
+  describe '#transplant' do # This metaphor brought to you while watching House M. D. ;-)
     it "transplants a part of another hydra" do
-      hydra1 = Hydra.new ['abc', 'def', 'ghi']
-      hydra2 = Hydra.new ['zyx', 'klm']
-      scion = hydra2.read 'klm'
-      hydra1.transplant scion
-      expect(hydra1.digest).to eq ['abc', 'def', 'ghi', 'klm']
+      patient = Hydra.new ['abc', 'def', 'ghi']
+      donor = Hydra.new ['zyx', 'klm']
+      graft = donor.read 'klm'
+      patient.transplant graft
+      expect(patient.digest).to eq ['abc', 'def', 'ghi', 'klm']
     end
 
     it "handles digits correctly" do
-      hydra1 = Hydra.new 'foo3'
-      hydra2 = Hydra.new
-      scion = hydra1.read 'foo'
-      hydra1.transplant scion
-      expect(hydra1.digest).to eq ['foo3']
+      donor = Hydra.new 'foo3'
+      patient = Hydra.new
+      graft = donor.read 'foo'
+      patient.transplant graft
+      expect(patient.digest).to eq ['foo3']
+    end
+
+    it "removes the head from the source hydra" do
+      donor = Hydra.new ['foo', 'bar']
+      patient = Hydra.new
+      graft = donor.read 'foo'
+      patient.transplant graft
+      expect(donor.digest).to eq ['bar']
     end
   end
 
