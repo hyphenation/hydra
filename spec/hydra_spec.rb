@@ -570,6 +570,11 @@ describe Pattern do
       pattern = Pattern.new 'f1oo3ba1r'
       expect(pattern.showhyphens(2, 2)).to eq 'foo-bar'
     end
+
+    it "behaves correctly at the border" do
+      pattern = Pattern.new 'fo1ba'
+      expect(pattern.showhyphens(2, 2)).to eq 'fo-ba'
+    end
   end
 end
 
