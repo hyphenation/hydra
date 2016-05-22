@@ -1174,8 +1174,8 @@ describe Hydra do
 
       it 'works with dotted patterns' do
         hydra = Hydra.new povsod_patterns
-        pending "bug"
-        expect(hydra.prehyphenate('povsod').to_s).to eq 'po4v5o1d'
+        pattern = hydra.prehyphenate('povsod')
+        expect(pattern.to_s).to eq 'po4v5so1d'
       end
     end
 

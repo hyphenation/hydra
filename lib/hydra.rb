@@ -584,6 +584,7 @@ class Hydra
 
   def prehyphenate(word)
     word = Pattern.dummy(word) unless word.is_a? Pattern
+    getneck('.').regest(word, :hyphenate) if getneck('.')
     word.length.times do |n|
       word.reset(n)
       regest(word, :hyphenate)
