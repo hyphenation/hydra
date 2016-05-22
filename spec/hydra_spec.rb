@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Pattern do
-  describe '#new' do
+  describe '.new' do
     it "makes a pattern from a word and an array of digits" do
       expect(Pattern.new('bac', [0, 2, 1, 0])).to be_a Pattern
     end
