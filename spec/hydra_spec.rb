@@ -201,6 +201,18 @@ describe Pattern do
       it "returns a string representation of the pattern" do
         expect(pattern.to_s).to eq "b2a1c"
       end
+
+      it "works with initial patterns too" do
+        pattern = Pattern.new 'foobar', [0, 0, 0, 3, 0, 0, 0]
+        pattern.initial!
+        expect(pattern.to_s).to eq '.foo3bar'
+      end
+
+      it "also works with final patterns" do
+        pattern = Pattern.new 'foobar', [0, 0, 0, 7, 0, 0, 0]
+        pattern.final!
+        expect(pattern.to_s).to eq 'foo7bar.'
+      end
     end
 
     describe '.get_digits' do
@@ -527,6 +539,13 @@ describe Pattern do
       pattern.inc_bad_count
       expect(pattern.good_count).to be == 2
       expect(pattern.bad_count).to be == 1
+    end
+  end
+
+  describe '#showhyphens' do
+    it "shows the current hyphens" do
+      pattern = Pattern.new 'fo2o3bar5qu6ux'
+      expect(pattern.showhyphens).to eq 'foo-bar-quux'
     end
   end
 end
@@ -988,6 +1007,7 @@ describe Hydra do
 
   context "with a complex hydra" do
     let(:complex_hydra) { Hydra.new ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch'] }
+    let(:povsod_patterns) { ["o1d", "o1v", "po1", ".po4v5s"] } # From Matjaž Vrečko’s Slovenian patterns
 
     describe '#match' do
       it "returns a simple match" do
@@ -1108,12 +1128,22 @@ describe Hydra do
         match = hydra.match('foo').first
         expect(match.anchor).to be == 0
       end
+
+      it "works correctly with dotted patterns" do
+        hydra = Hydra.new povsod_patterns
+        expect(hydra.match('povsod').map(&:to_s)).to eq povsod_patterns
+      end
     end
 
     describe '#prehyphenate' do
       it "pre-hyphenates the string" do
         hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
         expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
+      end
+
+      it 'works with dotted patterns' do
+        hydra = Hydra.new povsod_patterns
+        expect(hydra.prehyphenate('povsod').to_s).to eq 'po4v5o1d'
       end
     end
 
