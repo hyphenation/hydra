@@ -51,7 +51,7 @@ class Pattern
   end
 
   def self.dummy(word)
-    new word, (word.length + 1).times.map { 0 } # I’m sure there is syntactic sugar for that ...
+    new word,  [0] * (word.length + 1)
   end
 
   def self.simple(word, position, value)
