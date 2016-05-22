@@ -599,8 +599,7 @@ class Hydra
     pattern = Pattern.dummy(word)
     l.times.each do |n|
       # regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
-      pattern.reset # TODO Test that strategy thoroughly
-      pattern.shift(n)
+      pattern.reset(n) # TODO Test that strategy thoroughly
       regest(pattern, :hydrae, matches)
     end
 
@@ -610,8 +609,7 @@ class Hydra
   def prehyphenate(word)
     word = Pattern.dummy(word) unless word.is_a? Pattern
     word.length.times do |n|
-      word.reset
-      word.shift(n)
+      word.reset(n)
       regest(word, :hyphenate)
     end
 
