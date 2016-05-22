@@ -8,8 +8,7 @@ class Pattern
       @digits = digits
       raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
     elsif word
-      @pattern = word
-      breakup
+      breakup(word)
     else
       @word = ''
     end
@@ -171,16 +170,12 @@ class Pattern
   end
 
   def initial!
-    combine unless @pattern
     @initial = true
-    @pattern = '.' + @pattern
     @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
   end
 
   def final!
-    combine unless @pattern
     @final = true
-    @pattern += '.'
     @digits = @digits[0..@digits.length - 2] if @digits.length > @word.length + 1
   end
 
@@ -224,22 +219,22 @@ class Pattern
   end
 
   def combine
-    @pattern = ''
+    pattern = ''
     @digits.each_with_index do |digit, index|
-      @pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
+      pattern += if digit > 0 then digit.to_s else '' end + @word[index].to_s
     end
 
-    @pattern = '.' + @pattern if @initial
-    @pattern = @pattern + '.' if @final
+    pattern = '.' + pattern if @initial
+    pattern = pattern + '.' if @final
 
-    @pattern
+    pattern
   end
 
-  def breakup
+  def breakup(pattern)
     @word, i, @digits = '', 0, []
     @breakpoints = [] if is_a? Lemma
-    while i < @pattern.length
-      char = @pattern[i]
+    while i < pattern.length
+      char = pattern[i]
       if Hydra.isdigit(char)
         @digits << char.to_i
         i += 1
@@ -255,7 +250,7 @@ class Pattern
         end
         @digits << 0
       end
-      @word += @pattern[i] if @pattern[i]
+      @word += pattern[i] if pattern[i]
       i += 1
     end
     @digits << 0 if @digits.length == @word.length # Ensure explicit 0 after end of pattern
