@@ -631,6 +631,8 @@ end
 
 describe Hydra do
   let(:hydra)  { Hydra.new }
+  let(:complex_hydra) { Hydra.new ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch'] }
+  let(:povsod_patterns) { ["o1d", "o1v", "po1", ".po4v5s"] } # From Matjaž Vrečko’s Slovenian patterns
 
   describe '.new' do
     it "creates a new Hydra" do
@@ -756,7 +758,7 @@ describe Hydra do
   end
 
   describe '#ensure_neck' do
-    it "ensures there is a limb" do
+    it "ensures there is a neck" do
       hydra.ensure_neck('a')
       expect(hydra.getneck('a')).to be_a Hydra
     end
@@ -768,19 +770,19 @@ describe Hydra do
       expect(hydra.count).to eq 1
     end
 
-    it "has a correctly labelled limb" do
+    it "has a correctly labelled neck" do
       hydra.setatlas('b', [2])
       expect(hydra.getneck('b')).to be_a Hydra
     end
   end
 
   describe '#getneck' do
-    it "returns the limb" do
+    it "returns the neck" do
       hydra.ingest 'abc'
       expect(hydra.getneck('a')).to be_a Hydra
     end
 
-    it "returns nil for non-existing limbs" do
+    it "returns nil for non-existing necks" do
       hydra.ingest 'def'
       expect(hydra.getneck('g')).to be_nil
     end
@@ -990,8 +992,6 @@ describe Hydra do
     end
   end
 
-  # Plan: #search → #delete (more complex search)
-  # → #regest (search with option to delete)
   describe '#search' do
     it "searches one digitless pattern" do
       hydra.ingest ['b2a1c']
@@ -1066,259 +1066,254 @@ describe Hydra do
     end
   end
 
-  context "with a complex hydra" do
-    let(:complex_hydra) { Hydra.new ['.foo3', '.fo1', 'fo2o1', '.bar1', '3ba2r.', 'ba1', '.ba3', 'a2r.', 'boo', '.ooba', '.oo3', 'o2o', 'ba.', 'fo.', 'big', 'bag', 'bug', '.boo', 'alsonotamatch'] }
-    let(:povsod_patterns) { ["o1d", "o1v", "po1", ".po4v5s"] } # From Matjaž Vrečko’s Slovenian patterns
-
-    describe '#match' do
-      it "returns a simple match" do
-        hydra.ingest ['foo1', 'boo2']
-        matches = hydra.match('foobar')
-        expect(matches.map(&:to_s)).to eq ['foo1']
-      end
-
-      it "returns an array of patterns" do
-        hydra.ingest ['foo1', 'boo2', '3bar']
-        matches = hydra.match('foobar')
-        expect(matches).to be_an Array
-        expect(matches.count).to eq 2
-        expect(matches.map(&:class)).to eq [Pattern, Pattern]
-      end
-
-      it "works with patterns that are prefixes of each other" do
-        hydra.ingest ['fo2', 'foo1']
-        expect(hydra.match('foobar').map(&:to_s)).to eq ['fo2', 'foo1']
-      end
-
-      it "looks for matching patterns" do
-        hydra = Hydra.new
-        matching_patterns = ['ba1', 'ba2r', 'fo1', 'o1b', 'o2o']
-        non_matching_patterns = ['ba2b', 'of3', 'mo2o']
-        hydra.ingest matching_patterns
-        hydra.ingest non_matching_patterns
-        match = hydra.match('foobar')
-        expect(match.map(&:to_s)).to eq matching_patterns
-      end
-
-      it "matches a more complex example" do
-        hydra = Hydra.new
-        hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
-        expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '2io', '1na', 'n2at', 'o2n', '1tio'] # According to appendix H :-)
-      end
-
-      it "matches a pattern with an initial dot", dot: true do
-        hydra = Hydra.new ['.foo']
-        expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
-      end
-
-      it "matches a pattern with an initial dot and actual digits" do
-        hydra = Hydra.new '.foo1'
-        expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
-      end
-
-      it "finds no match if pattern is in the middle of the word" do
-        hydra = Hydra.new ['.oob']
-        expect(hydra.match('foobar')).to be_empty
-      end
-
-      it "finds no match if pattern is different after initial dot" do
-        hydra = Hydra.new ['.boo']
-        expect(hydra.match('foobar')).to be_empty
-      end
-
-      it "matches a closing dot" do
-        hydra = Hydra.new ['bar.']
-        expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
-      end
-
-      # TODO Stupid pattern bar1.?
-
-      it "matches a final do with actual digits in the pattern" do
-        hydra = Hydra.new '1bar.'
-        expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
-      end
-
-      it "finds no match if pattern is in the middle of the word" do
-        hydra = Hydra.new ['oba.']
-        expect(hydra.match('foobar')).to be_empty
-      end
-
-      it "finds no match if pattern is different before final dot" do
-        hydra = Hydra.new ['far.']
-        expect(hydra.match('foobar')).to be_empty
-      end
-
-      it "matches a more complex example with dots" do
-        expect(complex_hydra.match('foobar').map(&:to_s).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
-      end
-
-      it "... also with a final dot" do
-        hydra.ingest ['fo1', 'o2o3', '5bar.']
-        pattern = hydra.prehyphenate('foobar')
-        expect(pattern.get_word).to be == "foobar"
-        expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
-      end
-
-      it "and with an initial dot too, why not" do
-        hydra.ingest ['.fo1', 'o2o3', '5ba4r']
-        pattern = hydra.prehyphenate('foobar')
-        expect(pattern.get_word).to be == "foobar"
-        expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
-      end
-
-      it "sets the anchor correctly" do
-        hydra = Hydra.new ['oba']
-        match = hydra.match('foobar').first
-        expect(match.anchor).to be == 2
-      end
-
-      it "... also with initial dot" do
-        hydra = Hydra.new '.foo'
-        match = hydra.match('foobar').first
-        expect(match.anchor).to be == 0
-      end
-
-      it "... and final dots" do
-        hydra = Hydra.new 'bar.'
-        match = hydra.match('foobar').first
-        expect(match.anchor).to be == 3
-      end
-
-      it "... and dots at both ends" do
-        hydra = Hydra.new '.foo.'
-        match = hydra.match('foo').first
-        expect(match.anchor).to be == 0
-      end
-
-      it "works correctly with dotted patterns" do
-        hydra = Hydra.new povsod_patterns
-        expect(hydra.match('povsod').map(&:to_s)).to eq povsod_patterns
-      end
+  describe '#match' do
+    it "returns a simple match" do
+      hydra.ingest ['foo1', 'boo2']
+      matches = hydra.match('foobar')
+      expect(matches.map(&:to_s)).to eq ['foo1']
     end
 
-    describe '#prehyphenate' do
-      it "pre-hyphenates the string" do
-        hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
-        expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
-      end
-
-      it 'works with dotted patterns' do
-        hydra = Hydra.new povsod_patterns
-        pattern = hydra.prehyphenate('povsod')
-        expect(pattern.to_s).to eq 'po4v5so1d'
-      end
+    it "returns an array of patterns" do
+      hydra.ingest ['foo1', 'boo2', '3bar']
+      matches = hydra.match('foobar')
+      expect(matches).to be_an Array
+      expect(matches.count).to eq 2
+      expect(matches.map(&:class)).to eq [Pattern, Pattern]
     end
 
-    describe '#hydrae' do
-      it "returns matches as hydrae" do
-        matches = complex_hydra.hydrae('foobar')
-        expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
-      end
-
-      it "sets the index correctly ..." do
-        hydra = Hydra.new ['a1b', 'c1de', 'fg1hi']
-        matches = hydra.hydrae('xxabcdefghixxx')
-        expect(matches.count).to be == 3
-        expect(matches[0].index).to be == 2
-        expect(matches[1].index).to be == 4
-        expect(matches[2].index).to be == 7
-      end
-
-      it "... even with initial dots ..." do
-        hydra = Hydra.new '.ab1'
-        matches = hydra.hydrae('abcdxxx')
-        expect(matches.count).to be == 1
-        expect(matches.first.index).to be == 0
-      end
-
-      it "... and trailing ones." do
-        hydra = Hydra.new 'a1bcd.'
-        matches = hydra.hydrae('xxabcd')
-        expect(matches.count).to be == 1
-        expect(matches.first.index).to be == 2
-      end
-
-      it "And even at both ends :-)" do
-        hydra = Hydra.new '.ab1cde.'
-        matches = hydra.hydrae('abcde')
-        expect(matches.count).to be == 1
-        expect(matches.first.index).to be == 0
-      end
+    it "works with patterns that are prefixes of each other" do
+      hydra.ingest ['fo2', 'foo1']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['fo2', 'foo1']
     end
 
-    describe '#index' do
-      it "returns the current index" do
-        hydra = Hydra.new
-        3.times { hydra.shift }
-        expect(hydra.index).to be == 3
-      end
-
-      it "is 0 at initialisation" do
-        hydra = Hydra.new
-        expect(hydra.index).to be == 0
-      end
+    it "looks for matching patterns" do
+      hydra = Hydra.new
+      matching_patterns = ['ba1', 'ba2r', 'fo1', 'o1b', 'o2o']
+      non_matching_patterns = ['ba2b', 'of3', 'mo2o']
+      hydra.ingest matching_patterns
+      hydra.ingest non_matching_patterns
+      match = hydra.match('foobar')
+      expect(match.map(&:to_s)).to eq matching_patterns
     end
 
-    describe '#shift' do
-      it "shifts the index by one" do
-        expect { hydra.shift }.to change(hydra, :index).by(1)
-      end
+    it "matches a more complex example" do
+      hydra = Hydra.new
+      hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
+      expect(hydra.match('hyphenation').map(&:to_s)).to eq ['he2n', 'hena4', 'hen5at', 'hy3ph', '2io', '1na', 'n2at', 'o2n', '1tio'] # According to appendix H :-)
     end
 
-    describe '#currdigit' do
-      it "returns the digit at the current index position" do
-        hydra = Hydra.new 'ab3c'
-        chydra = hydra.read('abc')
-        2.times { chydra.shift }
-        expect(chydra.currdigit).to be == 3
-      end
-
-      it "raises an OutOfBound exception if index is negative" do
-        hydra = Hydra.new
-        hydra.instance_variable_set :@index, -2
-        expect { hydra.currdigit }.to raise_exception(Hydra::OutOfBounds)
-      end
-
-      # FIXME Also if larger than end of digits array
+    it "matches a pattern with an initial dot", dot: true do
+      hydra = Hydra.new ['.foo']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo'] # TODO Matcher for that
     end
 
-    describe '#read' do
-      it "reads a word, returning a hydra" do
-        hydra = Hydra.new 'abc'
-        chydra = hydra.getneck('a').getneck('b').getneck('c')
-        expect(hydra.read('abc')).to be == chydra
-      end
-
-      it "returns nil if word isn’t found" do
-        hydra = Hydra.new 'foo'
-        expect(hydra.read('bar')).to be_nil
-      end
+    it "matches a pattern with an initial dot and actual digits" do
+      hydra = Hydra.new '.foo1'
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['.foo1']
     end
 
-    describe '#spattern' do
-      it "returns the pattern associated with that head, as string" do
-        hydra = Hydra.new '5fo2o3'
-        fooneck = hydra.read('foo')
-        expect(fooneck.spattern).to eq "5fo2o3"
-      end
+    it "finds no match if pattern is in the middle of the word" do
+      hydra = Hydra.new ['.oob']
+      expect(hydra.match('foobar')).to be_empty
+    end
 
-      it "returns the empty string if no head" do
-        hydra = Hydra.new 'abc'
-        bneck = hydra.read('ab')
-        expect(bneck.spattern).to be == ""
-      end
+    it "finds no match if pattern is different after initial dot" do
+      hydra = Hydra.new ['.boo']
+      expect(hydra.match('foobar')).to be_empty
+    end
 
-      it "works with initial dots" do
-        hydra = Hydra.new '.ba2'
-        aneck = hydra.read('.ba')
-        expect(aneck.spattern).to be == ".ba2"
-      end
+    it "matches a closing dot" do
+      hydra = Hydra.new ['bar.']
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['bar.']
+    end
 
-      it "works with final dots" do
-        hydra = Hydra.new 'f4o.'
-        oneck = hydra.read('fo')
-        expect(oneck.spattern).to be == "f4o."
-      end
+    # TODO Stupid pattern bar1.?
+
+    it "matches a final do with actual digits in the pattern" do
+      hydra = Hydra.new '1bar.'
+      expect(hydra.match('foobar').map(&:to_s)).to eq ['1bar.']
+    end
+
+    it "finds no match if pattern is in the middle of the word" do
+      hydra = Hydra.new ['oba.']
+      expect(hydra.match('foobar')).to be_empty
+    end
+
+    it "finds no match if pattern is different before final dot" do
+      hydra = Hydra.new ['far.']
+      expect(hydra.match('foobar')).to be_empty
+    end
+
+    it "matches a more complex example with dots" do
+      expect(complex_hydra.match('foobar').map(&:to_s).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
+    end
+
+    it "... also with a final dot" do
+      hydra.ingest ['fo1', 'o2o3', '5bar.']
+      pattern = hydra.prehyphenate('foobar')
+      expect(pattern.get_word).to be == "foobar"
+      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
+    end
+
+    it "and with an initial dot too, why not" do
+      hydra.ingest ['.fo1', 'o2o3', '5ba4r']
+      pattern = hydra.prehyphenate('foobar')
+      expect(pattern.get_word).to be == "foobar"
+      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
+    end
+
+    it "sets the anchor correctly" do
+      hydra = Hydra.new ['oba']
+      match = hydra.match('foobar').first
+      expect(match.anchor).to be == 2
+    end
+
+    it "... also with initial dot" do
+      hydra = Hydra.new '.foo'
+      match = hydra.match('foobar').first
+      expect(match.anchor).to be == 0
+    end
+
+    it "... and final dots" do
+      hydra = Hydra.new 'bar.'
+      match = hydra.match('foobar').first
+      expect(match.anchor).to be == 3
+    end
+
+    it "... and dots at both ends" do
+      hydra = Hydra.new '.foo.'
+      match = hydra.match('foo').first
+      expect(match.anchor).to be == 0
+    end
+
+    it "works correctly with dotted patterns" do
+      hydra = Hydra.new povsod_patterns
+      expect(hydra.match('povsod').map(&:to_s)).to eq povsod_patterns
+    end
+  end
+
+  describe '#prehyphenate' do
+    it "pre-hyphenates the string" do
+      hydra.ingest ['fo1', 'fo2o3', 'ba1', 'ba2r']
+      expect(hydra.prehyphenate('foobar').to_s).to eq "fo2o3ba2r"
+    end
+
+    it 'works with dotted patterns' do
+      hydra = Hydra.new povsod_patterns
+      pattern = hydra.prehyphenate('povsod')
+      expect(pattern.to_s).to eq 'po4v5so1d'
+    end
+  end
+
+  describe '#hydrae' do
+    it "returns matches as hydrae" do
+      matches = complex_hydra.hydrae('foobar')
+      expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
+    end
+
+    it "sets the index correctly ..." do
+      hydra = Hydra.new ['a1b', 'c1de', 'fg1hi']
+      matches = hydra.hydrae('xxabcdefghixxx')
+      expect(matches.count).to be == 3
+      expect(matches[0].index).to be == 2
+      expect(matches[1].index).to be == 4
+      expect(matches[2].index).to be == 7
+    end
+
+    it "... even with initial dots ..." do
+      hydra = Hydra.new '.ab1'
+      matches = hydra.hydrae('abcdxxx')
+      expect(matches.count).to be == 1
+      expect(matches.first.index).to be == 0
+    end
+
+    it "... and trailing ones." do
+      hydra = Hydra.new 'a1bcd.'
+      matches = hydra.hydrae('xxabcd')
+      expect(matches.count).to be == 1
+      expect(matches.first.index).to be == 2
+    end
+
+    it "And even at both ends :-)" do
+      hydra = Hydra.new '.ab1cde.'
+      matches = hydra.hydrae('abcde')
+      expect(matches.count).to be == 1
+      expect(matches.first.index).to be == 0
+    end
+  end
+
+  describe '#index' do
+    it "returns the current index" do
+      hydra = Hydra.new
+      3.times { hydra.shift }
+      expect(hydra.index).to be == 3
+    end
+
+    it "is 0 at initialisation" do
+      hydra = Hydra.new
+      expect(hydra.index).to be == 0
+    end
+  end
+
+  describe '#shift' do
+    it "shifts the index by one" do
+      expect { hydra.shift }.to change(hydra, :index).by(1)
+    end
+  end
+
+  describe '#currdigit' do
+    it "returns the digit at the current index position" do
+      hydra = Hydra.new 'ab3c'
+      chydra = hydra.read('abc')
+      2.times { chydra.shift }
+      expect(chydra.currdigit).to be == 3
+    end
+
+    it "raises an OutOfBound exception if index is negative" do
+      hydra = Hydra.new
+      hydra.instance_variable_set :@index, -2
+      expect { hydra.currdigit }.to raise_exception(Hydra::OutOfBounds)
+    end
+
+    # FIXME Also if larger than end of digits array
+  end
+
+  describe '#read' do
+    it "reads a word, returning a hydra" do
+      hydra = Hydra.new 'abc'
+      chydra = hydra.getneck('a').getneck('b').getneck('c')
+      expect(hydra.read('abc')).to be == chydra
+    end
+
+    it "returns nil if word isn’t found" do
+      hydra = Hydra.new 'foo'
+      expect(hydra.read('bar')).to be_nil
+    end
+  end
+
+  describe '#spattern' do
+    it "returns the pattern associated with that head, as string" do
+      hydra = Hydra.new '5fo2o3'
+      fooneck = hydra.read('foo')
+      expect(fooneck.spattern).to eq "5fo2o3"
+    end
+
+    it "returns the empty string if no head" do
+      hydra = Hydra.new 'abc'
+      bneck = hydra.read('ab')
+      expect(bneck.spattern).to be == ""
+    end
+
+    it "works with initial dots" do
+      hydra = Hydra.new '.ba2'
+      aneck = hydra.read('.ba')
+      expect(aneck.spattern).to be == ".ba2"
+    end
+
+    it "works with final dots" do
+      hydra = Hydra.new 'f4o.'
+      oneck = hydra.read('fo')
+      expect(oneck.spattern).to be == "f4o."
     end
   end
 
@@ -1351,6 +1346,9 @@ describe Hydra do
 end
 
 describe Heracles do
+  let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
+  let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
+
   describe '#run' do
     it "runs a file of hyphenated words" do
       heracles = Heracles.new
@@ -1368,56 +1366,47 @@ describe Heracles do
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
 
-    context "with a complex dictionary" do
-      before(:each) do
-        @complex_dictionary = ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi']
-        @complex_dictionary.map! { |word| word = 'xx' + word + 'xxx' }
-      end
+    it "runs a slightly more complex list of words" do
+      heracles = Heracles.new
+      hydra = heracles.run_array(complex_dictionary, [1, 1, 2, 5, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
+    end
 
-      it "runs a slightly more complex list of words" do
-        heracles = Heracles.new
-        hydra = heracles.run_array(@complex_dictionary, [1, 1, 2, 5, 1, 1, 1])
-        # Getting it right now!
-        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
-      end
+    it "handles hyphenmins correctly" do
+      dictionary = ['a-b', 'a-b-cxxx']
+      hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c']
+    end
 
-      it "handles hyphenmins correctly" do
-        dictionary = ['a-b', 'a-b-cxxx']
-        hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
-        expect(hydra.digest).to be == ['b1c']
-      end
+    it "handles hyphenmins correctly on a more complex example" do
+      dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
+      hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
+    end
 
-      it "handles hyphenmins correctly on a more complex example" do
-        dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
-        hydra = Heracles.new.run_array(dictionary, [1, 1, 2, 5, 1, 1, 1])
-        expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
-      end
+    it "generates level 2" do
+      hydra = Heracles.new.run_array(complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
+      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
+    end
 
-      # Works now!
-      it "generates level 2" do
-        hydra = Heracles.new.run_array(@complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
-        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
-      end
+    it "generates level 3" do
+      hydra = Heracles.new.run_array(complex_dictionary, [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
+    end
 
-      it "generates level 3" do
-        hydra = Heracles.new.run_array(@complex_dictionary, [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1])
-        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
-      end
+    it "generates level 4" do
+      hydra = Heracles.new.run_array(complex_dictionary, [1, 4, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1])
+      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
+    end
 
-      it "generates level 4" do
-        hydra = Heracles.new.run_array(@complex_dictionary, [1, 4, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1])
-        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
-      end
+    it "generates level 5" do
+      hydra = Heracles.new.run_array(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1])
+      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
+    end
 
-      it "generates level 5" do
-        hydra = Heracles.new.run_array(@complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1])
-        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
-      end
-
-      it "generates level 6" do
-        hydra = Heracles.new.run_array(@complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1])
-        expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
-      end
+    it "generates level 6" do
+      hydra = Heracles.new.run_array(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1])
+      expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
     end
   end
 
