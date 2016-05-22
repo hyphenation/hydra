@@ -611,6 +611,10 @@ class Hydra
     end
   end
 
+  def transplant(other)
+    ingest other.spattern
+  end
+
   # Debug methods
   def spattern(sneck = "", digits = nil)
     if digits
@@ -686,7 +690,7 @@ class Heracles
 
           @count_hydra.each do |hydra|
             if hydra.good_count * @good_weight < @threshold
-              @count_hydra.delete hydra.spattern
+              hydra.chophead
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               pattern = hydra.spattern
               @final_hydra.ingest Pattern.new(pattern) # FIXME add atlas and use it instead of spattern

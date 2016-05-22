@@ -1291,6 +1291,24 @@ describe Hydra do
     end
   end
 
+  describe '#transplant' do
+    it "transplants a part of another hydra" do
+      hydra1 = Hydra.new ['abc', 'def', 'ghi']
+      hydra2 = Hydra.new ['zyx', 'klm']
+      scion = hydra2.read 'klm'
+      hydra1.transplant scion
+      expect(hydra1.digest).to eq ['abc', 'def', 'ghi', 'klm']
+    end
+
+    it "handles digits correctly" do
+      hydra1 = Hydra.new 'foo3'
+      hydra2 = Hydra.new
+      scion = hydra1.read 'foo'
+      hydra1.transplant scion
+      expect(hydra1.digest).to eq ['foo3']
+    end
+  end
+
   describe '#spattern' do
     it "returns the pattern associated with that head, as string" do
       hydra = Hydra.new '5fo2o3'
