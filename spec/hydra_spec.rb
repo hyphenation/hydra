@@ -592,13 +592,11 @@ describe Lemma do
 
     it "sets all breakpoints to :no initially" do
       lemma = Lemma.new 'foobar'
-      lemma.breakup('foobar') # FIXME Refactor Could be parse, really + duplication of information
       expect(lemma.instance_variable_get :@breakpoints).to be == [:no] * 7
     end
 
     it "sets actual breakpoints to :is" do
       lemma = Lemma.new 'foo-bar'
-      lemma.breakup('foo-bar')
       expect(lemma.instance_variable_get :@breakpoints).to be == [:no, :no, :no, :is, :no, :no, :no]
     end
   end
