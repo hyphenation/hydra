@@ -262,8 +262,10 @@ class Pattern
   def showhyphens(lefthyphenmin = 0, righthyphenmin = 0)
     output = ''
     @digits.each_with_index do |digit, index|
-      output += '-' if digit % 2 == 1 && index > 0 && index < length && index >= lefthyphenmin && index <= length - righthyphenmin
-      output += @word[index] if index < length
+      if index < length 
+        output += '-' if digit % 2 == 1 && index > 0 && index >= lefthyphenmin && index <= length - righthyphenmin
+        output += @word[index]
+      end
     end
 
     output
