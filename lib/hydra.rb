@@ -281,6 +281,21 @@ class Pattern
     raise BadPattern unless @digits.length == @word.length + 1
     # FIXME Test for that
   end
+
+  def showhyphens
+    breakup unless @digits
+    output = ''
+    @digits.each_with_index do |digit, index|
+      if index > 0 and index < length
+        if digit % 2 == 1
+          output += '-'
+        end
+      end
+      output += @word[index].to_s
+    end
+
+    output
+  end
 end
 
 class Lemma < Pattern # FIXME Plural lemmata?

@@ -547,6 +547,16 @@ describe Pattern do
       pattern = Pattern.new 'fo2o3bar5qu6ux'
       expect(pattern.showhyphens).to eq 'foo-bar-quux'
     end
+
+    it "takes care of edge cases" do
+      pattern = Pattern.new '1foo'
+      expect(pattern.showhyphens).to eq 'foo'
+    end
+
+    it "correctly handles the other edge case" do
+      pattern = Pattern.new 'bar3'
+      expect(pattern.showhyphens).to eq 'bar'
+    end
   end
 end
 
