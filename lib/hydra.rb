@@ -362,6 +362,11 @@ class Hydra
     @mode = :strict
   end
 
+  def showhyphens(word)
+    pattern = prehyphenate(word)
+    pattern.showhyphens
+  end
+
   def parent
     @parent
   end

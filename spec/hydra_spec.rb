@@ -697,6 +697,20 @@ describe Hydra do
     end
   end
 
+  describe '#showhyphens' do
+    it "shows the hyphenation points" do
+      hydra = Hydra.new ['fo1', 'fo2o3', 'qu1', 'qu2u3', 'quu4x', 'bar3']
+      expect(hydra.showhyphens('foobarquux')).to eq 'foo-bar-quux'
+    end
+
+    it "takes hyphenmins into account" do
+      hydra = Hydra.new ['o1d', 'o1v', 'po1', '.po4v5s']
+      hydra.setlefthyphenmin(2)
+      hydra.setrighthyphenmin(2)
+      expect(hydra.showhyphens('povsod')).to eq 'pov-sod'
+    end
+  end
+
   # FIXME Maybe not the best metaphor!
   describe '#parent' do
     it "is nil by default" do
