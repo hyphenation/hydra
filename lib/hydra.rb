@@ -616,8 +616,7 @@ class Hydra
   end
 
   def transplant(other)
-    pattern = other.spattern
-    ingest pattern
+    ingest other.spattern
     other.chophead
   end
 
