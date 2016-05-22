@@ -69,436 +69,447 @@ describe Pattern do
     end
   end
 
-  context "with a predefined pattern" do
-    describe '#index' do
-      it "returns the index" do
-        pattern.shift(2)
-        expect(pattern.index).to eq 2
-      end
-
-      it "is zero at initialisation" do
-        expect(pattern.index).to eq 0
-      end
+  describe '#index' do
+    it "returns the index" do
+      pattern = Pattern.new
+      pattern.shift(2)
+      expect(pattern.index).to eq 2
     end
 
-    describe '#shift' do
-      it "shifts the index by one" do
-        pattern.shift
-        expect(pattern.index).to eq 1
-      end
+    it "is zero at initialisation" do
+      pattern = Pattern.new
+      expect(pattern.index).to eq 0
+    end
+  end
 
-      it "shifts the cursor by one" do
-        expect { pattern.shift }.to change(pattern, :cursor).by(1)
-      end
-
-      it "returns the pattern" do
-        expect(pattern.shift).to be_a Pattern
-      end
-
-      it "takes an optional number of repetitions" do
-        pattern = Pattern.new('foo1bar')
-        expect(pattern.shift(3).index).to eq 3
-      end
+  describe '#shift' do
+    it "shifts the index by one" do
+      pending "reword later"
+      bug
+      pattern = Pattern.new
+      pattern.shift
+      expect(pattern.index).to eq 1
     end
 
-    describe '#shift!' do
-      it "just shifts" do
-        pattern = Pattern.new 'q8u1u2x'
-        pattern.shift!
-        expect(pattern.index).to eq 1
-      end
-
-      it "also shifts the cursor" do
-        expect { pattern.shift }.to change(pattern, :cursor).by(1)
-      end
-
-      it "takes an optional number as argument" do
-        pattern = Pattern.new('baz1quux')
-        expect { pattern.shift! 2 }.to change(pattern, :index).by 2
-      end
+    it "shifts the cursor by one" do
+      pattern = Pattern.new
+      expect { pattern.shift }.to change(pattern, :cursor).by(1)
     end
 
-    describe '#reset' do
-      it "resets the index" do
-        pattern.shift(2)
-        pattern.reset
-        expect(pattern.index).to eq 0
-      end
-
-      it "resets the cursor too" do
-        pattern.shift(2)
-        pattern.reset
-        expect(pattern.cursor).to be == 0
-      end
-
-      it "takes an optional argument" do
-        pattern.shift(3)
-        pattern.reset(2)
-        expect(pattern.index).to be == 2
-        expect(pattern.cursor).to be == 2
-      end
+    it "returns the pattern" do
+      pattern = Pattern.new
+      expect(pattern.shift).to be_a Pattern
     end
 
-    describe '#letter' do
-      it "returns the nth letter" do
-        pattern = Pattern.new('foo9bar')
-        expect(pattern.letter(3)).to eq 'b'
-      end
+    it "takes an optional number of repetitions" do
+      pattern = Pattern.new('foo1bar')
+      expect(pattern.shift(3).index).to eq 3
+    end
+  end
+
+  describe '#shift!' do
+    it "just shifts" do
+      pattern = Pattern.new 'q8u1u2x'
+      pattern.shift!
+      expect(pattern.index).to eq 1
     end
 
-    describe '#digit' do
-      it "returns the nth digit" do
-        pattern = Pattern.new('foo9bar')
-        expect(pattern.digit(3)).to eq 9
-      end
+    it "also shifts the cursor" do
+      pattern = Pattern.new
+      expect { pattern.shift }.to change(pattern, :cursor).by(1)
     end
 
-    describe '#last?' do
-      it "tells when we’re on the last character of the pattern" do
-        pattern = Pattern.new '1f2i4n3'
-        pattern.shift(2)
-        expect(pattern.last?).to be_truthy
-      end
+    it "takes an optional number as argument" do
+      pattern = Pattern.new('baz1quux')
+      expect { pattern.shift! 2 }.to change(pattern, :index).by 2
+    end
+  end
 
-      it "returns false just after pattern is initialized" do
-        pattern = Pattern.new '1vé2g3'
-        expect(pattern.last?).to be_falsey
-      end
+  describe '#reset' do
+    it "resets the index" do
+      pattern = Pattern.new
+      pattern.shift(2)
+      pattern.reset
+      expect(pattern.index).to eq 0
     end
 
-    describe '#end?' do
-      it "tells whether we’re at the end of the pattern" do
-        pattern = Pattern.new 'end3'
-        pattern.shift(3)
-        expect(pattern.end?).to be_truthy
-      end
-
-      it "returns false otherwise" do
-        pattern = Pattern.new 'Schluß'
-        pattern.shift(3)
-        expect(pattern.end?).to be_falsey
-      end
+    it "resets the cursor too" do
+      pattern = Pattern.new
+      pattern.shift(2)
+      pattern.reset
+      expect(pattern.cursor).to be == 0
     end
 
-    describe '#currletter' do
-      it "returns the current letter" do
-        pattern = Pattern.new 'a1n2a1n2a'
-        pattern.shift(3)
-        expect(pattern.currletter).to eq 'n'
-      end
+    it "takes an optional argument" do
+      pattern = Pattern.new
+      pattern.shift(3)
+      pattern.reset(2)
+      expect(pattern.index).to be == 2
+      expect(pattern.cursor).to be == 2
+    end
+  end
+
+  describe '#letter' do
+    it "returns the nth letter" do
+      pattern = Pattern.new('foo9bar')
+      expect(pattern.letter(3)).to eq 'b'
+    end
+  end
+
+  describe '#digit' do
+    it "returns the nth digit" do
+      pattern = Pattern.new('foo9bar')
+      expect(pattern.digit(3)).to eq 9
+    end
+  end
+
+  describe '#last?' do
+    it "tells when we’re on the last character of the pattern" do
+      pattern = Pattern.new '1f2i4n3'
+      pattern.shift(2)
+      expect(pattern.last?).to be_truthy
     end
 
-    describe '#currdigit' do
-      it "returns the current digit" do
-        pattern = Pattern.new '3foo'
-        expect(pattern.currdigit).to eq 3
-      end
+    it "returns false just after pattern is initialized" do
+      pattern = Pattern.new '1vé2g3'
+      expect(pattern.last?).to be_falsey
+    end
+  end
+
+  describe '#end?' do
+    it "tells whether we’re at the end of the pattern" do
+      pattern = Pattern.new 'end3'
+      pattern.shift(3)
+      expect(pattern.end?).to be_truthy
     end
 
-    let(:pattern) { Pattern.new('bac', [0, 2, 1, 0]) }
+    it "returns false otherwise" do
+      pattern = Pattern.new 'Schluß'
+      pattern.shift(3)
+      expect(pattern.end?).to be_falsey
+    end
+  end
 
-    describe '#to_s' do
-      it "returns a string representation of the pattern" do
-        expect(pattern.to_s).to eq "b2a1c"
-      end
+  describe '#currletter' do
+    it "returns the current letter" do
+      pattern = Pattern.new 'a1n2a1n2a'
+      pattern.shift(3)
+      expect(pattern.currletter).to eq 'n'
+    end
+  end
 
-      it "works with initial patterns too" do
-        pattern = Pattern.new 'foobar', [0, 0, 0, 3, 0, 0, 0]
-        pattern.initial!
-        expect(pattern.to_s).to eq '.foo3bar'
-      end
+  describe '#currdigit' do
+    it "returns the current digit" do
+      pattern = Pattern.new '3foo'
+      expect(pattern.currdigit).to eq 3
+    end
+  end
 
-      it "also works with final patterns" do
-        pattern = Pattern.new 'foobar', [0, 0, 0, 7, 0, 0, 0]
-        pattern.final!
-        expect(pattern.to_s).to eq 'foo7bar.'
-      end
+  describe '#to_s' do
+    it "returns a string representation of the pattern" do
+      pattern = Pattern.new('bac', [0, 2, 1, 0])
+      expect(pattern.to_s).to eq "b2a1c"
     end
 
-    describe '.get_digits' do
-      it "extracts the digits from a pattern" do
-        expect(pattern.get_digits).to eq [0, 2, 1, 0]
-      end
+    it "works with initial patterns too" do
+      pattern = Pattern.new 'foobar', [0, 0, 0, 3, 0, 0, 0]
+      pattern.initial!
+      expect(pattern.to_s).to eq '.foo3bar'
     end
 
-    describe '.get_word' do # For completeness!
-      it "extracts the word from a pattern" do
-        expect(pattern.get_word).to eq "bac"
-      end
+    it "also works with final patterns" do
+      pattern = Pattern.new 'foobar', [0, 0, 0, 7, 0, 0, 0]
+      pattern.final!
+      expect(pattern.to_s).to eq 'foo7bar.'
+    end
+  end
+
+  describe '.get_digits' do
+    it "extracts the digits from a pattern" do
+      pattern = Pattern.new('bac', [0, 2, 1, 0])
+      expect(pattern.get_digits).to eq [0, 2, 1, 0]
+    end
+  end
+
+  describe '.get_word' do # For completeness!
+    it "extracts the word from a pattern" do
+      pattern = Pattern.new('bac', [0, 2, 1, 0])
+      expect(pattern.get_word).to eq "bac"
+    end
+  end
+
+  describe '#grow' do
+    it "grows a letter.  I know it doesn’t make much sense, just give me a break" do
+      pattern = Pattern.new 'abc'
+      pattern.grow('d')
+      expect(pattern.get_word).to eq 'abcd'
     end
 
-    describe '#grow' do
-      it "grows a letter.  I know it doesn’t make much sense, just give me a break" do
-        pattern = Pattern.new 'abc'
-        pattern.grow('d')
-        expect(pattern.get_word).to eq 'abcd'
-      end
-
-      it "returns the pattern" do
-        expect(pattern.grow('taller')).to be_a Pattern # Adding more than one letter: not recommended!
-      end
-
-      it "raises an exception if pattern is frozen" do
-        pattern = Pattern.new 'def'
-        pattern.freeze [0, 1, 2, 3]
-        expect { pattern.grow('g') }.to raise_exception Hydra::FrozenPattern
-      end
+    it "returns the pattern" do
+      pattern = Pattern.new
+      expect(pattern.grow('taller')).to be_a Pattern # Adding more than one letter: not recommended!
     end
 
-    describe '#grow!' do
-      it "just grows" do
-        pattern = Pattern.new 'f'
-        pattern.grow!('g')
-        expect(pattern.get_word.length).to eq 2
-      end
+    it "raises an exception if pattern is frozen" do
+      pattern = Pattern.new 'def'
+      pattern.freeze [0, 1, 2, 3]
+      expect { pattern.grow('g') }.to raise_exception Hydra::FrozenPattern
+    end
+  end
 
-      it "raises and exception if pattern is frozen" do
-        pattern = Pattern.new 'ijk'
-        pattern.freeze [4, 6, 7, 8]
-        expect { pattern.grow 'l' }.to raise_exception Hydra::FrozenPattern
-      end
+  describe '#grow!' do
+    it "just grows" do
+      pattern = Pattern.new 'f'
+      pattern.grow!('g')
+      expect(pattern.get_word.length).to eq 2
     end
 
-    describe '#fork' do
-      it "forks the pattern on a letter" do
-        pattern = Pattern.new
-        pattern.grow 'f'; pattern.grow 'o'; pattern.grow 'o'
-        expect(pattern.fork('b').get_word).to eq "foob"
-      end
+    it "raises and exception if pattern is frozen" do
+      pattern = Pattern.new 'ijk'
+      pattern.freeze [4, 6, 7, 8]
+      expect { pattern.grow 'l' }.to raise_exception Hydra::FrozenPattern
+    end
+  end
 
-      it "returns a new pattern" do
-        pattern = Pattern.new
-        pattern2 = pattern.fork('b')
-        expect(pattern2.object_id).to_not eq pattern.object_id
-      end
+  describe '#fork' do
+    it "forks the pattern on a letter" do
+      pattern = Pattern.new
+      pattern.grow 'f'; pattern.grow 'o'; pattern.grow 'o'
+      expect(pattern.fork('b').get_word).to eq "foob"
     end
 
-    describe '#copy' do
-      it "returns a new pattern with the same word" do
-        pattern = Pattern.new('fo2o')
-        expect(pattern.copy([1, 2, 3, 0])).to be_a Pattern
-      end
+    it "returns a new pattern" do
+      pattern = Pattern.new
+      pattern2 = pattern.fork('b')
+      expect(pattern2.object_id).to_not eq pattern.object_id
+    end
+  end
 
-      it "sets the digits" do
-        pattern = Pattern.new('ba2r')
-        new_pattern = pattern.copy [4, 5, 6, 0]
-        expect(new_pattern.get_digits).to eq [4, 5, 6, 0]
-      end
+  describe '#copy' do
+    it "returns a new pattern with the same word" do
+      pattern = Pattern.new('fo2o')
+      expect(pattern.copy([1, 2, 3, 0])).to be_a Pattern
     end
 
-    describe '#freeze' do
-      it "freezes the pattern and sets the digits" do
-        pattern = Pattern.new('foo5bar')
-        pattern.freeze [1, 2, 3, 4, 5, 6, 7]
-        expect(pattern.get_digits).to eq [1, 2, 3, 4, 5, 6, 7]
-      end
+    it "sets the digits" do
+      pattern = Pattern.new('ba2r')
+      new_pattern = pattern.copy [4, 5, 6, 0]
+      expect(new_pattern.get_digits).to eq [4, 5, 6, 0]
+    end
+  end
 
-      it "returns the pattern" do
-        pattern = Pattern.new('ba6z5quux')
-        expect(pattern.freeze [4, 5, 6, 7, 8, 9, 0, 0]).to be_a Pattern
-      end
-
-      it "actually freezes" do
-        pattern = Pattern.new('foo5bar')
-        pattern.freeze [0, 1, 2, 3, 4, 5, 6]
-        expect(pattern.instance_variable_get :@frozen).to be_truthy
-      end
+  describe '#freeze' do
+    it "freezes the pattern and sets the digits" do
+      pattern = Pattern.new('foo5bar')
+      pattern.freeze [1, 2, 3, 4, 5, 6, 7]
+      expect(pattern.get_digits).to eq [1, 2, 3, 4, 5, 6, 7]
     end
 
-    describe '#freeze!' do
-      it "just sets the digits" do
-        pattern = Pattern.new('1ing')
-        expect(pattern.freeze! [4, 5, 6, 0]).to eq [4, 5, 6, 0]
-      end
-
-      it "actually freezes" do
-        pattern = Pattern.new('t1t2ing')
-        pattern.freeze! [0, 1, 2, 0, 0, 0]
-        expect(pattern.instance_variable_get :@frozen).to be_truthy
-      end
+    it "returns the pattern" do
+      pattern = Pattern.new('ba6z5quux')
+      expect(pattern.freeze [4, 5, 6, 7, 8, 9, 0, 0]).to be_a Pattern
     end
 
-    describe '#frozen?' do
-      it "says whether the pattern is frozen" do
-        pattern = Pattern.new 'abc'
-        pattern.freeze! [0, 1, 2, 3]
-        expect(pattern.frozen?).to be_truthy
-      end
+    it "actually freezes" do
+      pattern = Pattern.new('foo5bar')
+      pattern.freeze [0, 1, 2, 3, 4, 5, 6]
+      expect(pattern.instance_variable_get :@frozen).to be_truthy
+    end
+  end
 
-      it "returns nil on initialisation" do
-        pattern = Pattern.new
-        expect(pattern.frozen?).to be_falsey
-      end
+  describe '#freeze!' do
+    it "just sets the digits" do
+      pattern = Pattern.new('1ing')
+      expect(pattern.freeze! [4, 5, 6, 0]).to eq [4, 5, 6, 0]
     end
 
-    describe '#word_so_far' do # TODO word_at?
-      it "returns the word up to the current index" do
-        pattern = Pattern.dummy 'sandrigham'
-        pattern.shift(4)
-        expect(pattern.word_so_far).to eq 'sand'
-      end
+    it "actually freezes" do
+      pattern = Pattern.new('t1t2ing')
+      pattern.freeze! [0, 1, 2, 0, 0, 0]
+      expect(pattern.instance_variable_get :@frozen).to be_truthy
+    end
+  end
+
+  describe '#frozen?' do
+    it "says whether the pattern is frozen" do
+      pattern = Pattern.new 'abc'
+      pattern.freeze! [0, 1, 2, 3]
+      expect(pattern.frozen?).to be_truthy
     end
 
-    describe '#word_to' do
-      it "returns the word from the current index with length n" do
-        pattern = Pattern.dummy 'maskedball'
-        pattern.shift(2)
-        expect(pattern.word_to(6)).to eq 'skedba'
-      end
+    it "returns nil on initialisation" do
+      pattern = Pattern.new
+      expect(pattern.frozen?).to be_falsey
+    end
+  end
+
+  describe '#word_so_far' do # TODO word_at?
+    it "returns the word up to the current index" do
+      pattern = Pattern.dummy 'sandrigham'
+      pattern.shift(4)
+      expect(pattern.word_so_far).to eq 'sand'
+    end
+  end
+
+  describe '#word_to' do
+    it "returns the word from the current index with length n" do
+      pattern = Pattern.dummy 'maskedball'
+      pattern.shift(2)
+      expect(pattern.word_to(6)).to eq 'skedba'
+    end
+  end
+
+  describe '#digits_to' do # TODO #digits_so_far as well
+    it "returns the digits from the current index to length n" do
+      pattern = Pattern.new 'po2l3ish9en4g3lish'
+      pattern.shift(6)
+      expect(pattern.digits_to(4)).to be == [9, 0, 4, 3, 0]
+    end
+  end
+
+  describe '#mask(array)' do
+    it "masks the pattern’s digits with an array" do
+      pattern = Pattern.dummy 'supercal'
+      pattern.shift(3)
+      pattern.mask [0, 0, 0, 3]
+      expect(pattern.to_s).to eq 'sup3ercal'
     end
 
-    describe '#digits_to' do # TODO #digits_so_far as well
-      it "returns the digits from the current index to length n" do
-        pattern = Pattern.new 'po2l3ish9en4g3lish'
-        pattern.shift(6)
-        expect(pattern.digits_to(4)).to be == [9, 0, 4, 3, 0]
-      end
+    it "also works with a pattern" do
+      pattern = Pattern.dummy 'foobar'
+      pattern.shift(3)
+      pattern.mask Pattern.new "foo5" # FIXME That’s awkward
+      expect(pattern.to_s).to eq "foo5bar"
     end
 
-    describe '#mask(array)' do
-      it "masks the pattern’s digits with an array" do
-        pattern = Pattern.dummy 'supercal'
-        pattern.shift(3)
-        pattern.mask [0, 0, 0, 3]
-        expect(pattern.to_s).to eq 'sup3ercal'
-      end
+    it "use the anchor if it’s set" do
+      pattern = Pattern.dummy 'supercal'
+      mask = Pattern.new 'foo', [0, 0, 0, 3]
+      mask.setanchor(2)
+      pattern.mask mask
+      expect(pattern.to_s).to be == 'super3cal' # Let’s not try and specify what happens if we give both a second argument and a patteren with a second anchor ;-)
+    end
 
-      it "also works with a pattern" do
-        pattern = Pattern.dummy 'foobar'
-        pattern.shift(3)
-        pattern.mask Pattern.new "foo5" # FIXME That’s awkward
-        expect(pattern.to_s).to eq "foo5bar"
-      end
+    it "applies several masks successively" do
+      pattern = Pattern.dummy 'supercal'
+      pattern.shift(2)
+      pattern.mask [0, 0, 1] # Potentially coming from a "su1"
+      pattern.shift
+      pattern.mask [0, 0, 2, 3] # "su2p3"
+      pattern.shift(4)
+      pattern.mask [0, 1, 2, 1] # "r1c2a"
+      pattern.shift
+      pattern.mask [0, 2, 3] # "a2l3"
+      expect(pattern.to_s).to eq "su2p3er1c2a2l3"
+    end
+  end
 
-      it "use the anchor if it’s set" do
-        pattern = Pattern.dummy 'supercal'
-        mask = Pattern.new 'foo', [0, 0, 0, 3]
-        mask.setanchor(2)
-        pattern.mask mask
-        expect(pattern.to_s).to be == 'super3cal' # Let’s not try and specify what happens if we give both a second argument and a patteren with a second anchor ;-)
-      end
+  describe '#length' do
+    it "returns the length of the underlying word" do
+      pattern = Pattern.dummy 'abcdef'
+      expect(pattern.length).to eq 6
+    end
+  end
 
-      it "applies several masks successively" do
-        pattern = Pattern.dummy 'supercal'
-        pattern.shift(2)
-        pattern.mask [0, 0, 1] # Potentially coming from a "su1"
-        pattern.shift
-        pattern.mask [0, 0, 2, 3] # "su2p3"
-        pattern.shift(4)
-        pattern.mask [0, 1, 2, 1] # "r1c2a"
-        pattern.shift
-        pattern.mask [0, 2, 3] # "a2l3"
-        expect(pattern.to_s).to eq "su2p3er1c2a2l3"
-      end
+  describe '#<=>' do
+    it "returns -1 if first pattern’s word is lexicographically less than the second’s" do
+      expect(Pattern.new('abc').<=>(Pattern.new('def'))).to eq -1
+    end
 
-      describe '#length' do
-        it "returns the length of the underlying word" do
-          pattern = Pattern.dummy 'abcdef'
-          expect(pattern.length).to eq 6
-        end
-      end
+    it "returns 1 if it’s the other way round" do
+      expect(Pattern.new('def').<=>(Pattern.new('abc'))).to eq 1
+    end
 
-      describe '#<=>' do
-        it "returns -1 if first pattern’s word is lexicographically less than the second’s" do
-          expect(Pattern.new('abc').<=>(Pattern.new('def'))).to eq -1
-        end
+    it "compares the digits if the underlying words are the same" do
+      expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq -1
+    end
 
-        it "returns 1 if it’s the other way round" do
-          expect(Pattern.new('def').<=>(Pattern.new('abc'))).to eq 1
-        end
+    it "returns 0 if the underlying words and digits are the same" do
+      expect(Pattern.new('abc3').<=>(Pattern.new('abc3'))).to eq 0
+    end
+  end
 
-        it "compares the digits if the underlying words are the same" do
-          expect(Pattern.new('a1bc').<=>(Pattern.new('a2bc'))).to eq -1
-        end
+  describe '#initial!' do
+    it "marks a pattern as initial" do
+      pattern = Pattern.new('aaabbb')
+      pattern.initial!
+      expect(pattern.initial?).to be_truthy
+      expect(pattern.get_digits.length).to eq 7
+    end
+  end
 
-        it "returns 0 if the underlying words and digits are the same" do
-          expect(Pattern.new('abc3').<=>(Pattern.new('abc3'))).to eq 0
-        end
-      end
+  describe '#final!' do
+    it "marks a pattern as final" do
+      pattern = Pattern.new('cc')
+      pattern.final!
+      expect(pattern.final?).to be_truthy
+      expect(pattern.get_digits.length).to eq 3
+    end
+  end
 
-      describe '#initial!' do
-        it "marks a pattern as initial" do
-          pattern = Pattern.new('aaabbb')
-          pattern.initial!
-          expect(pattern.initial?).to be_truthy
-          expect(pattern.get_digits.length).to eq 7
-        end
-      end
+  describe '#initial' do
+    it "marks a pattern as initial" do
+      pattern = Pattern.new('foo3')
+      pattern.initial
+      expect(pattern.initial?).to be_truthy
+      expect(pattern.get_digits.length).to eq 4
+    end
 
-      describe '#final!' do
-        it "marks a pattern as final" do
-          pattern = Pattern.new('cc')
-          pattern.final!
-          expect(pattern.final?).to be_truthy
-          expect(pattern.get_digits.length).to eq 3
-        end
-      end
+    it "returns the pattern" do
+      expect(Pattern.new('def').initial).to be_a Pattern
+    end
+  end
 
-      describe '#initial' do
-        it "marks a pattern as initial" do
-          pattern = Pattern.new('foo3')
-          pattern.initial
-          expect(pattern.initial?).to be_truthy
-          expect(pattern.get_digits.length).to eq 4
-        end
+  describe '#final' do
+    it "marks a pattern as final" do
+      pattern = Pattern.new('5bar')
+      pattern.final
+      expect(pattern.final?).to be_truthy
+      expect(pattern.get_digits.length).to eq 4
+    end
+    
+    it "returns the pattern" do
+      expect(Pattern.new('bac').final).to be_a Pattern
+    end
+  end
 
-        it "returns the pattern" do
-          expect(Pattern.new('def').initial).to be_a Pattern
-        end
-      end
+  describe '#initial?' do
+    it "says whether a pattern is initial" do
+      pattern = Pattern.new('1fo2o3')
+      pattern.initial
+      expect(pattern.initial?).to be_truthy
+    end
+  end
 
-      describe '#final' do
-        it "marks a pattern as final" do
-          pattern = Pattern.new('5bar')
-          pattern.final
-          expect(pattern.final?).to be_truthy
-          expect(pattern.get_digits.length).to eq 4
-        end
-        
-        it "returns the pattern" do
-          expect(Pattern.new('bac').final).to be_a Pattern
-        end
-      end
+  describe '#final?' do
+    it "says whether a pattern is final" do
+     pattern = Pattern.new('3b2a4r')
+     pattern.final
+     expect(pattern.final?).to be_truthy
+    end
+  end
 
-      describe '#initial?' do
-        it "says whether a pattern is initial" do
-          pattern = Pattern.new('1fo2o3')
-          pattern.initial
-          expect(pattern.initial?).to be_truthy
-        end
-      end
+  describe '#to_s' do # That was clearly missing!
+    it "returns the verbatim pattern in case it was fed so" do
+      pattern = Pattern.new('fo2o')
+      expect(pattern.to_s).to eq 'fo2o'
+    end
 
-      describe '#final?' do
-        it "says whether a pattern is final" do
-         pattern = Pattern.new('3b2a4r')
-         pattern.final
-         expect(pattern.final?).to be_truthy
-       end
-     end
+    it "computes the pattern correctly otherwise" do
+      pattern = Pattern.new('foo', [0, 0, 2, 0])
+      expect(pattern.to_s).to eq 'fo2o'
+    end
 
-     describe '#to_s' do # That was clearly missing!
-       it "returns the verbatim pattern in case it was fed so" do
-         pattern = Pattern.new('fo2o')
-         expect(pattern.to_s).to eq 'fo2o'
-       end
+    it "handles dots correctly" do
+      pattern = Pattern.new('foo')
+      pattern.initial
+      expect(pattern.to_s).to eq '.foo'
+    end
 
-       it "computes the pattern correctly otherwise" do
-         pattern = Pattern.new('foo', [0, 0, 2, 0])
-         expect(pattern.to_s).to eq 'fo2o'
-       end
-
-       it "handles dots correctly" do
-         pattern = Pattern.new('foo')
-         pattern.initial
-         expect(pattern.to_s).to eq '.foo'
-       end
-
-       it "... even in final position" do
-         pattern = Pattern.new('bar')
-         pattern.final
-         expect(pattern.to_s).to eq 'bar.'
-       end
-     end
+    it "... even in final position" do
+      pattern = Pattern.new('bar')
+      pattern.final
+      expect(pattern.to_s).to eq 'bar.'
     end
   end
 
