@@ -641,8 +641,8 @@ class Hydra
 end
 
 class Heracles
-  def run(filename, parameters = [])
-    run_array(File.read(filename).split("\n"), parameters)
+  def run_file(filename, parameters = [])
+    run(File.read(filename).split("\n"), parameters)
   end
 
   def set_parameters(parameters)
@@ -652,7 +652,7 @@ class Heracles
     @final_hydra = Hydra.new
   end
 
-  def run_array(array, parameters = [])
+  def run(array, parameters = [])
     set_parameters(parameters)
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
       @hyphenation_level = hyphenation_level
