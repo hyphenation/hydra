@@ -565,6 +565,11 @@ describe Pattern do
       pattern = Pattern.new 'bar3'
       expect(pattern.showhyphens).to eq 'bar'
     end
+
+    it "optionally takes lefthyphenmin and righthyphenmin" do
+      pattern = Pattern.new 'f1oo3ba1r'
+      expect(pattern.showhyphens(2, 2)).to eq 'foo-bar'
+    end
   end
 end
 

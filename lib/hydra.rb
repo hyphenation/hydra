@@ -259,10 +259,10 @@ class Pattern
     # FIXME Test for that
   end
 
-  def showhyphens
+  def showhyphens(lefthyphenmin = 0, righthyphenmin = 0)
     output = ''
     @digits.each_with_index do |digit, index|
-      output += '-' if digit % 2 == 1 && index > 0 && index < length
+      output += '-' if digit % 2 == 1 && index > 0 && index < length && index > lefthyphenmin && index < length - righthyphenmin
       output += @word[index] if index < length
     end
 
@@ -364,7 +364,7 @@ class Hydra
 
   def showhyphens(word)
     pattern = prehyphenate(word)
-    pattern.showhyphens
+    pattern.showhyphens(@lefthyphenmin, @righthyphenmin)
   end
 
   def parent
