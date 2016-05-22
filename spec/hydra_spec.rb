@@ -1315,6 +1315,15 @@ describe Hydra do
       oneck = hydra.read('fo')
       expect(oneck.spattern).to be == "f4o."
     end
+
+    it "works correctly if both “ab” and “ab.” are stored" do
+      hydra = Hydra.new ['ab', 'ab.']
+      dothead = hydra.read 'ab.'
+      nodothead = hydra.read 'ab'
+      expect(dothead.spattern).to eq 'ab.'
+      expect(nodothead.spattern).to eq 'ab'
+      expect(hydra.spattern).to eq ''
+    end
   end
 
   describe '#disembowel' do
