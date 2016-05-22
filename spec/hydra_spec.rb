@@ -84,11 +84,8 @@ describe Pattern do
 
   describe '#shift' do
     it "shifts the index by one" do
-      pending "reword later"
-      bug
       pattern = Pattern.new
-      pattern.shift
-      expect(pattern.index).to eq 1
+      expect { pattern.shift }.to change(pattern, :index).by 1
     end
 
     it "shifts the cursor by one" do
