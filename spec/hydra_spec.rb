@@ -587,13 +587,13 @@ describe Lemma do
 
     it "sets all digits to 0 initially" do
       lemma = Lemma.new 'foo-bar'
-      expect(lemma.get_digits).to be == 7.times.map { 0 } # FIXME Refactor rename digits
+      expect(lemma.get_digits).to be == [0] * 7 # FIXME Refactor rename digits
     end
 
     it "sets all breakpoints to :no initially" do
       lemma = Lemma.new 'foobar'
       lemma.breakup('foobar') # FIXME Refactor Could be parse, really + duplication of information
-      expect(lemma.instance_variable_get :@breakpoints).to be == 7.times.map { :no }
+      expect(lemma.instance_variable_get :@breakpoints).to be == [:no] * 7
     end
 
     it "sets actual breakpoints to :is" do
