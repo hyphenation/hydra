@@ -9,6 +9,7 @@ class Pattern
       raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
     elsif word
       @pattern = word
+      breakup
     else
       @word = ''
     end
@@ -59,17 +60,14 @@ class Pattern
   end
 
   def get_digits
-    breakup unless @digits
     @digits
   end
 
   def get_word
-    breakup unless @word
     @word
   end
 
   def length
-    breakup unless @word
     @word.length
   end
 
@@ -94,45 +92,37 @@ class Pattern
   end
 
   def letter(n)
-    breakup unless @word
     @word[n]
   end
 
   def digit(n)
-    breakup unless @digits
     @digits[n]
   end
 
   def last?
-    breakup unless @word
     @index == @word.length - 1
   end
 
   def end?
-    breakup unless @word
     @index == @word.length
   end
 
   def grow(letter)
     raise Hydra::FrozenPattern if @frozen
-    breakup unless @word # Shouldn’t be necessary, really
     @word += letter
     self
   end
 
   def grow!(letter)
     raise Hydra::FrozenPattern if @frozen
-    breakup unless @word
     @word += letter
   end
 
   def fork(letter)
-    breakup unless @word # Shouldn’t be necessary
     Pattern.dummy(@word + letter)
   end
 
   def copy(digits)
-    breakup unless @word
     Pattern.new(String.new(@word), digits)
   end
 
@@ -152,22 +142,18 @@ class Pattern
   end
 
   def word_so_far
-    breakup unless @word
     @word[0..@index-1]
   end
 
   def word_to(n)
-    breakup unless @word
     @word[@index..@index + n - 1]
   end
 
   def digits_to(n)
-    breakup unless @word
     @digits[@index..@index + n]
   end
 
   def mask(a, anchor = nil)
-    breakup unless @digits
     if a.is_a? Pattern
       mask(a.get_digits, a.anchor)
     else
@@ -186,7 +172,6 @@ class Pattern
 
   def initial!
     combine unless @pattern
-    breakup unless @digits
     @initial = true
     @pattern = '.' + @pattern
     @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
@@ -194,7 +179,6 @@ class Pattern
 
   def final!
     combine unless @pattern
-    breakup unless @digits
     @final = true
     @pattern += '.'
     @digits = @digits[0..@digits.length - 2] if @digits.length > @word.length + 1
@@ -219,7 +203,6 @@ class Pattern
   end
 
   def <=>(other)
-    breakup unless @word
     word_order = @word <=> other.get_word
     if word_order != 0
       word_order
@@ -229,18 +212,15 @@ class Pattern
   end
 
   def currletter
-    breakup unless @word
     @word[@cursor]
   end
 
   def currdigit
-    breakup unless @digits
     @digits[@cursor]
   end
 
   def to_s
-    combine unless @pattern
-    @pattern
+    combine
   end
 
   def combine
@@ -251,6 +231,8 @@ class Pattern
 
     @pattern = '.' + @pattern if @initial
     @pattern = @pattern + '.' if @final
+
+    @pattern
   end
 
   def breakup
@@ -283,7 +265,6 @@ class Pattern
   end
 
   def showhyphens
-    breakup unless @digits
     output = ''
     @digits.each_with_index do |digit, index|
       output += '-' if digit % 2 == 1 && index > 0 && index < length
@@ -300,12 +281,10 @@ class Lemma < Pattern # FIXME Plural lemmata?
   end
 
   def break(n)
-    breakup unless @breakpoints
     @breakpoints[@cursor + n]
   end
 
   def mark_breaks
-    breakup unless @breakpoints
     @breakpoints.length.times do |i|
       if @breakpoints[i] == :is
         if @digits[i] % 2 == 1
