@@ -321,6 +321,10 @@ class Hydra
     @atlas = atlas if atlas
   end
 
+  def clear
+    @necks = { }
+  end
+
   def index
     @index
   end

@@ -651,6 +651,14 @@ describe Hydra do
     end
   end
 
+  describe '#clear' do
+    it "clears the hydra" do
+      hydra = Hydra.new ['a', 'b', 'c', 'd', 'e']
+      hydra.clear
+      expect(hydra.count).to eq 0
+    end
+  end
+
   describe '#lefthyphenmin' do
     it "is 2 by default" do
       hydra = Hydra.new
