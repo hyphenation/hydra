@@ -876,6 +876,13 @@ describe Hydra do
     end
   end
 
+  describe '#map' do
+    it "works as an enumerable" do
+      hydra = Hydra.new ['bac', 'def', 'gijk']
+      expect(hydra.map { |word| word.spattern.upcase }).to eq ['BAC', 'DEF', 'GIJK']
+    end
+  end
+
   describe '.isdigit' do
     it "says 3 is a digit" do
       expect(Hydra.isdigit('3')).to be_truthy

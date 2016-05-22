@@ -322,6 +322,8 @@ end
 
 # TODO Comparison function for Hydra.  Criterion: basically, the list of generated patterns is identical
 class Hydra
+  include Enumerable
+
   class ConflictingPattern < StandardError
   end
 
