@@ -757,11 +757,11 @@ describe Hydra do
     end
   end
 
-  describe '#coccyx' do
+  describe '#prominens' do # Vertebra prominens is the base of the neck (C7)
     it "goes back to the base of the hydra" do
       hydra = Hydra.new 'foo'
       fooneck = hydra.read 'foo'
-      expect(fooneck.coccyx).to eq hydra
+      expect(fooneck.prominens).to eq hydra
     end
   end
 

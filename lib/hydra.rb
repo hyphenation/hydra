@@ -383,8 +383,8 @@ class Hydra
     end
   end
 
-  def coccyx
-    if parent then parent.coccyx else self end
+  def prominens
+    if parent then parent.prominens else self end
   end
 
   def ensure_neck(letter)
@@ -618,7 +618,7 @@ class Hydra
   def transplant(other)
     pattern = other.spattern
     ingest pattern
-    other.coccyx.delete pattern
+    other.prominens.delete pattern
   end
 
   # Debug methods
