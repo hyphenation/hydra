@@ -857,22 +857,20 @@ describe Hydra do
   end
 
   describe '#each' do # TODO Also #map, #select.  Enumerator mixin?
-    context "with a simple Hydra" do
-      let(:initial_words) { ['abc', 'def', 'ghij', 'klm'] }
-      let(:hydra) { Hydra.new initial_words }
+    it "iterates over the hydra" do
+      hydra = Hydra.new ['α', 'β', 'γ', 'δ']
+      n = 0
+      hydra.each { n += 1 }
+      expect(n).to be == 4
+    end
 
-      it "iterates over the hydra" do
-        n = 0
-        hydra.each { n += 1 }
-        expect(n).to be == 4
-      end
-
-      it "can work as “digest”" do
-        words = []
-        hydra.each { |h| words << h.spattern }
-        words.sort!
-        expect(words).to be == initial_words
-      end
+    it "can work as “digest”" do
+      initial_words = ['abc', 'def', 'ghij', 'klm']
+      hydra = Hydra.new initial_words
+      words = []
+      hydra.each { |h| words << h.spattern }
+      words.sort!
+      expect(words).to be == initial_words
     end
   end
 
