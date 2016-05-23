@@ -1068,6 +1068,21 @@ describe Hydra do
       hydra.ingest(['1abc', 'a2b', 'a3bc4d'])
       expect(hydra.digest).to eq ['a2b', '1abc', 'a3bc4d']
     end
+
+    it "takes dots into account correctly" do
+      hydra = Hydra.new ['.abc', 'def', 'gijk']
+      expect(hydra.digest).to eq ['.abc', 'def', 'gijk']
+    end
+
+    it "takes final dots into account too" do
+      hydra = Hydra.new ['klm', 'pqr', 'xyz.']
+      expect(hydra.digest).to eq ['klm', 'pqr', 'xyz.']
+    end
+
+    it "works with both initial and final dots" do
+      hydra = Hydra.new ['.abc', 'def', 'gijk', 'xyz.', '.klm.']
+      expect(hydra.digest).to eq ['.abc', 'def', 'gijk', 'xyz.', '.klm.']
+    end
   end
 
   describe '#search' do
