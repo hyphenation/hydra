@@ -27,6 +27,31 @@ describe Pattern do
       expect(pattern.index).to be == 2
       expect(pattern.instance_variable_get(:@cursor)).to be == 1
     end
+
+    it "handles initial dots correctly" do
+      pattern = Pattern.new '.foo'
+      expect(pattern.initial?).to be_truthy
+      expect(pattern.length).to eq 3
+      expect(pattern.get_word).to eq 'foo'
+      expect(pattern.get_digits).to eq [0] * 4
+    end
+
+    it "handles final dots correctly" do
+      pattern = Pattern.new 'bar.'
+      expect(pattern.final?).to be_truthy
+      expect(pattern.length).to eq 3
+      expect(pattern.get_word).to eq 'bar'
+      expect(pattern.get_digits).to eq [0] * 4
+    end
+
+    it "handle simultaneous initial and final dots correctly" do
+      pattern = Pattern.new '.foobar.'
+      expect(pattern.initial?).to be_truthy
+      expect(pattern.final?).to be_truthy
+      expect(pattern.length).to eq 6
+      expect(pattern.get_word).to eq 'foobar'
+      expect(pattern.get_digits).to eq [0] * 7
+    end
   end
 
   describe '.dummy' do

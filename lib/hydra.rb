@@ -8,6 +8,14 @@ class Pattern
       @digits = digits
       raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
     elsif word
+      if word =~ /^\./
+        word.gsub!(/^\./, '')
+        @initial = true
+      end
+      if word =~ /\.$/
+        word.gsub!(/\.$/, '')
+        @final = true
+      end
       breakup(word)
     else
       @word = ''
