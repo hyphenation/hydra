@@ -690,8 +690,7 @@ class Heracles
               hydra.chophead
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
               pattern = hydra.spattern
-              @final_hydra.transplant hydra # FIXME add atlas and use it instead of spattern
-              @count_hydra.delete pattern
+              @final_hydra.transplant hydra
             # FIXME else clear good and bad counts?
             end
           end
