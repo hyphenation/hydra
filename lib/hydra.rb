@@ -544,9 +544,10 @@ class Hydra
           if mode == :match
             matches << Pattern.new(pattern.word_so_far, head[0..-2], -pattern.index).final
           elsif mode == :hydrae
-            @index = pattern.index - depth
-            @index += 1 if spattern =~ /^\./ # FIXME See above
-            matches << self
+            index = pattern.index - depth
+            index += 1 if spattern =~ /^\./ # FIXME See above
+            index.times { dotneck.shift }
+            matches << dotneck
           elsif mode == :hyphenate
             pattern.mask head[0..head.length - 2]
           end
