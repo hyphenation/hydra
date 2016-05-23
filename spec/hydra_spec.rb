@@ -30,7 +30,6 @@ describe Pattern do
 
     it "handles initial dots correctly" do
       pattern = Pattern.new '.foo'
-      pending "not yet"
       expect(pattern.initial?).to be_truthy
       expect(pattern.length).to eq 3
       expect(pattern.get_word).to eq 'foo'
@@ -39,7 +38,6 @@ describe Pattern do
 
     it "handles final dots correctly" do
       pattern = Pattern.new 'bar.'
-      pending "not yet"
       expect(pattern.final?).to be_truthy
       expect(pattern.length).to eq 3
       expect(pattern.get_word).to eq 'bar'
@@ -48,7 +46,6 @@ describe Pattern do
 
     it "handle simultaneous initial and final dots correctly" do
       pattern = Pattern.new '.foobar.'
-      pending "not yet"
       expect(pattern.initial?).to be_truthy
       expect(pattern.final?).to be_truthy
       expect(pattern.length).to eq 6
@@ -78,6 +75,11 @@ describe Pattern do
       pattern = Pattern.dummy 'abc'
       pattern.instance_variable_set :@cursor, 3
       expect(pattern.cursor).to be == 3
+    end
+
+    it "is -1 initially for patterns with initial dots" do
+      pattern = Pattern.dummy '.foo'
+      expect(pattern.cursor).to eq -1
     end
   end
 
@@ -221,6 +223,24 @@ describe Pattern do
       pattern.shift(3)
       expect(pattern.currletter).to eq 'n'
     end
+
+    it "returns . at the beginning of a dotted pattern" do
+      pattern = Pattern.new '.foo'
+      expect(pattern.currletter).to eq '.'
+    end
+
+    it "returns . at the end of a dotted pattern" do
+      pattern = Pattern.new 'bar.'
+      pattern.shift(3)
+      expect(pattern.currletter).to eq '.'
+    end
+
+    it "returns . at both the beginning and the end of a dotted pattern" do
+      pattern = Pattern.new '.foobar.'
+      expect(pattern.currletter).to eq '.'
+      pattern.shift(7)
+      expect(pattern.currletter).to eq '.'
+    end
   end
 
   describe '#currdigit' do
@@ -246,6 +266,28 @@ describe Pattern do
       pattern = Pattern.new 'foobar', [0, 0, 0, 7, 0, 0, 0]
       pattern.final!
       expect(pattern.to_s).to eq 'foo7bar.'
+    end
+
+    it "works when used with a dotted pattern as first argument" do
+      pattern = Pattern.new '.foo'
+      expect(pattern.initial).to be_truthy
+      expect(pattern.length).to eq 3
+      expect(pattern.to_s).to eq '.foo'
+    end
+
+    it "works when used with a finally dotted pattern as first argument" do
+      pattern = Pattern.new 'bar.'
+      expect(pattern.final).to be_truthy
+      expect(pattern.length).to eq 3
+      expect(pattern.to_s).to eq 'bar.'
+    end
+
+    it "works when used with a single-argument pattern with both initial and final dot" do
+      pattern = Pattern.new '.foobar.'
+      expect(pattern.initial).to be_truthy
+      expect(pattern.final).to be_truthy
+      expect(pattern.length).to eq 6
+      expect(pattern.to_s).to eq '.foobar.'
     end
   end
 

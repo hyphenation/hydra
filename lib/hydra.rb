@@ -3,25 +3,29 @@ require 'pp'
 
 class Pattern
   def initialize(word = nil, digits = nil, index = 0, cursor = 0)
-    if digits
-      @word = word
-      @digits = digits
-      raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
-    elsif word
-      # if word =~ /^\./
-      #   word.gsub!(/^\./, '')
-      #   @initial = true
-      # end
-      # if word =~ /\.$/
-      #   word.gsub!(/\.$/, '')
-      #   @final = true
-      # end
-      breakup(word)
+    set_variables(index, cursor)
+    if word
+      if word =~ /^\./
+        word = word.gsub(/^\./, '')
+        @initial = true
+        @cursor = -1
+      end
+
+      if word =~ /\.$/
+        word = word.gsub(/\.$/, '')
+        @final = true
+      end
+
+      if digits
+        @word = word
+        @digits = digits
+        raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
+      else
+        breakup(word)
+      end
     else
       @word = ''
     end
-
-    set_variables(index, cursor)
   end
 
   def cursor
@@ -215,7 +219,13 @@ class Pattern
   end
 
   def currletter
-    @word[@cursor]
+    if @initial && @cursor == -1
+      '.'
+    elsif @final && @cursor == @word.length
+      '.'
+    else
+      @word[@cursor]
+    end
   end
 
   def currdigit
@@ -550,14 +560,14 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.word_so_far, head[0..-2], -pattern.index).final
+            matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
           elsif mode == :hydrae
             index = pattern.index - depth
             index += 1 if spattern =~ /^\./ # FIXME See above
             index.times { dotneck.shift }
             matches << dotneck
           elsif mode == :hyphenate
-            pattern.mask head[0..head.length - 2]
+            pattern.mask head
           end
         end
       end
