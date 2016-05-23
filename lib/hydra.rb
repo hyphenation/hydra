@@ -25,6 +25,7 @@ class Pattern
       end
     else
       @word = ''
+      @digits = [0]
     end
   end
 
@@ -130,7 +131,9 @@ class Pattern
   end
 
   def fork(letter)
-    Pattern.dummy(@word + letter)
+    pattern = Pattern.dummy(@word + letter)
+    pattern.initial! if @initial
+    pattern
   end
 
   def copy(digits)

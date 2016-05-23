@@ -52,6 +52,12 @@ describe Pattern do
       expect(pattern.get_word).to eq 'foobar'
       expect(pattern.get_digits).to eq [0] * 7
     end
+
+    it "initialises the pattern with '', [0] by default" do
+      pattern = Pattern.new
+      expect(pattern.get_word).to eq ''
+      expect(pattern.get_digits).to eq [0] # TODO Ensure digits.length = word.length + 1 always
+    end
   end
 
   describe '.dummy' do
@@ -349,6 +355,18 @@ describe Pattern do
       pattern = Pattern.new
       pattern2 = pattern.fork('b')
       expect(pattern2.object_id).to_not eq pattern.object_id
+    end
+
+    it "copies the initial state of the pattern" do
+      pattern = Pattern.new.initial
+      copy = pattern.fork('a')
+      expect(copy.initial?).to be_truthy
+    end
+
+    it "marks the new pattern as non-initial if the original one was" do
+      pattern = Pattern.new
+      copy = pattern.fork('b')
+      expect(copy.initial?).to be_falsey
     end
   end
 
@@ -1081,7 +1099,7 @@ describe Hydra do
 
     it "works with both initial and final dots" do
       hydra = Hydra.new ['.abc', 'def', 'gijk', 'xyz.', '.klm.']
-      expect(hydra.digest).to eq ['.abc', 'def', 'gijk', 'xyz.', '.klm.']
+      expect(hydra.digest).to eq ['.abc', '.klm.', 'def', 'gijk', 'xyz.']
     end
   end
 
