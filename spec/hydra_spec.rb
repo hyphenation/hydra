@@ -1332,10 +1332,10 @@ describe Hydra do
       expect(fooneck.spattern).to eq "5fo2o3"
     end
 
-    it "returns the empty string if no head" do
+    it "returns string to current node even if no head" do
       hydra = Hydra.new 'abc'
       bneck = hydra.read('ab')
-      expect(bneck.spattern).to be == ""
+      expect(bneck.spattern).to be == "ab"
     end
 
     it "works with initial dots" do
@@ -1346,8 +1346,14 @@ describe Hydra do
 
     it "works with final dots" do
       hydra = Hydra.new 'f4o.'
-      oneck = hydra.read('fo')
+      oneck = hydra.read('fo.')
       expect(oneck.spattern).to be == "f4o."
+    end
+
+    it "but not the way it used to" do
+      hydra = Hydra.new 'fo.'
+      oneck = hydra.read('fo')
+      expect(oneck.spattern).to be == 'fo'
     end
 
     it "works correctly if both “ab” and “ab.” are stored" do
@@ -1362,14 +1368,12 @@ describe Hydra do
     it "works correctly if only “ab.” is stored and we’re at the b head" do
       hydra = Hydra.new 'ab.'
       bhead = hydra.read 'ab'
-      pending "bug"
       expect(bhead.spattern).to eq 'ab'
     end
 
     it "works correctly with non-heads location" do
       hydra = Hydra.new 'abc'
       bhead = hydra.read 'ab'
-      pending "bug"
       expect(bhead.spattern).to eq 'ab'
     end
   end
