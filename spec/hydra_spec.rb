@@ -221,6 +221,22 @@ describe Pattern do
       pattern.shift(3)
       expect(pattern.end?).to be_falsey
     end
+
+    it "works with dotted patterns" do
+      pattern = Pattern.new '.конец.'
+      pattern.reset(5)
+      expect(pattern.end?).to be_falsey
+      pattern.shift
+      expect(pattern.end?).to be_truthy
+    end
+
+    it "also with a simpler one" do
+      pattern = Pattern.new 'loppu.'
+      pattern.reset(5)
+      expect(pattern.end?).to be_falsey
+      pattern.shift
+      expect(pattern.end?).to be_truthy
+    end
   end
 
   describe '#currletter' do
@@ -1069,6 +1085,16 @@ describe Hydra do
     end
 
     # TODO Test with conflicting patterns
+
+    it "works with patterns that have dots at both end" do
+      hydra = Hydra.new '.bac.'
+      expect(hydra.read('.bac').letters).to eq ['.']
+    end
+
+    it "... and with a dot only at one end" do
+      hydra = Hydra.new 'zyx.'
+      expect(hydra.read('zyx').letters).to eq ['.']
+    end
   end
 
   describe '#digest' do

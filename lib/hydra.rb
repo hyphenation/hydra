@@ -116,7 +116,11 @@ class Pattern
   end
 
   def end?
-    @index == @word.length
+    if @final
+      @cursor == @word.length + 1
+    else
+      @index == @word.length
+    end
   end
 
   def grow(letter)
