@@ -9,19 +9,21 @@ class Pattern
     if word
       if word =~ /^\./
         word = word.gsub(/^\./, '')
+        digits = digits[1..-1] if digits && digits.length > word.length + 1
         @initial = true
         @cursor = -1
       end
 
       if word =~ /\.$/
         word = word.gsub(/\.$/, '')
+        digits = digits[0..-2] if digits && digits.length > word.length + 1
         @final = true
       end
 
       if digits
         @word = word
         @digits = digits
-        raise Hydra::BadPattern unless @digits.count == @word.length + 1 || @digits.count == @word.length + 2
+        raise Hydra::BadPattern unless @digits.count == @word.length + 1
       else
         breakup(word)
       end

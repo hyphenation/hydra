@@ -72,6 +72,11 @@ describe Pattern do
       pattern = Pattern.dummy '.foo'
       expect(pattern.cursor).to eq -1
     end
+
+    it "works with dual-dotted patterns too" do
+      pattern = Pattern.dummy '.foobar.'
+      expect(pattern.cursor).to eq -1
+    end
   end
 
   describe '#anchor' do
