@@ -3,7 +3,7 @@ require 'pp'
 
 class Pattern
   def initialize(word = nil, digits = nil, index = 0, cursor = 0)
-    set_variables(index, cursor)
+    set_variables(cursor)
     if word
       if word =~ /^\./
         word = word.gsub(/^\./, '')
@@ -41,8 +41,7 @@ class Pattern
     @anchor = anchor
   end
 
-  def set_variables(index, cursor = 0)
-    @index = index
+  def set_variables(cursor = 0)
     @cursor = cursor
     @good_count = @bad_count = 0
   end
@@ -83,23 +82,16 @@ class Pattern
     @word.length
   end
 
-  def index
-    @index
-  end
-
   def shift(n = 1)
-    @index += n
     @cursor += n
     self
   end
 
   def shift!(n = 1)
-    @index += n
     @cursor += n
   end
 
   def reset(n = 0)
-    @index = n
     @cursor = n
   end
 
@@ -172,7 +164,7 @@ class Pattern
   end
 
   def mask(a)
-    offset = @index - a.length + 1
+    offset = @cursor - a.length + 1
     a.length.times do |i|
       j = offset + i
       @digits[j] = [a[i], @digits[j]].max
@@ -532,9 +524,9 @@ class Hydra
     if digits
       case mode
       when :match
-        matches << Pattern.new(pattern.word_so_far, digits, -pattern.index)
+        matches << Pattern.new(pattern.word_so_far, digits, -pattern.cursor)
       when :hydrae
-        @index = pattern.index - depth
+        @index = pattern.cursor - depth
         @index += 1 if spattern =~ /^\./ # FIXME awful
         matches << self
       when :hyphenate
@@ -554,9 +546,9 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.word_so_far, head, -pattern.index).final
+            matches << Pattern.new(pattern.word_so_far, head, -pattern.cursor).final
           elsif mode == :hydrae
-            index = pattern.index - depth
+            index = pattern.cursor - depth
             index += 1 if spattern =~ /^\./ # FIXME See above
             index.times { dotneck.shift }
             matches << dotneck

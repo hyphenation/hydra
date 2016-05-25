@@ -13,18 +13,10 @@ describe Pattern do
       expect(pattern.get_digits).to eq [0, 0, 2]
     end
 
-    it "can set the index" do
-      pattern = Pattern.new('foo', [5, 0, 2, 3], 2)
-      expect(pattern).to be_a Pattern
-      expect(pattern.to_s).to be == "5fo2o3"
-      expect(pattern.index).to be == 2
-    end
-
     it "can set the cursor" do # FIXME Not used in code actually
       pattern = Pattern.new('foo', [5, 0, 2, 3], 2, 1)
       expect(pattern).to be_a Pattern
       expect(pattern.to_s).to be == "5fo2o3"
-      expect(pattern.index).to be == 2
       expect(pattern.instance_variable_get(:@cursor)).to be == 1
     end
 
@@ -105,25 +97,7 @@ describe Pattern do
     end
   end
 
-  describe '#index' do
-    it "returns the index" do
-      pattern = Pattern.new
-      pattern.shift(2)
-      expect(pattern.index).to eq 2
-    end
-
-    it "is zero at initialisation" do
-      pattern = Pattern.new
-      expect(pattern.index).to eq 0
-    end
-  end
-
   describe '#shift' do
-    it "shifts the index by one" do
-      pattern = Pattern.new
-      expect { pattern.shift }.to change(pattern, :index).by 1
-    end
-
     it "shifts the cursor by one" do
       pattern = Pattern.new
       expect { pattern.shift }.to change(pattern, :cursor).by(1)
@@ -136,7 +110,7 @@ describe Pattern do
 
     it "takes an optional number of repetitions" do
       pattern = Pattern.new('foo1bar')
-      expect(pattern.shift(3).index).to eq 3
+      expect(pattern.shift(3).cursor).to eq 3
     end
   end
 
@@ -144,7 +118,7 @@ describe Pattern do
     it "just shifts" do
       pattern = Pattern.new 'q8u1u2x'
       pattern.shift!
-      expect(pattern.index).to eq 1
+      expect(pattern.cursor).to eq 1
     end
 
     it "also shifts the cursor" do
@@ -154,16 +128,16 @@ describe Pattern do
 
     it "takes an optional number as argument" do
       pattern = Pattern.new('baz1quux')
-      expect { pattern.shift! 2 }.to change(pattern, :index).by 2
+      expect { pattern.shift! 2 }.to change(pattern, :cursor).by 2
     end
   end
 
   describe '#reset' do
-    it "resets the index" do
+    it "resets the cursor" do
       pattern = Pattern.new
       pattern.shift(2)
       pattern.reset
-      expect(pattern.index).to eq 0
+      expect(pattern.cursor).to eq 0
     end
 
     it "resets the cursor too" do
@@ -177,7 +151,7 @@ describe Pattern do
       pattern = Pattern.new
       pattern.shift(3)
       pattern.reset(2)
-      expect(pattern.index).to be == 2
+      expect(pattern.cursor).to be == 2
       expect(pattern.cursor).to be == 2
     end
   end
@@ -445,7 +419,7 @@ describe Pattern do
   end
 
   describe '#word_so_far' do # TODO word_at?
-    it "returns the word up to the current index" do
+    it "returns the word up to the current cursor" do
       pattern = Pattern.dummy 'sandrigham'
       pattern.shift(4)
       expect(pattern.word_so_far).to eq 'sand'
@@ -453,7 +427,7 @@ describe Pattern do
   end
 
   describe '#word_to' do
-    it "returns the word from the current index with length n" do
+    it "returns the word from the current cursor with length n" do
       pattern = Pattern.dummy 'maskedball'
       pattern.shift(2)
       expect(pattern.word_to(6)).to eq 'skedba'
@@ -461,7 +435,7 @@ describe Pattern do
   end
 
   describe '#digits_to' do # TODO #digits_so_far as well
-    it "returns the digits from the current index to length n" do
+    it "returns the digits from the current cursor to length n" do
       pattern = Pattern.new 'po2l3ish9en4g3lish'
       pattern.shift(6)
       expect(pattern.digits_to(4)).to be == [9, 0, 4, 3, 0]
