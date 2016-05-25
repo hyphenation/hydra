@@ -64,7 +64,7 @@ class Pattern
   end
 
   def self.dummy(word)
-    new word,  [0] * (word.length + 1)
+    new word, [0] * (word.length + 1)
   end
 
   def self.simple(word, position, value)
