@@ -2,8 +2,10 @@ require 'byebug'
 require 'pp'
 
 class Pattern
-  def initialize(word = nil, digits = nil, index = 0, cursor = 0)
-    set_variables(cursor)
+  def initialize(word = nil, digits = nil)
+    @cursor = 0
+    @good_count = @bad_count = 0
+
     if word
       if word =~ /^\./
         word = word.gsub(/^\./, '')
@@ -39,11 +41,6 @@ class Pattern
 
   def setanchor(anchor)
     @anchor = anchor
-  end
-
-  def set_variables(cursor = 0)
-    @cursor = cursor
-    @good_count = @bad_count = 0
   end
 
   def inc_good_count
@@ -524,7 +521,7 @@ class Hydra
     if digits
       case mode
       when :match
-        matches << Pattern.new(pattern.word_so_far, digits, -pattern.cursor)
+        matches << Pattern.new(pattern.word_so_far, digits)
       when :hydrae
         @index = pattern.cursor - depth
         @index += 1 if spattern =~ /^\./ # FIXME awful
@@ -546,7 +543,7 @@ class Hydra
         head = dotneck.gethead
         if head
           if mode == :match
-            matches << Pattern.new(pattern.word_so_far, head, -pattern.cursor).final
+            matches << Pattern.new(pattern.word_so_far, head).final
           elsif mode == :hydrae
             index = pattern.cursor - depth
             index += 1 if spattern =~ /^\./ # FIXME See above
@@ -680,7 +677,7 @@ class Heracles
             lemma.reset(word_start - dot)
             (word_start..word_end).each do
               currword = lemma.word_to(pattern_length)
-              count_pattern = Pattern.simple currword, dot, hyphenation_level
+              count_pattern = Pattern.simple(currword, dot, hyphenation_level)
               @count_hydra.ingest count_pattern
               hydra = @count_hydra.read(currword)
               if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
