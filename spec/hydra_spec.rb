@@ -717,20 +717,6 @@ describe Lemma do
       expect(lemma.break(1)).to be == :is
     end
   end
-
-  describe '#mark_breaks' do
-    it "marks breakpoints according to the digit values" do
-      lemma = Lemma.new 'foo-bar-baz'
-      mask1 = Pattern.new 'fo1'
-      mask1.setanchor 0
-      mask2 = Pattern.new 'foo3'
-      mask2.setanchor 0
-      lemma.mask mask1
-      lemma.mask mask2
-      lemma.mark_breaks
-      expect(lemma.instance_variable_get :@breakpoints).to be == [:no, :no, :err, :found, :no, :no, :is, :no, :no, :no]
-    end
-  end
 end
 
 describe Hydra do

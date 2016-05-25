@@ -301,20 +301,22 @@ class Lemma < Pattern # FIXME Plural lemmata?
   end
 
   def break(n)
-    @breakpoints[@cursor + n]
-  end
-
-  def mark_breaks
-    @breakpoints.length.times do |i|
-      if @breakpoints[i] == :is
-        if @digits[i] % 2 == 1
-          @breakpoints[i] = :found
-        end
-      elsif @breakpoints[i] == :no
-        if @digits[i] % 2 == 1
-          @breakpoints[i] = :err
-        end
+    i = @cursor + n
+    breakpoint = @breakpoints[i]
+    if breakpoint == :is
+      if @digits[i] % 2 == 1
+        :found
+      else
+        :is
       end
+    elsif breakpoint == :no
+      if @digits[i] % 2 == 1
+        :err
+      else
+        :no
+      end
+    else
+      breakpoint
     end
   end
 end
@@ -694,7 +696,6 @@ class Heracles
             lemma = Lemma.new(line.strip.downcase)
             next unless lemma.length >= pattern_length
             @final_hydra.prehyphenate(lemma)
-            lemma.mark_breaks # FIXME Should ideally not be necessary
             word_start = dot
             word_end = lemma.length - (pattern_length - dot)
             word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
