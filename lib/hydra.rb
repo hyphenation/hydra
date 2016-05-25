@@ -302,22 +302,15 @@ class Lemma < Pattern # FIXME Plural lemmata?
 
   def break(n)
     i = @cursor + n
+    odd_level = @digits[i] % 2 == 1
     breakpoint = @breakpoints[i]
     if breakpoint == :is
-      if @digits[i] % 2 == 1
-        :found
-      else
-        :is
-      end
+      breakpoint = :found if odd_level
     elsif breakpoint == :no
-      if @digits[i] % 2 == 1
-        :err
-      else
-        :no
-      end
-    else
-      breakpoint
+      breakpoint = :err if odd_level
     end
+
+    breakpoint
   end
 end
 
