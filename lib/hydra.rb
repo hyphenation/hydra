@@ -172,11 +172,10 @@ class Pattern
   end
 
   def mask(a)
-    offset = a.length - 1
-    local_anchor = @index
+    offset = @index - a.length + 1
     a.length.times do |i|
-      j = local_anchor - offset + i
-      @digits[j] = [a[i], @digits[j] || 0].max
+      j = offset + i
+      @digits[j] = [a[i], @digits[j]].max
     end
   end
 
