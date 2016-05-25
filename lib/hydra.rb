@@ -674,8 +674,10 @@ class Heracles
             @final_hydra.prehyphenate(lemma)
             word_start = dot
             word_end = lemma.length - (pattern_length - dot)
-            word_start = @final_hydra.lefthyphenmin if word_start < @final_hydra.lefthyphenmin
-            word_end = lemma.length - @final_hydra.righthyphenmin if word_end > lemma.length - @final_hydra.righthyphenmin
+            hyph_start = @final_hydra.lefthyphenmin
+            hyph_end = lemma.length - @final_hydra.righthyphenmin
+            word_start = hyph_start if word_start < hyph_start
+            word_end = hyph_end if word_end > hyph_end
             lemma.reset(word_start - dot)
             (word_start..word_end).each do
               currword = lemma.word_to(pattern_length)
@@ -691,7 +693,6 @@ class Heracles
             if hydra.good_count * @good_weight < @threshold
               hydra.chophead
             elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
-              pattern = hydra.spattern
               @final_hydra.transplant hydra
             # FIXME else clear good and bad counts?
             end
