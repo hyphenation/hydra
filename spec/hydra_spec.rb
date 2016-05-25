@@ -476,21 +476,6 @@ describe Pattern do
       expect(pattern.to_s).to eq 'sup3ercal'
     end
 
-    it "also works with a pattern" do
-      pattern = Pattern.dummy 'foobar'
-      pattern.shift(3)
-      pattern.mask Pattern.new "foo5" # FIXME That’s awkward
-      expect(pattern.to_s).to eq "foo5bar"
-    end
-
-    it "use the anchor if it’s set" do
-      pattern = Pattern.dummy 'supercal'
-      mask = Pattern.new 'foo', [0, 0, 0, 3]
-      mask.setanchor(2)
-      pattern.mask mask
-      expect(pattern.to_s).to be == 'super3cal' # Let’s not try and specify what happens if we give both a second argument and a patteren with a second anchor ;-)
-    end
-
     it "applies several masks successively" do
       pattern = Pattern.dummy 'supercal'
       pattern.shift(2)
