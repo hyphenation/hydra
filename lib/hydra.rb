@@ -112,14 +112,14 @@ class Pattern
   end
 
   def last?
-    @index == @word.length - 1
+    @cursor == @word.length - 1
   end
 
   def end?
     if @final
       @cursor == @word.length + 1
     else
-      @index == @word.length
+      @cursor == @word.length
     end
   end
 
@@ -160,15 +160,15 @@ class Pattern
   end
 
   def word_so_far
-    @word[0..@index-1]
+    @word[0..@cursor-1]
   end
 
   def word_to(n)
-    @word[@index..@index + n - 1]
+    @word[@cursor..@cursor + n - 1]
   end
 
   def digits_to(n)
-    @digits[@index..@index + n]
+    @digits[@cursor..@cursor + n]
   end
 
   def mask(a, anchor = nil)
@@ -179,7 +179,7 @@ class Pattern
       if anchor
         local_anchor = anchor + offset
       else
-        local_anchor = index
+        local_anchor = @index
       end
       a.length.times do |i|
         j = local_anchor - offset + i
