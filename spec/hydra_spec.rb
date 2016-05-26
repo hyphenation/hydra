@@ -1597,7 +1597,7 @@ describe Heracles do
     it "handles hyphenmins correctly on a more complex example" do
       dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
       hydra = Heracles.new.run(dictionary, [1, 1, 2, 5, 1, 1, 1])
-      expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
+      expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f', 'f1g']
     end
 
     it "generates level 2" do
@@ -1639,17 +1639,22 @@ describe Heracles do
 
     it "runs a somewhat smarter extract" do
       heracles = Heracles.new
-      hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
+      hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.count).to eq 16
       expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
     end
 
-    it "runs to level 1 only" do
+    it "runs to level 1 only" do # Level 1 now works, let’s check the rest
       heracles = Heracles.new
-      hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 1, 2, 5, 1, 1, 1])
-      byebug
+      hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 1, 2, 5, 1, 1, 1], [2, 2])
       expect(hydra.count).to eq 16
       expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
+    end
+
+    it "runs yet another example" do
+      heracles = Heracles.new
+      hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s']
     end
   end
 

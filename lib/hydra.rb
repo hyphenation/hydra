@@ -688,7 +688,6 @@ class Club
       dictionary.each do |line|
         n += 1
         # print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
-        byebug if line == 'Aal-ent-nah-me' && dot == 1
         lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
         next unless lemma.length >= @pattern_length
         final_hydra.prehyphenate(lemma)
@@ -701,7 +700,6 @@ class Club
         lemma.reset(word_start - dot)
         (word_start..word_end).each do |foo|
           currword = lemma.word_to(@pattern_length)
-          byebug if line == "Aal-ent-nah-me" && dot == 1 && (foo == word_start || foo == word_end)
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
           count_hydra.ingest count_pattern
           patterns = { "a1k" => "good", "1ar" => "good", "e1c" => "good", "i1t" => "good", "k1k" => "good", "1len." => "good", "r1b" => "good", "s1b" => "good", "1se" => "good", "s1m" => "good", "t1n" => "good", # Intersection
@@ -710,9 +708,7 @@ class Club
           }
           s = count_pattern.to_s
           p = patterns[s]
-          # raise if count_pattern.to_s == "h1m"
-          # byebug if currword == "hm"
-          puts "#{s} (#{p})" if p
+          # puts "#{s} (#{p})" if p
           hydra = count_hydra.read(currword)
           if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
           lemma.shift
