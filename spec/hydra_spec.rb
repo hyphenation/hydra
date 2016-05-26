@@ -1485,7 +1485,7 @@ describe Club do
       hydra = Hydra.new
       final = Hydra.new
       club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra, final)
-      expect(final).to be_a Hydra
+      expect(final.digest).to eq ['b1c', '1de', 'd1f', 'g1h']
     end
   end
 

@@ -686,7 +686,6 @@ class Club
         (word_start..word_end).each do
           currword = lemma.word_to(@pattern_length)
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
-          # byebug if count_pattern.to_s == "b1c"
           count_hydra.ingest count_pattern
           hydra = count_hydra.read(currword)
           if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
@@ -711,27 +710,24 @@ class Heracles
     run(File.read(filename).split("\n"), parameters)
   end
 
-  def set_parameters(parameters)
+  def run(array, parameters = [])
     @hyphenation_level_start = parameters.shift
     @hyphenation_level_end = parameters.shift
     @count_hydra = Hydra.new
     @final_hydra = Hydra.new
-  end
 
-  def run(array, parameters = [])
-    set_parameters(parameters)
     (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
-      @hyphenation_level = hyphenation_level
-      @pattern_length_start = parameters.shift
-      @pattern_length_end = parameters.shift
-      @good_weight = parameters.shift
-      @bad_weight = parameters.shift
-      @threshold = parameters.shift
-      (@pattern_length_start..@pattern_length_end).each do |pattern_length|
-        club = Club.new(@hyphenation_level, pattern_length, @good_weight, @bad_weight, @threshold)
+      pattern_length_start = parameters.shift
+      pattern_length_end = parameters.shift
+      good_weight = parameters.shift
+      bad_weight = parameters.shift
+      threshold = parameters.shift
+      (pattern_length_start..pattern_length_end).each do |pattern_length|
+        club = Club.new(hyphenation_level, pattern_length, good_weight, bad_weight, threshold)
         club.pass(array, @count_hydra, @final_hydra)
       end
     end
+
     @final_hydra
   end
 
