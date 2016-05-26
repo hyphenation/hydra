@@ -644,6 +644,68 @@ class Hydra
   end
 end
 
+class Club
+  def initialize(hyph_level = 1, pat_length = 2, good = 1, bad = 1, thresh = 1)
+    @hyphenation_level = hyph_level
+    @pattern_length = pat_length
+    @good_weight = good
+    @bad_weight = bad
+    @threshold = thresh
+  end
+
+  def good
+    if @hyphenation_level % 2 == 1
+      :is
+    else
+      :err
+    end
+  end
+
+  def bad
+    if @hyphenation_level % 2 == 1
+      :no
+    else
+      :found
+    end
+  end
+
+  def pass(dictionary, count_hydra, final_hydra)
+    Heracles.organ(@pattern_length).each do |dot|
+      # TODO Idea: call each pass a Club, and make Heracles have many clubs?
+      dictionary.each do |line|
+        lemma = Lemma.new(line.strip.downcase)
+        next unless lemma.length >= @pattern_length
+        final_hydra.prehyphenate(lemma)
+        word_start = dot
+        word_end = lemma.length - (@pattern_length - dot)
+        hyph_start = final_hydra.lefthyphenmin
+        hyph_end = lemma.length - final_hydra.righthyphenmin
+        word_start = hyph_start if word_start < hyph_start
+        word_end = hyph_end if word_end > hyph_end
+        lemma.reset(word_start - dot)
+        (word_start..word_end).each do
+          currword = lemma.word_to(@pattern_length)
+          count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
+          # byebug if count_pattern.to_s == "b1c"
+          count_hydra.ingest count_pattern
+          hydra = count_hydra.read(currword)
+          if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+          lemma.shift
+        end
+      end
+
+      count_hydra.each do |hydra|
+        if hydra.good_count * @good_weight < @threshold
+          hydra.chophead
+        elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
+          final_hydra.transplant hydra
+        # FIXME else clear good and bad counts?
+        end
+      end
+    end
+  end
+end
+
 class Heracles
   def run_file(filename, parameters = [])
     run(File.read(filename).split("\n"), parameters)
@@ -666,38 +728,8 @@ class Heracles
       @bad_weight = parameters.shift
       @threshold = parameters.shift
       (@pattern_length_start..@pattern_length_end).each do |pattern_length|
-        Heracles.organ(pattern_length).each do |dot|
-          # TODO Idea: call each pass a Club, and make Heracles have many clubs?
-          array.each do |line|
-            lemma = Lemma.new(line.strip.downcase)
-            next unless lemma.length >= pattern_length
-            @final_hydra.prehyphenate(lemma)
-            word_start = dot
-            word_end = lemma.length - (pattern_length - dot)
-            hyph_start = @final_hydra.lefthyphenmin
-            hyph_end = lemma.length - @final_hydra.righthyphenmin
-            word_start = hyph_start if word_start < hyph_start
-            word_end = hyph_end if word_end > hyph_end
-            lemma.reset(word_start - dot)
-            (word_start..word_end).each do
-              currword = lemma.word_to(pattern_length)
-              count_pattern = Pattern.simple(currword, dot, hyphenation_level)
-              @count_hydra.ingest count_pattern
-              hydra = @count_hydra.read(currword)
-              if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
-              lemma.shift
-            end
-          end
-
-          @count_hydra.each do |hydra|
-            if hydra.good_count * @good_weight < @threshold
-              hydra.chophead
-            elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
-              @final_hydra.transplant hydra
-            # FIXME else clear good and bad counts?
-            end
-          end
-        end
+        club = Club.new(@hyphenation_level, pattern_length, @good_weight, @bad_weight, @threshold)
+        club.pass(array, @count_hydra, @final_hydra)
       end
     end
     @final_hydra
@@ -708,22 +740,6 @@ class Heracles
     dot1 = 2 * dot
     (n + 1).times.map do
       (dot, dot1 = dot1 - dot, 2 * n - dot1 - 1).first
-    end
-  end
-
-  def good
-    if @hyphenation_level % 2 == 1
-      :is
-    else
-      :err
-    end
-  end
-
-  def bad
-    if @hyphenation_level % 2 == 1
-      :no
-    else
-      :found
     end
   end
 end

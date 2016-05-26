@@ -1478,6 +1478,46 @@ describe Hydra do
   end
 end
 
+describe Club do
+  describe '#pass' do
+    it "runs through a dictionary" do
+      club = Club.new(1, 2, 1, 1, 1)
+      hydra = Hydra.new
+      final = Hydra.new
+      club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra, final)
+      expect(final).to be_a Hydra
+    end
+  end
+
+  describe '#good' do
+    it "returns :is when hyphenation level is odd" do
+      heracles = Club.new
+      heracles.instance_variable_set :@hyphenation_level, 1
+      expect(heracles.good).to be == :is
+    end
+
+    it "returns :err when hyphenation level is even" do
+      heracles = Club.new
+      heracles.instance_variable_set :@hyphenation_level, 2
+      expect(heracles.good).to be == :err
+    end
+  end
+
+  describe '#bad' do
+    it "returns :no when hyphenation level is odd" do
+      heracles = Club.new
+      heracles.instance_variable_set :@hyphenation_level, 1
+      expect(heracles.bad).to be == :no
+    end
+
+    it "returns :hyph when hyphenation level is even" do
+      heracles = Club.new
+      heracles.instance_variable_set :@hyphenation_level, 2
+      expect(heracles.bad).to be == :found
+    end
+  end
+end
+
 describe Heracles do
   let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
   let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
@@ -1554,34 +1594,6 @@ describe Heracles do
 
     it "works for n = 13" do
       expect(Heracles.organ(13)).to be == [6, 7, 5, 8, 4, 9, 3, 10, 2, 11, 1, 12, 0, 13]
-    end
-  end
-
-  describe '#good' do
-    it "returns :is when hyphenation level is odd" do
-      heracles = Heracles.new
-      heracles.instance_variable_set :@hyphenation_level, 1
-      expect(heracles.good).to be == :is
-    end
-
-    it "returns :err when hyphenation level is even" do
-      heracles = Heracles.new
-      heracles.instance_variable_set :@hyphenation_level, 2
-      expect(heracles.good).to be == :err
-    end
-  end
-
-  describe '#bad' do
-    it "returns :no when hyphenation level is odd" do
-      heracles = Heracles.new
-      heracles.instance_variable_set :@hyphenation_level, 1
-      expect(heracles.bad).to be == :no
-    end
-
-    it "returns :hyph when hyphenation level is even" do
-      heracles = Heracles.new
-      heracles.instance_variable_set :@hyphenation_level, 2
-      expect(heracles.bad).to be == :found
     end
   end
 end
