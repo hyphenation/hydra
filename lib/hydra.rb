@@ -713,8 +713,8 @@ class Club
         final_hydra.prehyphenate(lemma)
         word_start = dot - 1
         word_end = lemma.length - (@pattern_length - dot) + 1
-        hyph_start = final_hydra.lefthyphenmin - 1
-        hyph_end = lemma.length - final_hydra.righthyphenmin + 1
+        hyph_start = final_hydra.lefthyphenmin
+        hyph_end = lemma.length - final_hydra.righthyphenmin
         word_start = hyph_start if word_start < hyph_start
         word_end = hyph_end if word_end > hyph_end
         lemma.reset(word_start - dot)
