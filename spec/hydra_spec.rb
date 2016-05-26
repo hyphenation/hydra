@@ -1547,16 +1547,16 @@ describe Heracles do
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
 
-    it "runs a large file" do
+    it "runs a slightly longer file" do
       heracles = Heracles.new
-      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 1, 2, 5, 1, 1, 1])
+      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
       expect(hydra).to be_a Hydra
-      out = File.open(File.expand_path('../../files/100.out.utf8', __FILE__), 'w')
+      out = File.open(File.expand_path('../../files/100.out2.utf8', __FILE__), 'w')
       hydra.each do |node|
         out.puts(node.pattern.to_s)
       end
       out.close
-      expect(hydra.count).to eq 71
+      expect(hydra.count).to eq 83
     end
   end
 
