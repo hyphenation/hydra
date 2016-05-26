@@ -526,7 +526,7 @@ class Hydra
         matches << Pattern.new(pattern.word_so_far, digits)
       when :hydrae
         @index = pattern.cursor - depth
-        @index += 1 if spattern =~ /^\./ # FIXME awful
+        @index += 1 if self.pattern.to_s =~ /^\./ # FIXME awful
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -548,7 +548,7 @@ class Hydra
             matches << Pattern.new(pattern.word_so_far, head).final
           elsif mode == :hydrae
             index = pattern.cursor - depth
-            index += 1 if spattern =~ /^\./ # FIXME See above
+            index += 1 if self.pattern.to_s =~ /^\./ # FIXME See above
             index.times { dotneck.shift }
             matches << dotneck
           elsif mode == :hyphenate
@@ -620,21 +620,21 @@ class Hydra
   end
 
   def transplant(other)
-    ingest other.spattern
+    ingest other.pattern.to_s
     other.chophead
   end
 
   # Debug methods
-  def spattern(sneck = "", digits = nil)
+  def pattern(neck = "", digits = nil)
     if digits
       if parent
-        parent.spattern(@atlas + sneck, digits)
+        parent.pattern(@atlas + neck, digits)
       else
-        Pattern.new(sneck, digits).to_s
+        Pattern.new(neck, digits).to_s
       end
     else
       digits = if gethead then gethead else [0] * (depth + 1) end
-      spattern('', digits)
+      pattern('', digits)
     end
   end
 

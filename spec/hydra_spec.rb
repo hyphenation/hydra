@@ -940,7 +940,7 @@ describe Hydra do
     end
   end
 
-  describe '#each' do # TODO Also #map, #select.  Enumerator mixin?
+  describe '#each' do
     it "iterates over the hydra" do
       hydra = Hydra.new ['α', 'β', 'γ', 'δ']
       n = 0
@@ -952,7 +952,7 @@ describe Hydra do
       initial_words = ['abc', 'def', 'ghij', 'klm']
       hydra = Hydra.new initial_words
       words = []
-      hydra.each { |h| words << h.spattern }
+      hydra.each { |h| words << h.pattern.to_s }
       words.sort!
       expect(words).to be == initial_words
     end
@@ -961,15 +961,15 @@ describe Hydra do
   describe '#map' do
     it "works as an enumerable" do
       hydra = Hydra.new ['bac', 'def', 'gijk']
-      expect(hydra.map { |head| head.spattern.upcase }).to eq ['BAC', 'DEF', 'GIJK']
+      expect(hydra.map { |head| head.pattern.to_s.upcase }).to eq ['BAC', 'DEF', 'GIJK']
     end
   end
 
   describe '#select' do
     it "selects heads from a hydra" do
       hydra = Hydra.new ['abc', 'abz', 'def', 'defz', 'xyz']
-      zheads = hydra.select { |head| head.spattern =~ /z$/ }
-      expect(zheads.map(&:spattern)).to eq ['abz', 'defz', 'xyz']
+      zheads = hydra.select { |head| head.pattern.to_s =~ /z$/ }
+      expect(zheads.map(&:pattern).map(&:to_s)).to eq ['abz', 'defz', 'xyz']
     end
   end
 
@@ -1288,7 +1288,7 @@ describe Hydra do
   describe '#hydrae' do
     it "returns matches as hydrae" do
       matches = complex_hydra.hydrae('foobar')
-      expect(matches.map(&:spattern).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
+      expect(matches.map(&:pattern).map(&:to_s).sort).to eq ['.fo1', '.foo3', '3ba2r.', 'a2r.', 'ba1', 'fo2o1', 'o2o']
     end
 
     it "sets the index correctly ..." do
@@ -1397,56 +1397,56 @@ describe Hydra do
     end
   end
 
-  describe '#spattern' do
+  describe '#pattern' do
     it "returns the pattern associated with that head, as string" do
       hydra = Hydra.new '5fo2o3'
       fooneck = hydra.read('foo')
-      expect(fooneck.spattern).to eq "5fo2o3"
+      expect(fooneck.pattern.to_s).to eq "5fo2o3"
     end
 
     it "returns string to current node even if no head" do
       hydra = Hydra.new 'abc'
       bneck = hydra.read('ab')
-      expect(bneck.spattern).to be == "ab"
+      expect(bneck.pattern.to_s).to be == "ab"
     end
 
     it "works with initial dots" do
       hydra = Hydra.new '.ba2'
       aneck = hydra.read('.ba')
-      expect(aneck.spattern).to be == ".ba2"
+      expect(aneck.pattern.to_s).to be == ".ba2"
     end
 
     it "works with final dots" do
       hydra = Hydra.new 'f4o.'
       oneck = hydra.read('fo.')
-      expect(oneck.spattern).to be == "f4o."
+      expect(oneck.pattern.to_s).to be == "f4o."
     end
 
     it "but not the way it used to" do
       hydra = Hydra.new 'fo.'
       oneck = hydra.read('fo')
-      expect(oneck.spattern).to be == 'fo'
+      expect(oneck.pattern.to_s).to be == 'fo'
     end
 
     it "works correctly if both “ab” and “ab.” are stored" do
       hydra = Hydra.new ['ab', 'ab.']
       dothead = hydra.read 'ab.'
       nodothead = hydra.read 'ab'
-      expect(dothead.spattern).to eq 'ab.'
-      expect(nodothead.spattern).to eq 'ab'
-      expect(hydra.spattern).to eq ''
+      expect(dothead.pattern.to_s).to eq 'ab.'
+      expect(nodothead.pattern.to_s).to eq 'ab'
+      expect(hydra.pattern.to_s).to eq ''
     end
 
     it "works correctly if only “ab.” is stored and we’re at the b head" do
       hydra = Hydra.new 'ab.'
       bhead = hydra.read 'ab'
-      expect(bhead.spattern).to eq 'ab'
+      expect(bhead.pattern.to_s).to eq 'ab'
     end
 
     it "works correctly with non-heads location" do
       hydra = Hydra.new 'abc'
       bhead = hydra.read 'ab'
-      expect(bhead.spattern).to eq 'ab'
+      expect(bhead.pattern.to_s).to eq 'ab'
     end
   end
 
