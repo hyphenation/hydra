@@ -687,21 +687,32 @@ class Club
       n = 0
       dictionary.each do |line|
         n += 1
-        print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
+        # print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
+        byebug if line == 'Aal-ent-nah-me' && dot == 1
         lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
         next unless lemma.length >= @pattern_length
         final_hydra.prehyphenate(lemma)
         word_start = dot - 1
         word_end = lemma.length - (@pattern_length - dot) + 1
-        hyph_start = final_hydra.lefthyphenmin
-        hyph_end = lemma.length - final_hydra.righthyphenmin
+        hyph_start = final_hydra.lefthyphenmin - 1
+        hyph_end = lemma.length - final_hydra.righthyphenmin + 1
         word_start = hyph_start if word_start < hyph_start
         word_end = hyph_end if word_end > hyph_end
         lemma.reset(word_start - dot)
-        (word_start..word_end).each do
+        (word_start..word_end).each do |foo|
           currword = lemma.word_to(@pattern_length)
+          byebug if line == "Aal-ent-nah-me" && dot == 1 && (foo == word_start || foo == word_end)
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
           count_hydra.ingest count_pattern
+          patterns = { "a1k" => "good", "1ar" => "good", "e1c" => "good", "i1t" => "good", "k1k" => "good", "1len." => "good", "r1b" => "good", "s1b" => "good", "1se" => "good", "s1m" => "good", "t1n" => "good", # Intersection
+          "1ent" => "missing", "h1m" => "missing", "n1d" => "missing", "1sc" => "missing", "1ste" => "missing", # Missing
+          "l1e" => "spurious", "l1s" => "spurious", # Should no be there
+          }
+          s = count_pattern.to_s
+          p = patterns[s]
+          # raise if count_pattern.to_s == "h1m"
+          # byebug if currword == "hm"
+          puts "#{s} (#{p})" if p
           hydra = count_hydra.read(currword)
           if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
           lemma.shift
@@ -709,10 +720,10 @@ class Club
       end
 
       n = 0
-      print "count_hydra: "
+      # print "count_hydra: "
       count_hydra.each do |hydra|
         n += 1
-        print "\rcount_hydra: #{n}"
+        # print "\rcount_hydra: #{n}"
         if hydra.good_count * @good_weight < @threshold
           hydra.chophead
         elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold

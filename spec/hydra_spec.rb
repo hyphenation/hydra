@@ -1636,6 +1636,21 @@ describe Heracles do
       expect(hydra.count).to eq 12
       expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
     end
+
+    it "runs a somewhat smarter extract" do
+      heracles = Heracles.new
+      hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
+      expect(hydra.count).to eq 16
+      expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
+    end
+
+    it "runs to level 1 only" do
+      heracles = Heracles.new
+      hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 1, 2, 5, 1, 1, 1])
+      byebug
+      expect(hydra.count).to eq 16
+      expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
+    end
   end
 
   describe '.organ' do
