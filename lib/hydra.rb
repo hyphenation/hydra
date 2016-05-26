@@ -728,7 +728,8 @@ class Club
           hydra.chophead
         elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
           final_hydra.transplant hydra
-        # FIXME else clear good and bad counts?
+        else # FIXME else clear good and bad counts? – definitely ;-)
+          hydra.reset_good_and_bad_counts
         end
       end
     end
