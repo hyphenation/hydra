@@ -455,6 +455,10 @@ class Hydra
     @bad_count += 1
   end
 
+  def reset_good_and_bad_counts
+    @good_count = @bad_count = 0
+  end
+
   def letters
     @necks.keys
   end

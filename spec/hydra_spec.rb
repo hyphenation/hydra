@@ -950,6 +950,17 @@ describe Hydra do
     end
   end
 
+  describe '#reset_good_and_bad_counts' do
+    it "resets the good and bad counts" do
+      hydra = Hydra.new
+      3.times { hydra.inc_good_count }
+      2.times { hydra.inc_bad_count }
+      hydra.reset_good_and_bad_counts
+      expect(hydra.good_count).to eq 0
+      expect(hydra.bad_count).to eq 0
+    end
+  end
+
   describe '#letters' do
     it "returns the letters starting the different necks" do
       hydra.ingest ['a', 'b', 'c', 'cd', 'cde']
