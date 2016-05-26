@@ -730,24 +730,35 @@ class Club
           p = patterns[s]
           # puts "#{s} (#{p})" if p
           hydra = count_hydra.read(currword)
+          # byebug if s == "1er" || s == "1e2r" || currword == "er"
           if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
           lemma.shift
         end
       end
 
+      hopeless = good = unsure = 0
       n = 0
+      # byebug
+      puts "pat_len = #{@pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that
       # print "count_hydra: "
       count_hydra.each do |hydra|
+        # byebug if hydra.pattern.to_s == "1er" || hydra.pattern.to_s == "e1r"
         n += 1
         # print "\rcount_hydra: #{n}"
         if hydra.good_count * @good_weight < @threshold
+          hopeless += 1
           hydra.chophead
+          # hydra.reset_good_and_bad_counts
         elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
+          good += 1
           final_hydra.transplant hydra
         else # FIXME else clear good and bad counts? – definitely ;-)
+          unsure += 1
+          hydra.chophead
           hydra.reset_good_and_bad_counts
         end
       end
+      puts "#{good} good, #{hopeless} hopeless, #{unsure} unsure"
     end
 
     final_hydra

@@ -1681,7 +1681,7 @@ describe Heracles do
     it "runs yet another example" do
       heracles = Heracles.new
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
-      expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Much better!  Only got “g1g2” wrong now (as gg2)
+      expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Works now!
     end
   end
 
