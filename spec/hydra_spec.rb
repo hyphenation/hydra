@@ -166,6 +166,12 @@ describe Pattern do
       pattern = Pattern.new('foo9bar')
       expect(pattern.digit(3)).to eq 9
     end
+
+    it "takes the curent cursor into account" do
+      pattern = Pattern.new('foo9ba8r')
+      pattern.shift(3)
+      expect(pattern.digit(2)).to eq 8
+    end
   end
 
   describe '#last?' do

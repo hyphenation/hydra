@@ -99,7 +99,7 @@ class Pattern
   end
 
   def digit(n)
-    @digits[n]
+    @digits[@cursor + n]
   end
 
   def last?
