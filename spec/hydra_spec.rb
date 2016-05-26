@@ -1,5 +1,17 @@
 require 'spec_helper'
 
+describe Array do
+  describe '#mask' do
+    it "masks an array with another array of equal length" do
+      expect([1, 2, 5].mask([3, 4, 0])).to eq [3, 4, 5]
+    end
+
+    it "raises an exception if the arrays don’t have the same length" do
+      expect { [1, 2, 3].mask [4, 5, 6, 7] }.to raise_exception Array::MismatchedLength
+    end
+  end
+end
+
 describe Pattern do
   describe '.new' do
     it "makes a pattern from a word and an array of digits" do
@@ -1055,14 +1067,18 @@ describe Hydra do
 
     # TODO Specify that in non-strict modes higher-values heads take precedence
     it "really works with patterns that are prefix of each other" do
-      matching_patterns = ['fo1', 'o2o', 'o1b', 'ba1', 'ba2r']
-      non_matching_patterns = ['ba2', 'of3', 'mo2o']
-      hydra.ingest matching_patterns
-      hydra.ingest non_matching_patterns
+      hydra.ingest ['fo1', 'o2o', 'o1b', 'ba1', 'ba2r']
+      hydra.ingest ['ba2', 'of3', 'mo2o']
       expect(hydra.digest).to eq ['ba2', 'ba2r', 'fo1', 'mo2o', 'o1b', 'of3', 'o2o']
     end
 
-    # TODO Test with conflicting patterns
+    it "uses higer values to mask lower ones" do
+      hydra = Hydra.new '1ba'
+      hydra.ingest 'b2a'
+      expect(hydra.digest).to eq ['1b2a']
+    end
+
+    # TODO More tests with conflicting patterns
 
     it "works with patterns that have dots at both end" do
       hydra = Hydra.new '.bac.'

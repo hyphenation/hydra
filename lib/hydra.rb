@@ -1,6 +1,18 @@
 require 'byebug'
 require 'pp'
 
+class Array
+  class MismatchedLength < StandardError
+  end
+
+  def mask(other)
+    raise MismatchedLength unless length == other.length
+    each_with_index do |value, index|
+      self[index] = [value, other[index]].max
+    end
+  end
+end
+
 class Pattern
   def initialize(word = nil, digits = nil)
     @cursor = 0
@@ -513,7 +525,11 @@ class Hydra
           getneck(letter).ingest(pattern.shift)
         end
       else
-        sethead(pattern.get_digits)
+        if gethead
+          sethead(pattern.get_digits.mask(gethead))
+        else
+          sethead(pattern.get_digits)
+        end
       end
     end
   end
