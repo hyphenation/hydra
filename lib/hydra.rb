@@ -672,9 +672,8 @@ class Club
   def pass(dictionary, count_hydra, final_hydra = Hydra.new)
     final_hydra ||= Hydra.new
     Heracles.organ(@pattern_length).each do |dot|
-      # TODO Idea: call each pass a Club, and make Heracles have many clubs?
       dictionary.each do |line|
-        lemma = Lemma.new(line.strip.downcase)
+        lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
         next unless lemma.length >= @pattern_length
         final_hydra.prehyphenate(lemma)
         word_start = dot
@@ -714,11 +713,11 @@ class Heracles
   end
 
   def run(array, parameters = [])
-    @hyphenation_level_start = parameters.shift
-    @hyphenation_level_end = parameters.shift
-    @count_hydra = Hydra.new
+    hyphenation_level_start = parameters.shift
+    hyphenation_level_end = parameters.shift
+    count_hydra = Hydra.new
 
-    (@hyphenation_level_start..@hyphenation_level_end).each do |hyphenation_level|
+    (hyphenation_level_start..hyphenation_level_end).each do |hyphenation_level|
       pattern_length_start = parameters.shift
       pattern_length_end = parameters.shift
       good_weight = parameters.shift
@@ -726,7 +725,7 @@ class Heracles
       threshold = parameters.shift
       (pattern_length_start..pattern_length_end).each do |pattern_length|
         club = Club.new(hyphenation_level, pattern_length, good_weight, bad_weight, threshold)
-        @final_hydra = club.pass(array, @count_hydra, @final_hydra)
+        @final_hydra = club.pass(array, count_hydra, @final_hydra)
       end
     end
 

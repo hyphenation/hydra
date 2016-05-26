@@ -1539,6 +1539,13 @@ describe Heracles do
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
 
+    it "correctly ignores commments" do
+      dictionary = ['xxa-b-cxxx % f-o-o', 'xxab-cd-fg-hixxx % b-a-r', 'xxabc-defxxx % baz quux', '% I’m a c-o-m-m-e-n-t']
+      heracles = Heracles.new
+      hydra = heracles.run(dictionary, [1, 1, 2, 2, 1, 1, 1])
+      expect(hydra.digest).to eq ['b1c', '1de', 'd1f', 'g1h']
+    end
+
     it "runs a slightly more complex list of words" do
       heracles = Heracles.new
       hydra = heracles.run(complex_dictionary, [1, 1, 2, 5, 1, 1, 1])
