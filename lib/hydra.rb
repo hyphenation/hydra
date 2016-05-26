@@ -744,7 +744,7 @@ class Heracles
       threshold = parameters.shift
       (pattern_length_start..pattern_length_end).each do |pattern_length|
         club = Club.new(hyphenation_level, pattern_length, good_weight, bad_weight, threshold)
-        @final_hydra = club.pass(array, count_hydra, @final_hydra, hyphenmins = [2, 3])
+        @final_hydra = club.pass(array, count_hydra, @final_hydra, hyphenmins)
       end
     end
 
