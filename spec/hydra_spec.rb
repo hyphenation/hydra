@@ -1618,6 +1618,12 @@ describe Heracles do
       hydra = Heracles.new.run(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
     end
+
+    it "runs a very small extract of a real-life file" do
+      hydra = Heracles.new.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      expect(hydra.count).to eq 12
+      expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
+    end
   end
 
   describe '.organ' do
