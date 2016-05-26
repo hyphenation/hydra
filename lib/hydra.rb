@@ -700,18 +700,7 @@ class Club
         lemma.reset(word_start - dot)
         (word_start..word_end).each do
           currword = lemma.word_to(@pattern_length)
-          gonext = false
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
-          # byebug if count_pattern.to_s == "b2au"
-          final_hydra.match(currword).each do |match|
-            index = currword.index(match.get_word)
-            if index
-              digit = count_pattern.digit(index + dot)
-              byebug if count_pattern.to_s == "b2au"
-              gonext = true if digit && digit <= @hyphenation_level
-            end
-          end
-          next if gonext
           count_hydra.ingest count_pattern
           hydra = count_hydra.read(currword)
           if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
