@@ -1549,14 +1549,14 @@ describe Heracles do
 
     it "runs a large file" do
       heracles = Heracles.new
-      hydra = heracles.run_file(File.expand_path('../../files/10k.dic.utf8', __FILE__), [1, 1, 2, 5, 1, 1, 1])
+      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 1, 2, 5, 1, 1, 1])
       expect(hydra).to be_a Hydra
-      out = File.open(File.expand_path('../../files/10k.out.utf8', __FILE__), 'w')
+      out = File.open(File.expand_path('../../files/100.out.utf8', __FILE__), 'w')
       hydra.each do |node|
         out.puts(node.pattern.to_s)
       end
       out.close
-      expect(hydra.count).to eq 999
+      expect(hydra.count).to eq 71
     end
   end
 
