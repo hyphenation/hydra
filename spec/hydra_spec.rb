@@ -1624,6 +1624,12 @@ describe Heracles do
       expect(hydra.count).to eq 12
       expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
     end
+
+    it "runs a to level 3" do
+      hydra = Heracles.new.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1], [2, 2])
+      expect(hydra.count).to eq 12
+      expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
+    end
   end
 
   describe '.organ' do
