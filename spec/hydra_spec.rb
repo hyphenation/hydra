@@ -430,6 +430,24 @@ describe Pattern do
       pattern.shift(2)
       expect(pattern.word_to(6)).to eq 'skedba'
     end
+
+    it "optionally crosses boundaries, starting at '.'" do
+      pattern = Pattern.dummy 'balloinmaschera'
+      pattern.shift(-1)
+      expect(pattern.word_to(5)).to eq '.ball'
+    end
+
+    it "optionally crosses boundaries, stopping at '.'" do
+      pattern = Pattern.dummy 'daverdi'
+      pattern.shift(2)
+      expect(pattern.word_to(6)).to eq 'verdi.'
+    end
+
+    it "crosses boundaries at both ends" do
+      pattern = Pattern.dummy 'unballo'
+      pattern.shift(-1)
+      expect(pattern.word_to(9)).to eq '.unballo.'
+    end
   end
 
   describe '#digits_to' do # TODO #digits_so_far as well

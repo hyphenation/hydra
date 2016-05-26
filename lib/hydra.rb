@@ -155,7 +155,14 @@ class Pattern
   end
 
   def word_to(n)
-    @word[@cursor..@cursor + n - 1]
+    start = if @cursor == -1 then 0 else @cursor end
+    subword = @word[start..@cursor + n - 1]
+    if @cursor == -1
+      subword = '.' + subword
+    end
+    subword += '.' if @cursor + n == length + 1
+
+    subword
   end
 
   def digits_to(n)
