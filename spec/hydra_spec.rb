@@ -1528,6 +1528,12 @@ describe Heracles do
       hydra = heracles.run_file(File.expand_path('../../files/dummy1.dic', __FILE__), [1, 1, 2, 2, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
+
+    it "runs a very large file" do
+      heracles = Heracles.new
+      # hydra = heracles.run_file(File.expand_path('../../files/words.hyphenated.refo', __FILE__), [1, 1, 2, 5, 1, 1, 1])
+      expect(hydra).to be_a Hydra
+    end
   end
 
   describe '#run' do

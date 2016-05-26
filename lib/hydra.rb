@@ -672,7 +672,10 @@ class Club
   def pass(dictionary, count_hydra, final_hydra = Hydra.new)
     final_hydra ||= Hydra.new
     Heracles.organ(@pattern_length).each do |dot|
+      n = 0
       dictionary.each do |line|
+        n += 1
+        print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
         lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
         next unless lemma.length >= @pattern_length
         final_hydra.prehyphenate(lemma)
@@ -693,7 +696,11 @@ class Club
         end
       end
 
+      n = 0
+      print "count_hydra: "
       count_hydra.each do |hydra|
+        n += 1
+        print "\rcount_hydra: #{n}"
         if hydra.good_count * @good_weight < @threshold
           hydra.chophead
         elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
