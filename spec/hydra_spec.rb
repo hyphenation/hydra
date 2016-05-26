@@ -1483,8 +1483,8 @@ describe Club do
     it "runs through a dictionary" do
       club = Club.new(1, 2, 1, 1, 1)
       hydra = Hydra.new
-      final = Hydra.new
-      club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra, final)
+      final = club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra)
+      expect(final).to be_a Hydra
       expect(final.digest).to eq ['b1c', '1de', 'd1f', 'g1h']
     end
   end
