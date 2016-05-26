@@ -676,8 +676,13 @@ class Club
     end
   end
 
-  def pass(dictionary, count_hydra, final_hydra = Hydra.new)
-    final_hydra ||= Hydra.new
+  def pass(dictionary, count_hydra, final_hydra = Hydra.new, hyphenmins = [2, 3])
+    unless final_hydra # TODO Document that
+      final_hydra = Hydra.new
+      final_hydra.setlefthyphenmin(hyphenmins.first)
+      final_hydra.setrighthyphenmin(hyphenmins.last)
+    end
+
     Heracles.organ(@pattern_length).each do |dot|
       n = 0
       dictionary.each do |line|
@@ -722,11 +727,11 @@ class Club
 end
 
 class Heracles
-  def run_file(filename, parameters = [])
-    run(File.read(filename).split("\n"), parameters)
+  def run_file(filename, parameters = [], hyphenmins = [2, 3])
+    run(File.read(filename).split("\n"), parameters, hyphenmins)
   end
 
-  def run(array, parameters = [])
+  def run(array, parameters = [], hyphenmins = [2, 3])
     hyphenation_level_start = parameters.shift
     hyphenation_level_end = parameters.shift
     count_hydra = Hydra.new
@@ -739,7 +744,7 @@ class Heracles
       threshold = parameters.shift
       (pattern_length_start..pattern_length_end).each do |pattern_length|
         club = Club.new(hyphenation_level, pattern_length, good_weight, bad_weight, threshold)
-        @final_hydra = club.pass(array, count_hydra, @final_hydra)
+        @final_hydra = club.pass(array, count_hydra, @final_hydra, hyphenmins = [2, 3])
       end
     end
 

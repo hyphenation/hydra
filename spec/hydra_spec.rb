@@ -1549,7 +1549,7 @@ describe Heracles do
 
     it "runs a slightly longer file" do
       heracles = Heracles.new
-      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
+      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra).to be_a Hydra
       out = File.open(File.expand_path('../../files/100.out2.utf8', __FILE__), 'w')
       hydra.each do |node|
