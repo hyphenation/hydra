@@ -1562,6 +1562,7 @@ describe Heracles do
         out.puts(node.pattern.to_s)
       end
       out.close
+      byebug
       expect(hydra.count).to eq 83
     end
   end
