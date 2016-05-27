@@ -1,5 +1,6 @@
 require 'byebug'
 require 'pp'
+require 'unicode_utils'
 
 class Array
   class MismatchedLength < StandardError
@@ -19,15 +20,16 @@ class Pattern
     @good_count = @bad_count = 0
 
     if word
+      word = UnicodeUtils.downcase(word)
       if word =~ /^\./
-        word = word.gsub(/^\./, '')
+        word.gsub!(/^\./, '')
         digits = digits[1..-1] if digits && digits.length > word.length + 1
         @initial = true
         @cursor = -1
       end
 
       if word =~ /\.$/
-        word = word.gsub(/\.$/, '')
+        word.gsub!(/\.$/, '')
         digits = digits[0..-2] if digits && digits.length > word.length + 1
         @final = true
       end
@@ -711,7 +713,7 @@ class Club
       dictionary.each do |line|
         n += 1
         # print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
-        lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
+        lemma = Lemma.new(UnicodeUtils.downcase(line.gsub(/%.*$/, '').strip))
         next unless lemma.length >= @pattern_length
         final_hydra.prehyphenate(lemma)
         word_start = dot - 1

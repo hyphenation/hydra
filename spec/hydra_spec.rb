@@ -55,6 +55,21 @@ describe Pattern do
       expect(pattern.get_word).to eq ''
       expect(pattern.get_digits).to eq [0] # TODO Ensure digits.length = word.length + 1 always
     end
+
+    it "normalises everything to lowercase" do
+      pattern = Pattern.new 'cA2b'
+      expect(pattern.get_word).to eq 'cab'
+    end
+
+    it "... even non-ASCII characters" do
+      pattern = Pattern.new 'Öl', [1, 2, 3]
+      expect(pattern.get_word).to eq 'öl'
+    end
+
+    it "needs some work for Turkish" do
+      pattern = Pattern.new 'İSTANBUL'
+      expect(pattern.get_word).to eq 'i̇stanbul' # FIXME That’s NFD!
+    end
   end
 
   describe '.dummy' do
@@ -252,6 +267,12 @@ describe Pattern do
       expect(pattern.currletter).to eq '.'
       pattern.shift(7)
       expect(pattern.currletter).to eq '.'
+    end
+
+    it "handles case correctly" do
+      pattern = Pattern.new 'aB'
+      pattern.shift
+      expect(pattern.currletter).to eq 'b'
     end
   end
 
@@ -801,6 +822,19 @@ describe Hydra do
       hydra.setlefthyphenmin(2)
       hydra.setrighthyphenmin(2)
       expect(hydra.showhyphens('povsod')).to eq 'pov-sod'
+    end
+
+    it "handles case correctly" do
+      hydra = Hydra.new 'Öl1'
+      hydra.setrighthyphenmin 2
+      expect(hydra.showhyphens('ölet')).to eq 'öl-et'
+      expect(hydra.showhyphens('Völker')).to eq 'völ-ker' # FIXME Will need more work!
+    end
+
+    it "works correctly on uppercase input" do
+      hydra = Hydra.new 'öl1'
+      hydra.setrighthyphenmin 2
+      expect(hydra.showhyphens('Ölet')).to eq 'öl-et' # FIXME See above
     end
   end
 
@@ -1763,6 +1797,11 @@ describe Heracles do
     it "runs a 50-word example" do
       hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens', 'Aal-ent-nah-me', 'Aal-ent-nah-men', 'Aa-ler', 'Aa-les', 'Aal-eskor-te', 'Aal-eskor-ten', 'Aal-fang', 'Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf', 'Aal-mous-se', 'Aal-mut-ter', 'Aal-re-gat-ta', 'Aal-reu-sen', 'Aal-räu-che-rei', 'Aal-räu-che-rei-en', 'Aals', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aal-stra-ße', 'Aal-stras-se'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['a1c', 'a1d', 'a1ß', 'b1n', 'e1g', 'e1n', '1ent', '2es.', 'h1m', 'i1e', 'i1l', 'k1k', 'l1b', 'l1d', '1le', '2lent', 'l1es', '2lesk', 'l1f', 'l1g', 'l1h', 'l1k', 'l1m', 'l1r', 'l1s', 'n1d', 'ng1', '2ns', '2nt', '1re', 'r1g', '1ri', 'r1t', '1sc', '1se', '2s1m', 's1s', '1st', '2st.', 'te1', 't1n', 't1t', 'u1c', 'u1e'] # Works now!
+    end
+
+    it "correctly folds cases of Unicode characters" do
+      hydra = heracles.run(['Zö-li-bat', 'GE-GRÖ-LE'], [1, 1, 2, 5, 1, 1, 1], [1, 2])
+      expect(hydra.digest).to eq ['e1g', 'i1b', 'ö1l']
     end
   end
 
