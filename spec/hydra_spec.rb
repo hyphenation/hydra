@@ -1826,5 +1826,8 @@ describe Labour do
       output = File.read('/tmp/output')
       expect(output).to eq hydra.digest.join "\n"
     end
+
+    # FIXME Actually use the input patterns!
+    # Also FIXME Output the current list as hyphenated by the generated patterns, optionally
   end
 end
