@@ -1603,6 +1603,30 @@ describe Heracles do
       pattfile.close
       expect(hydra.count).to eq 1619
     end
+
+    it "runs a full set of hyphenation levels on a small file", slow: true do
+      heracles = Heracles.new
+      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1], [2, 2])
+      expect(hydra).to be_a Hydra
+      pattfile = File.open(File.expand_path('../../files/100.pattern.ruby.9' ,__FILE__), 'w')
+      hydra.digest.each do |pattern|
+        pattfile.puts(pattern)
+      end
+      pattfile.close
+      expect(hydra.count).to eq 83
+    end
+
+    it "runs a full set of hyphenation levels on a large file", slow: true do
+      heracles = Heracles.new
+      hydra = heracles.run_file(File.expand_path('../../files/10k.dic.utf8', __FILE__), [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1], [2, 2])
+      expect(hydra).to be_a Hydra
+      pattfile = File.open(File.expand_path('../../files/10k.pattern.ruby.9' ,__FILE__), 'w')
+      hydra.digest.each do |pattern|
+        pattfile.puts(pattern)
+      end
+      pattfile.close
+      expect(hydra.count).to eq 1778
+    end
   end
 
   describe '#run' do
