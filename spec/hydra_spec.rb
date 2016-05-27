@@ -898,6 +898,16 @@ describe Hydra do
       hydra.getneck('a').chophead
       expect(hydra.count).to eq 2
     end
+
+    it "resets the good and bad counts" do
+      hydra.ingest ['abc', 'def', 'klm']
+      neck = hydra.read('abc')
+      3.times { neck.inc_good_count }
+      2.times { neck.inc_bad_count }
+      neck.chophead
+      expect(neck.good_count).to eq 0
+      expect(neck.bad_count).to eq 0
+    end
   end
 
   describe '#chopneck' do
@@ -962,12 +972,12 @@ describe Hydra do
     end
   end
 
-  describe '#reset_good_and_bad_counts' do
+  describe '#clear_good_and_bad_counts' do
     it "resets the good and bad counts" do
       hydra = Hydra.new
       3.times { hydra.inc_good_count }
       2.times { hydra.inc_bad_count }
-      hydra.reset_good_and_bad_counts
+      hydra.clear_good_and_bad_counts
       expect(hydra.good_count).to eq 0
       expect(hydra.bad_count).to eq 0
     end

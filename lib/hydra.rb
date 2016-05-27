@@ -467,7 +467,7 @@ class Hydra
     @bad_count += 1
   end
 
-  def reset_good_and_bad_counts
+  def clear_good_and_bad_counts
     @good_count = @bad_count = 0
   end
 
@@ -759,7 +759,7 @@ class Club
         else # FIXME else clear good and bad counts? – definitely ;-)
           unsure += 1
           hydra.chophead
-          hydra.reset_good_and_bad_counts
+          hydra.clear_good_and_bad_counts
         end
       end
       puts "#{good} good, #{hopeless} hopeless, #{unsure} unsure"
