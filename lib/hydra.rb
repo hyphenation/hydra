@@ -731,7 +731,11 @@ class Club
           # puts "#{s} (#{p})" if p
           hydra = count_hydra.read(currword)
           # byebug if s == "1er" || s == "1e2r" || currword == "er"
-          if lemma.break(dot) == good then hydra.inc_good_count else hydra.inc_bad_count end
+          # byebug if s == "2ck"
+          # byebug if s == "be1"
+          # byebug if s == "l1b"
+          # byebug if s == "1st"
+          if lemma.break(dot) == good then hydra.inc_good_count elsif lemma.break(dot) == bad then hydra.inc_bad_count end
           lemma.shift
         end
       end

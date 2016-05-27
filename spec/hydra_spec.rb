@@ -1683,6 +1683,24 @@ describe Heracles do
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Works now!
     end
+
+    it "runs a 20-word example" do
+      heracles = Heracles.new
+      hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      expect(hydra.digest).to eq ['a1c', 'a1d', 'e1n', 'e1s', 'l1b', 'l1d', '1le', 'n1d', '2ns', 'r1g', '1ri', 'u1e']
+    end
+
+    it "runs a 30-word example" do
+      heracles = Heracles.new
+      hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens', 'Aal-ent-nah-me', 'Aal-ent-nah-men', 'Aa-ler', 'Aa-les', 'Aal-eskor-te', 'Aal-eskor-ten', 'Aal-fang', 'Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      expect(hydra.digest).to eq ['a1c', 'a1d', 'b1n', 'e1n', '1ent', '2es.', 'h1m', 'l1b', 'l1d', '1le', '2lent', 'l1es', '2lesk', 'l1f', 'n1d', 'ng1', '2ns', '2nt', 'r1g', '1ri', 'r1t', 's1s', '1st', 't1n', 'u1e']
+    end
+
+    it "runs a 50-word example" do
+      heracles = Heracles.new
+      hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens', 'Aal-ent-nah-me', 'Aal-ent-nah-men', 'Aa-ler', 'Aa-les', 'Aal-eskor-te', 'Aal-eskor-ten', 'Aal-fang', 'Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf', 'Aal-mous-se', 'Aal-mut-ter', 'Aal-re-gat-ta', 'Aal-reu-sen', 'Aal-räu-che-rei', 'Aal-räu-che-rei-en', 'Aals', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aal-stra-ße', 'Aal-stras-se'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      expect(hydra.digest).to eq ['a1c', 'a1d', 'a1ß', 'b1n', 'e1g', 'e1n', '1ent', '2es.', 'h1m', 'i1e', 'i1l', 'k1k', 'l1b', 'l1d', '1le', '2lent', 'l1es', '2lesk', 'l1f', 'l1g', 'l1h', 'l1k', 'l1m', 'l1r', 'l1s', 'n1d', 'ng1', '2ns', '2nt', '1re', 'r1g', '1ri', 'r1t', '1sc', '1se', '2s1m', 's1s', '1st', '2st.', 'te1', 't1n', 't1t', 'u1c', 'u1e'] # Works now!
+    end
   end
 
   describe '.organ' do
