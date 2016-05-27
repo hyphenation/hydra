@@ -743,7 +743,7 @@ class Club
       hopeless = good = unsure = 0
       n = 0
       # byebug
-      puts "pat_len = #{@pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that
+      puts "hyph_level = #{@hyphenation_level}, pat_len = #{@pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that # And TODO: Output that to a “device” so that by default it doesn’t clutter the standard output.
       # print "count_hydra: "
       count_hydra.each do |hydra|
         # byebug if hydra.pattern.to_s == "1er" || hydra.pattern.to_s == "e1r"
