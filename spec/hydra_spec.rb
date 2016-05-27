@@ -1591,6 +1591,18 @@ describe Heracles do
       out.close
       expect(hydra.count).to eq 83
     end
+
+    it "runs a large file" do
+      heracles = Heracles.new
+      hydra = heracles.run_file(File.expand_path('../../files/10k.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      expect(hydra).to be_a Hydra
+      pattfile = File.open(File.expand_path('../../files/10k.patterns', __FILE__), 'w')
+      hydra.each do |node|
+        pattfile.puts(node.pattern.to_s)
+      end
+      pattfile.close
+      expect(hydra.count).to eq 1619
+    end
   end
 
   describe '#run' do
