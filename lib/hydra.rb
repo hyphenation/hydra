@@ -810,3 +810,10 @@ class Heracles
     end
   end
 end
+
+class Labour
+  def parse_translate(filename)
+    line = File.read(filename, 4)
+    [line[1].to_i, line[3].to_i]
+  end
+end

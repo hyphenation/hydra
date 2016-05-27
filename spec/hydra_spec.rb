@@ -1780,3 +1780,13 @@ describe Heracles do
     end
   end
 end
+
+describe Labour do
+  describe '#parse_translate' do
+    it "parses the translate file.  Or rather just the first line" do
+      labour = Labour.new
+      hyphenmins = labour.parse_translate(File.expand_path('../../files/german.tr', __FILE__))
+      expect(hyphenmins).to eq [2, 2]
+    end
+  end
+end
