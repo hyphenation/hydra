@@ -1592,7 +1592,7 @@ describe Heracles do
       expect(hydra.count).to eq 83
     end
 
-    it "runs a large file" do
+    it "runs a large file", slow: true do
       heracles = Heracles.new
       hydra = heracles.run_file(File.expand_path('../../files/10k.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra).to be_a Hydra
