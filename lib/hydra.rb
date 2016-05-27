@@ -672,12 +672,15 @@ class Hydra
 end
 
 class Club
-  def initialize(hyph_level = 1, pat_length = 2, good = 1, bad = 1, thresh = 1)
+  def initialize(hyph_level = 1, pat_length = 2, good = 1, bad = 1, thresh = 1, output = $stdout)
     @hyphenation_level = hyph_level
     @pattern_length = pat_length
     @good_weight = good
     @bad_weight = bad
     @threshold = thresh
+
+    @output = output
+    @output.puts "Generating one pass ..."
   end
 
   def good
@@ -743,7 +746,7 @@ class Club
       hopeless = good = unsure = 0
       n = 0
       # byebug
-      puts "hyph_level = #{@hyphenation_level}, pat_len = #{@pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that # And TODO: Output that to a “device” so that by default it doesn’t clutter the standard output.
+      @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{@pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that # And TODO: Output that to a “device” so that by default it doesn’t clutter the standard output.
       # print "count_hydra: "
       count_hydra.each do |hydra|
         # byebug if hydra.pattern.to_s == "1er" || hydra.pattern.to_s == "e1r"
@@ -762,7 +765,7 @@ class Club
           hydra.clear_good_and_bad_counts
         end
       end
-      puts "#{good} good, #{hopeless} hopeless, #{unsure} unsure"
+      @output.puts "#{good} good, #{hopeless} hopeless, #{unsure} unsure"
     end
 
     final_hydra
@@ -770,6 +773,11 @@ class Club
 end
 
 class Heracles
+  def initialize(output = $stdout)
+    @output = output
+    @output.puts "This is Hydra, a Ruby implementation of patgen"
+  end
+
   def run_file(filename, parameters = [], hyphenmins = [2, 3])
     run(File.read(filename).split("\n"), parameters, hyphenmins)
   end
@@ -786,7 +794,7 @@ class Heracles
       bad_weight = parameters.shift
       threshold = parameters.shift
       (pattern_length_start..pattern_length_end).each do |pattern_length|
-        club = Club.new(hyphenation_level, pattern_length, good_weight, bad_weight, threshold)
+        club = Club.new(hyphenation_level, pattern_length, good_weight, bad_weight, threshold, @output)
         @final_hydra = club.pass(array, count_hydra, @final_hydra, hyphenmins)
       end
     end

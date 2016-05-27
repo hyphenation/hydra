@@ -1540,10 +1540,26 @@ describe Hydra do
 end
 
 describe Club do
+  let(:output) { double("output device").as_null_object }
+  let(:club) { Club.new(1, 2, 1, 1, 1, output) }
+
+  describe '.initialize' do
+    it "creates a Club" do
+      club = Club.new(1, 2, 1, 1, 1, output)
+      expect(club).to be_a Club
+    end
+
+    it "takes an optional device as argument" do
+      fd = IO.sysopen('/dev/null', 'w')
+      output = IO.new(fd)
+      expect(output).to receive(:puts).with("Generating one pass ...")
+      Club.new(1, 2, 1, 1, 1, output)
+    end
+  end
+
   describe '#pass' do
     it "runs through a dictionary" do
-      club = Club.new(1, 2, 1, 1, 1)
-      hydra = Hydra.new
+      hydra = Hydra.new(output)
       final = club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra)
       expect(final).to be_a Hydra
       expect(final.digest).to eq ['b1c', '1de', 'd1f', 'g1h']
@@ -1552,29 +1568,25 @@ describe Club do
 
   describe '#good' do
     it "returns :is when hyphenation level is odd" do
-      heracles = Club.new
-      heracles.instance_variable_set :@hyphenation_level, 1
-      expect(heracles.good).to be == :is
+      club.instance_variable_set :@hyphenation_level, 1
+      expect(club.good).to be == :is
     end
 
     it "returns :err when hyphenation level is even" do
-      heracles = Club.new
-      heracles.instance_variable_set :@hyphenation_level, 2
-      expect(heracles.good).to be == :err
+      club.instance_variable_set :@hyphenation_level, 2
+      expect(club.good).to be == :err
     end
   end
 
   describe '#bad' do
     it "returns :no when hyphenation level is odd" do
-      heracles = Club.new
-      heracles.instance_variable_set :@hyphenation_level, 1
-      expect(heracles.bad).to be == :no
+      club.instance_variable_set :@hyphenation_level, 1
+      expect(club.bad).to be == :no
     end
 
     it "returns :hyph when hyphenation level is even" do
-      heracles = Club.new
-      heracles.instance_variable_set :@hyphenation_level, 2
-      expect(heracles.bad).to be == :found
+      club.instance_variable_set :@hyphenation_level, 2
+      expect(club.bad).to be == :found
     end
   end
 end
@@ -1582,16 +1594,30 @@ end
 describe Heracles do
   let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
   let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
+  let(:output) { double("null output").as_null_object }
+  let(:heracles) { Heracles.new(output) }
+
+  describe '.new' do
+    it "creates an instance of Heracles" do
+      heracles = Heracles.new(output)
+      expect(heracles).to be_a Heracles
+    end
+
+    it "takes an optional device as argument" do
+      fd = IO.sysopen('/dev/null', 'w')
+      io = IO.new(fd)
+      expect(io).to receive(:puts).with("This is Hydra, a Ruby implementation of patgen")
+      heracles = Heracles.new(io)
+    end
+  end
 
   describe '#run_file' do
     it "runs a file of hyphenated words" do
-      heracles = Heracles.new
       hydra = heracles.run_file(File.expand_path('../../files/dummy1.dic', __FILE__), [1, 1, 2, 2, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
 
     it "runs a slightly longer file" do
-      heracles = Heracles.new
       hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra).to be_a Hydra
       out = File.open(File.expand_path('../../files/100.out2.utf8', __FILE__), 'w')
@@ -1643,107 +1669,98 @@ describe Heracles do
     it "runs an array of hyphenated words" do
       dictionary = ['ab-cd-de-fg-hi', 'ab-cd-de', 'ab-cd', 'b-c', 'd-d', 'e-f']
       dictionary.map! { |word| word = 'xx' + word + 'xxx' } # TODO Helper function for that
-      heracles = Heracles.new
       hydra = heracles.run(dictionary, [1, 1, 2, 2, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
     end
 
     it "correctly ignores commments" do
       dictionary = ['xxa-b-cxxx % f-o-o', 'xxab-cd-fg-hixxx % b-a-r', 'xxabc-defxxx % baz quux', '% I’m a c-o-m-m-e-n-t']
-      heracles = Heracles.new
       hydra = heracles.run(dictionary, [1, 1, 2, 2, 1, 1, 1])
       expect(hydra.digest).to eq ['b1c', '1de', 'd1f', 'g1h']
     end
 
     it "runs a slightly more complex list of words" do
-      heracles = Heracles.new
       hydra = heracles.run(complex_dictionary, [1, 1, 2, 5, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '1efghx', '1ex', 'f1g']
     end
 
     it "handles hyphenmins correctly" do
       dictionary = ['a-b', 'a-b-cxxx']
-      hydra = Heracles.new.run(dictionary, [1, 1, 2, 5, 1, 1, 1])
+      hydra = heracles.run(dictionary, [1, 1, 2, 5, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c']
     end
 
     it "handles hyphenmins correctly on a more complex example" do
       dictionary = ['a-b', 'a-b-c', 'a-b-c-d', 'a-b-c-d-e', 'a-b-c-d-e-f', 'a-b-c-d-e-f-g', 'a-b-c-d-e-f-g-h']
-      hydra = Heracles.new.run(dictionary, [1, 1, 2, 5, 1, 1, 1])
+      hydra = heracles.run(dictionary, [1, 1, 2, 5, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', 'c1d', 'd1e', 'e1f']
     end
 
     it "generates level 2" do
-      hydra = Heracles.new.run(complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
+      hydra = heracles.run(complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
     end
 
     it "generates level 3" do
-      hydra = Heracles.new.run(complex_dictionary, [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1])
+      hydra = heracles.run(complex_dictionary, [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
     end
 
     it "generates level 4" do
-      hydra = Heracles.new.run(complex_dictionary, [1, 4, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1])
+      hydra = heracles.run(complex_dictionary, [1, 4, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
     end
 
     it "generates level 5" do
-      hydra = Heracles.new.run(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1])
+      hydra = heracles.run(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
     end
 
     it "generates level 6" do
-      hydra = Heracles.new.run(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1])
+      hydra = heracles.run(complex_dictionary, [1, 5, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '4defghx', '2dx', '1efghx', '1ex', 'f1g']
     end
 
     it "runs a very small extract of a real-life file" do
-      hydra = Heracles.new.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.count).to eq 12
       expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
     end
 
     it "runs a to level 3" do
-      hydra = Heracles.new.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1], [2, 2])
+      hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1], [2, 2])
       expect(hydra.count).to eq 12
       expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
     end
 
     it "runs a somewhat smarter extract" do
-      heracles = Heracles.new
       hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.count).to eq 16
       expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
     end
 
     it "runs to level 1 only" do # Level 1 now works, let’s check the rest
-      heracles = Heracles.new
       hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 1, 2, 5, 1, 1, 1], [2, 2])
       expect(hydra.count).to eq 16
       expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
     end
 
     it "runs yet another example" do
-      heracles = Heracles.new
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Works now!
     end
 
     it "runs a 20-word example" do
-      heracles = Heracles.new
       hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['a1c', 'a1d', 'e1n', 'e1s', 'l1b', 'l1d', '1le', 'n1d', '2ns', 'r1g', '1ri', 'u1e']
     end
 
     it "runs a 30-word example" do
-      heracles = Heracles.new
       hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens', 'Aal-ent-nah-me', 'Aal-ent-nah-men', 'Aa-ler', 'Aa-les', 'Aal-eskor-te', 'Aal-eskor-ten', 'Aal-fang', 'Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['a1c', 'a1d', 'b1n', 'e1n', '1ent', '2es.', 'h1m', 'l1b', 'l1d', '1le', '2lent', 'l1es', '2lesk', 'l1f', 'n1d', 'ng1', '2ns', '2nt', 'r1g', '1ri', 'r1t', 's1s', '1st', 't1n', 'u1e']
     end
 
     it "runs a 50-word example" do
-      heracles = Heracles.new
       hydra = heracles.run(['Aa-chen', 'Aa-che-ner', 'Aa-che-ne-rin', 'Aa-che-nern', 'Aa-che-ners', 'Aa-chens', 'Aa-dorf', 'Aal-bau-er', 'Aal-beck', 'Aal-be-stand', 'Aal-be-stän-de', 'Aal-borg', 'Aal-bor-ger', 'Aal-ders', 'Aa-le', 'Aa-len', 'Aa-le-ner', 'Aa-le-nern', 'Aa-le-ners', 'Aa-lens', 'Aal-ent-nah-me', 'Aal-ent-nah-men', 'Aa-ler', 'Aa-les', 'Aal-eskor-te', 'Aal-eskor-ten', 'Aal-fang', 'Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf', 'Aal-mous-se', 'Aal-mut-ter', 'Aal-re-gat-ta', 'Aal-reu-sen', 'Aal-räu-che-rei', 'Aal-räu-che-rei-en', 'Aals', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aal-stra-ße', 'Aal-stras-se'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['a1c', 'a1d', 'a1ß', 'b1n', 'e1g', 'e1n', '1ent', '2es.', 'h1m', 'i1e', 'i1l', 'k1k', 'l1b', 'l1d', '1le', '2lent', 'l1es', '2lesk', 'l1f', 'l1g', 'l1h', 'l1k', 'l1m', 'l1r', 'l1s', 'n1d', 'ng1', '2ns', '2nt', '1re', 'r1g', '1ri', 'r1t', '1sc', '1se', '2s1m', 's1s', '1st', '2st.', 'te1', 't1n', 't1t', 'u1c', 'u1e'] # Works now!
     end
