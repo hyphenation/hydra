@@ -812,8 +812,36 @@ class Heracles
 end
 
 class Labour
+  class InvalidInput < StandardError
+  end
+
+  def initialize(dictionary = '/dev/zero', input_patterns = '/dev/zero', output_patterns = '/dev/null', translate = '/dev/zero', device = $stdout)
+    @dictionary = dictionary
+    @input_patterns = input_patterns
+    @output_patterns = output_patterns
+    @translate = translate
+    @device = device
+    raise InvalidInput unless File.exists?(@dictionary)
+    raise InvalidInput unless File.exists?(@input_patterns)
+    raise InvalidInput unless Dir.exists?(File.dirname(@output_patterns))
+    raise InvalidInput unless File.exists?(@translate)
+  end
+
   def parse_translate(filename)
     line = File.read(filename, 4)
     [line[1].to_i, line[3].to_i]
+  end
+
+  def run(parameters)
+    hyphenmins = parse_translate(@translate)
+    @lefthyphenmin = hyphenmins.first
+    @righthyphenmin = hyphenmins.last
+    @heracles = Heracles.new(@device)
+    @hydra = @heracles.run_file(@dictionary, parameters, hyphenmins)
+    output = File.open(@output_patterns, 'w')
+    output.write(@hydra.digest.join "\n")
+    output.close
+
+    @hydra
   end
 end

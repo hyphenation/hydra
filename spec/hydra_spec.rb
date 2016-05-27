@@ -1782,11 +1782,49 @@ describe Heracles do
 end
 
 describe Labour do
+  let(:output) { double("output device").as_null_object }
+  let(:dictionary) { File.expand_path('../../files/words.hyphenated.refo', __FILE__) }
+  let(:empty_file) { File.expand_path('../../files/empty', __FILE__) }
+  let(:output_patterns) { '/tmp/output' }
+  let(:translate) { File.expand_path('../../files/german.tr', __FILE__) }
+
+  describe '.initialize' do
+    it "sets the four command-line parameters" do
+      labour = Labour.new(dictionary, empty_file, output_patterns, translate)
+    end
+
+    it "can optionally be called without any argument" do
+      labour = Labour.new
+      expect(labour).to be_a Labour
+    end
+
+    it "can also be called with a fifth argument to redirect the output" do
+      fd = IO.sysopen('/dev/null', 'w')
+      device = IO.new(fd)
+      labour = Labour.new(dictionary, empty_file, output_patterns, translate, device)
+    end
+
+    it "raises an exception if called to operate on an inexistent file" do
+      expect { labour = Labour.new('/some/file/that/does/not/exist') }.to raise_exception Labour::InvalidInput
+    end
+  end
+
   describe '#parse_translate' do
     it "parses the translate file.  Or rather just the first line" do
       labour = Labour.new
       hyphenmins = labour.parse_translate(File.expand_path('../../files/german.tr', __FILE__))
       expect(hyphenmins).to eq [2, 2]
+    end
+  end
+
+  describe '#run' do
+    it "runs the pattern generator" do
+      labour = Labour.new('files/100.dic.utf8', 'files/empty', '/tmp/output', 'files/german.tr', output)
+      hydra = labour.run([1, 1, 2, 5, 1, 1, 1])
+      expect(hydra).to be_a Hydra
+      expect(hydra.count).to eq 71
+      output = File.read('/tmp/output')
+      expect(output).to eq hydra.digest.join "\n"
     end
   end
 end
