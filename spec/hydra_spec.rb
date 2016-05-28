@@ -1652,13 +1652,13 @@ describe Club do
 
   describe '#knockout' do
     it "knocks out a position" do
-      club.knockout([{ line: 12, column: 3, dot: 2 }])
-      expect(club.instance_variable_get :@knockouts).to eq([12, 3] => 2)
+      club.knockout([{ line: 12, column: 3, dot: 2, length: 5 }])
+      expect(club.instance_variable_get :@knockouts).to eq([12, 3] => [2, 5])
     end
 
     it "can knock out several locations at once"  do
-      club.knockout([{ line: 5, column: 7, dot: 3 }, { line: 12, column: 3, dot: 2 }])
-      expect(club.instance_variable_get :@knockouts).to eq([5, 7] => 3, [12, 3] => 2)
+      club.knockout([{ line: 5, column: 7, dot: 1, length: 2 }, { line: 12, column: 3, dot: 2, length: 5 }])
+      expect(club.instance_variable_get :@knockouts).to eq([5, 7] => [1, 2], [12, 3] => [2, 5])
     end
   end
 end
@@ -1819,7 +1819,7 @@ describe Heracles do
 
     it "runs yet another example" do
       heracles = Heracles.new
-      hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
+      hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 1, 2, 2, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Works now!
     end
 
