@@ -1601,11 +1601,11 @@ end
 
 describe Club do
   let(:output) { double("output device").as_null_object }
-  let(:club) { Club.new(1, 2, 1, 1, 1, output) }
+  let(:club) { Club.new(1, [2, 5], 1, 1, 1, output) }
 
   describe '.initialize' do
     it "creates a Club" do
-      club = Club.new(1, 2, 1, 1, 1, output)
+      club = Club.new(1, [2, 5], 1, 1, 1, output)
       expect(club).to be_a Club
     end
 
@@ -1613,7 +1613,7 @@ describe Club do
       fd = IO.sysopen('/dev/null', 'w')
       output = IO.new(fd)
       expect(output).to receive(:puts).with("Generating one pass ...")
-      Club.new(1, 2, 1, 1, 1, output)
+      Club.new(1, [2, 5], 1, 1, 1, output)
     end
   end
 
@@ -1622,7 +1622,7 @@ describe Club do
       hydra = Hydra.new(output)
       final = club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra)
       expect(final).to be_a Hydra
-      expect(final.digest).to eq ['b1c', '1de', 'd1f', 'g1h']
+      expect(final.digest).to eq ['b1c', '1bcx', '1de', 'd1f', 'g1h']
     end
   end
 
