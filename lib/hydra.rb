@@ -716,6 +716,7 @@ class Club
 
   def knockout(locations)
     locations.each do |location|
+      # byebug if location[:line] == 1 && location[:column] + location[:dot] == 2
       @knockouts[[location[:line], location[:column] + location[:dot]]] = [location[:column], location[:length]]
     end
   end
@@ -744,13 +745,15 @@ class Club
           word_end = hyph_end if word_end > hyph_end
           lemma.reset(word_start - dot)
           (word_start..word_end).each do |column|
-            knocks = @knockouts[[lineno, column + dot]]
+            knocks = @knockouts[[lineno, lemma.cursor + dot]]
             # byebug if 
             if knocks
               knockcol = knocks.first
               knocklen = knocks.last
-              if column <= knockcol && knockcol + knocklen <= column + pattern_length
-                @output.puts "Position may be knocked out!"
+              if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
+                # byebug
+                # @output.puts "Position knocked out!"
+                # next
               end
             end
             currword = lemma.word_to(pattern_length)
@@ -764,7 +767,8 @@ class Club
             p = patterns[s]
             # puts "#{s} (#{p})" if p
             hydra = count_hydra.read(currword)
-            hydra.add_source(line: lineno, column: column, dot: dot, length: pattern_length)
+            # byebug if s == "a1c" || s == "a1ch"
+            hydra.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
             # byebug if s == "1er" || s == "1e2r" || currword == "er"
             # byebug if s == "2ck"
             # byebug if s == "be1"
@@ -791,6 +795,7 @@ class Club
             # hydra.reset_good_and_bad_counts
           elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
             good += 1
+            # byebug if hydra.pattern.to_s == "a1c"
             knockout(hydra.sources)
             final_hydra.transplant hydra
           else # FIXME else clear good and bad counts? – definitely ;-)
