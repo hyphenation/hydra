@@ -715,7 +715,7 @@ class Club
 
   def knockout(locations)
     locations.each do |location|
-      @knockouts[[location[:line], location[:column] + location[:dot]]] = [location[:dot], location[:length]]
+      @knockouts[[location[:line], location[:column] + location[:dot]]] = location[:length]
     end
   end
 
@@ -742,8 +742,13 @@ class Club
         word_end = hyph_end if word_end > hyph_end
         lemma.reset(word_start - dot)
         (word_start..word_end).each do |column|
-          if @knockouts[[lineno, column]]
-            @output.puts "Position may be knocked out!"
+          knocks = @knockouts[[lineno, column + dot]]
+          if knocks
+            knockcol = knocks[:column]
+            knocklen = knocks[:length]
+            if column <= knockcol && knockcol + knocklen <= column + length
+              @output.puts "Position may be knocked out!"
+            end
           end
           currword = lemma.word_to(@pattern_length)
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)

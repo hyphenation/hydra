@@ -1653,12 +1653,12 @@ describe Club do
   describe '#knockout' do
     it "knocks out a position" do
       club.knockout([{ line: 12, column: 3, dot: 2, length: 5 }])
-      expect(club.instance_variable_get :@knockouts).to eq([12, 5] => [2, 5])
+      expect(club.instance_variable_get :@knockouts).to eq([12, 5] => 5)
     end
 
     it "can knock out several locations at once"  do
       club.knockout([{ line: 5, column: 7, dot: 1, length: 2 }, { line: 12, column: 3, dot: 2, length: 5 }])
-      expect(club.instance_variable_get :@knockouts).to eq([5, 8] => [1, 2], [12, 5] => [2, 5])
+      expect(club.instance_variable_get :@knockouts).to eq([5, 8] => 2, [12, 5] => 5)
     end
   end
 end
