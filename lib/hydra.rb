@@ -782,6 +782,11 @@ class Club
             # byebug if n != p
             currword = lemma.word_to(pattern_length)
             count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
+            # byebug if count_pattern.to_s == "1bcdex"
+            if knocked2
+              lemma.shift
+              next
+            end
             count_hydra.ingest count_pattern
             hydra = count_hydra.read(currword)
             hydra.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)

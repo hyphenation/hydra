@@ -1792,6 +1792,7 @@ describe Heracles do
     end
 
     it "generates level 2" do
+      heracles = Heracles.new
       hydra = heracles.run(complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
     end
