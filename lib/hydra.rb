@@ -717,7 +717,9 @@ class Club
   def knockout(locations)
     locations.each do |location|
       # byebug if location[:line] == 1 && location[:column] + location[:dot] == 2
-      @knockouts[[location[:line], location[:column] + location[:dot]]] = [location[:column], location[:length]]
+      currpos = [location[:line], location[:column] + location[:dot]]
+      @knockouts[currpos] ||= []
+      @knockouts[currpos] << [location[:column], location[:length]]
     end
   end
 
@@ -748,12 +750,14 @@ class Club
             knocks = @knockouts[[lineno, lemma.cursor + dot]]
             # byebug if 
             if knocks
-              knockcol = knocks.first
-              knocklen = knocks.last
-              if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
-                # byebug
-                # @output.puts "Position knocked out!"
-                # next
+              knocks.each do |knock|
+                knockcol = knock.first
+                knocklen = knock.last
+                if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
+                  # byebug
+                  # @output.puts "Position knocked out!"
+                  # next
+                end
               end
             end
             currword = lemma.word_to(pattern_length)
