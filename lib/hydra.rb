@@ -715,7 +715,7 @@ class Club
 
   def knockout(locations)
     locations.each do |location|
-      @knockouts[[location[:line], location[:column] + location[:dot]]] = location[:length]
+      @knockouts[[location[:line], location[:column] + location[:dot]]] = [location[:column], location[:length]]
     end
   end
 
@@ -743,10 +743,11 @@ class Club
         lemma.reset(word_start - dot)
         (word_start..word_end).each do |column|
           knocks = @knockouts[[lineno, column + dot]]
+          # byebug if 
           if knocks
-            knockcol = knocks[:column]
-            knocklen = knocks[:length]
-            if column <= knockcol && knockcol + knocklen <= column + length
+            knockcol = knocks.first
+            knocklen = knocks.last
+            if column <= knockcol && knockcol + knocklen <= column + @pattern_length
               @output.puts "Position may be knocked out!"
             end
           end
