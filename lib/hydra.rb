@@ -735,7 +735,6 @@ class Club
         lineno = 0
         dictionary.each do |line|
           lineno += 1
-          # print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
           lemma = Lemma.new(UnicodeUtils.downcase(line.gsub(/%.*$/, '').strip))
           next unless lemma.length >= pattern_length
           final_hydra.prehyphenate(lemma)
@@ -748,13 +747,11 @@ class Club
           lemma.reset(word_start - dot)
           (word_start..word_end).each do |column|
             knocks = @knockouts[[lineno, lemma.cursor + dot]]
-            # byebug if 
             if knocks
               knocks.each do |knock|
                 knockcol = knock.first
                 knocklen = knock.last
                 if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
-                  # byebug
                   # @output.puts "Position knocked out!"
                   next
                 end
@@ -763,46 +760,25 @@ class Club
             currword = lemma.word_to(pattern_length)
             count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
             count_hydra.ingest count_pattern
-            patterns = { "a1k" => "good", "1ar" => "good", "e1c" => "good", "i1t" => "good", "k1k" => "good", "1len." => "good", "r1b" => "good", "s1b" => "good", "1se" => "good", "s1m" => "good", "t1n" => "good", # Intersection
-            "1ent" => "missing", "h1m" => "missing", "n1d" => "missing", "1sc" => "missing", "1ste" => "missing", # Missing
-            "l1e" => "spurious", "l1s" => "spurious", # Should no be there
-            }
-            s = count_pattern.to_s
-            p = patterns[s]
-            # puts "#{s} (#{p})" if p
             hydra = count_hydra.read(currword)
-            # byebug if s == "a1c" || s == "a1ch"
             hydra.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
-            # byebug if s == "1er" || s == "1e2r" || currword == "er"
-            # byebug if s == "2ck"
-            # byebug if s == "be1"
-            # byebug if s == "l1b"
-            # byebug if s == "1st"
             if lemma.break(dot) == good then hydra.inc_good_count elsif lemma.break(dot) == bad then hydra.inc_bad_count end
             lemma.shift
           end
         end
 
         hopeless = good = unsure = 0
-        n = 0
-        # byebug
-        @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that # And TODO: Output that to a “device” so that by default it doesn’t clutter the standard output.
-        # print "count_hydra: "
+        @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that
         count_hydra.each do |hydra|
-          # byebug if hydra.pattern.to_s == "1er" || hydra.pattern.to_s == "e1r"
-          n += 1
-          # print "\rcount_hydra: #{n}"
           if hydra.good_count * @good_weight < @threshold
             hopeless += 1
             knockout(hydra.sources)
             hydra.chophead
-            # hydra.reset_good_and_bad_counts
           elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
             good += 1
-            # byebug if hydra.pattern.to_s == "a1c"
             knockout(hydra.sources)
             final_hydra.transplant hydra
-          else # FIXME else clear good and bad counts? – definitely ;-)
+          else
             unsure += 1
             hydra.chophead
             hydra.clear_good_and_bad_counts
