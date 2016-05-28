@@ -693,6 +693,8 @@ class Club
 
     @output = output
     @output.puts "Generating one pass ..."
+
+    @knockouts = { }
   end
 
   def good
@@ -711,8 +713,10 @@ class Club
     end
   end
 
-  def self.knockout(location)
-    { [location[:line], location[:column]] => location[:dot] }
+  def knockout(locations)
+    locations.each do |location|
+      @knockouts[[location[:line], location[:column]]] = location[:dot]
+    end
   end
 
   def pass(dictionary, count_hydra, final_hydra = Hydra.new, hyphenmins = [2, 3])
@@ -721,8 +725,6 @@ class Club
       final_hydra.setlefthyphenmin(hyphenmins.first)
       final_hydra.setrighthyphenmin(hyphenmins.last)
     end
-
-    knockouts = { }
 
     Heracles.organ(@pattern_length).each do |dot|
       lineno = 0
@@ -740,6 +742,9 @@ class Club
         word_end = hyph_end if word_end > hyph_end
         lemma.reset(word_start - dot)
         (word_start..word_end).each do |column|
+          if @knockouts[[lineno, column]]
+            puts "Position may be knocked out!"
+          end
           currword = lemma.word_to(@pattern_length)
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
           count_hydra.ingest count_pattern
@@ -773,10 +778,12 @@ class Club
         # print "\rcount_hydra: #{n}"
         if hydra.good_count * @good_weight < @threshold
           hopeless += 1
+          knockout(hydra.sources)
           hydra.chophead
           # hydra.reset_good_and_bad_counts
         elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
           good += 1
+          knockout(hydra.sources)
           final_hydra.transplant hydra
         else # FIXME else clear good and bad counts? – definitely ;-)
           unsure += 1
