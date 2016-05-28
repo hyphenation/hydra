@@ -668,6 +668,24 @@ describe Pattern do
     end
   end
 
+  describe '#add_source' do
+    it "adds one source for the pattern being inserted" do
+      hydra = Hydra.new
+      hydra.add_source [242, 3]
+      expect(hydra.instance_variable_get :@sources).to eq [[242, 3]]
+    end
+  end
+
+  describe '#sources' do
+    it "returns the sources for the current hydra node" do
+      hydra = Hydra.new
+      hydra.add_source [10, 3]
+      hydra.add_source [15, 5]
+      hydra.add_source [20, 7]
+      expect(hydra.sources).to eq [[10, 3], [15, 5], [20, 7]]
+    end
+  end
+
   describe '#showhyphens' do
     it "shows the current hyphens" do
       pattern = Pattern.new 'fo2o3bar5qu6ux'

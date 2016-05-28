@@ -473,6 +473,15 @@ class Hydra
     @good_count = @bad_count = 0
   end
 
+  def add_source(source)
+    @sources ||= []
+    @sources << source
+  end
+
+  def sources
+    @sources
+  end
+
   def letters
     @necks.keys
   end
