@@ -960,6 +960,14 @@ describe Hydra do
       expect(neck.good_count).to eq 0
       expect(neck.bad_count).to eq 0
     end
+
+    it "clears the sources" do
+      hydra.ingest ['bac', 'def']
+      neck = hydra.read('bac')
+      neck.add_source(foo: 'bar', baz: 'quux')
+      neck.chophead
+      expect(neck.sources).to be_nil
+    end
   end
 
   describe '#chopneck' do
@@ -1639,6 +1647,13 @@ describe Club do
     it "returns :hyph when hyphenation level is even" do
       club.instance_variable_set :@hyphenation_level, 2
       expect(club.bad).to be == :found
+    end
+  end
+
+  describe '.knockout' do
+    it "knocks out a position" do
+      position = Club.knockout(line: 12, column: 3, dot: 2)
+      expect(position).to eq([12, 3] => 2)
     end
   end
 end

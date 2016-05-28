@@ -437,6 +437,7 @@ class Hydra
     @head = nil
     @good_count = 0
     @bad_count = 0
+    @sources = nil
     propagate_chop
   end
 
@@ -710,6 +711,10 @@ class Club
     end
   end
 
+  def self.knockout(location)
+    { [location[:line], location[:column]] => location[:dot] }
+  end
+
   def pass(dictionary, count_hydra, final_hydra = Hydra.new, hyphenmins = [2, 3])
     unless final_hydra # TODO Document that
       final_hydra = Hydra.new
@@ -717,10 +722,12 @@ class Club
       final_hydra.setrighthyphenmin(hyphenmins.last)
     end
 
+    knockouts = { }
+
     Heracles.organ(@pattern_length).each do |dot|
-      n = 0
+      lineno = 0
       dictionary.each do |line|
-        n += 1
+        lineno += 1
         # print "\rRunning dictionary: pattern_length = #{@pattern_length}, dot = #{dot}, #{n}"
         lemma = Lemma.new(UnicodeUtils.downcase(line.gsub(/%.*$/, '').strip))
         next unless lemma.length >= @pattern_length
@@ -732,7 +739,7 @@ class Club
         word_start = hyph_start if word_start < hyph_start
         word_end = hyph_end if word_end > hyph_end
         lemma.reset(word_start - dot)
-        (word_start..word_end).each do |foo|
+        (word_start..word_end).each do |column|
           currword = lemma.word_to(@pattern_length)
           count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
           count_hydra.ingest count_pattern
@@ -744,6 +751,7 @@ class Club
           p = patterns[s]
           # puts "#{s} (#{p})" if p
           hydra = count_hydra.read(currword)
+          hydra.add_source(line: lineno, column: column, dot: dot)
           # byebug if s == "1er" || s == "1e2r" || currword == "er"
           # byebug if s == "2ck"
           # byebug if s == "be1"
