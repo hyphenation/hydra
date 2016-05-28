@@ -767,7 +767,7 @@ class Club
                   # @output.puts "Position knocked out!"
                   n += 1
                   knocked1 = true
-                  next
+                  break
                 end
               end
             end
@@ -778,6 +778,8 @@ class Club
             end
             byebug unless knocked1 == knocked2
             p += 1 if knocked2
+            # byebug if n == 1
+            # byebug if n != p
             currword = lemma.word_to(pattern_length)
             count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
             count_hydra.ingest count_pattern
