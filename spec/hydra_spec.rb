@@ -1718,7 +1718,7 @@ describe Heracles do
       expect(hydra.count).to eq 1619
     end
 
-    it "runs a full set of hyphenation levels on a small file", slow: true do
+    it "runs a full set of hyphenation levels on a small file", slow: true do # Works with knockouts now!
       heracles = Heracles.new
       hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1], [2, 2])
       expect(hydra).to be_a Hydra

@@ -1,5 +1,5 @@
 pattern.ruby.1,2: About 8 minutes to generate
 pattern.ruby.1: 1 hours 1 minute (full level 1)
 10k.patterns (ruby_spec:1703): 3 minutes 53 seconds
-100.pattern.ruby.9 (spec/hydra_spec.rb:1715): Around 10.50 seconds with commit c8e8926, but wrong patterns!
+100.pattern.ruby.9 (spec/hydra_spec.rb:1721): Just over 16 seconds with commit 0748661
 10k.pattern.ruby.9 (ruby_spec:1727): 45 minutes 53

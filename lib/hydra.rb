@@ -756,7 +756,7 @@ class Club
                 if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
                   # byebug
                   # @output.puts "Position knocked out!"
-                  # next
+                  next
                 end
               end
             end
