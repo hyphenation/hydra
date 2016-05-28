@@ -1667,6 +1667,23 @@ describe Club do
       expect(positions).to eq([1, 2] => [[1, 2], [0, 2]])
     end
   end
+
+  describe '#knocked_out?' do
+    it "tells whether a position is knocked out or not" do
+      club.knockout([{ line: 6, column: 1, dot: 1, length: 2 }])
+      expect(club.knocked_out? 6, 1, 1, 3).to be_truthy
+    end
+
+    it "says no when it is not" do
+      club.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
+      expect(club.knocked_out? 1, 2, 0, 3).to be_falsey
+    end
+
+    it "says no when it is definitely not" do
+      club.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
+      expect(club.knocked_out? 2, 0, 2, 3).to be_falsey
+    end
+  end
 end
 
 describe Heracles do
@@ -1824,6 +1841,7 @@ describe Heracles do
     end
 
     it "runs yet another example" do
+      heracles = Heracles.new
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Works now!
     end

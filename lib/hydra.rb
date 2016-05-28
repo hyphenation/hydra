@@ -723,6 +723,15 @@ class Club
     end
   end
 
+  def knocked_out?(lineno, column, dot, length)
+    knocks = @knockouts[[lineno, column + dot]]
+    knocks && knocks.any? do |knock|
+      knockcol = knock.first
+      knocklen = knock.last
+      column <= knockcol && knockcol + knocklen <= column + length
+    end
+  end
+
   def pass(dictionary, count_hydra, final_hydra = Hydra.new, hyphenmins = [2, 3])
     unless final_hydra # TODO Document that
       final_hydra = Hydra.new
@@ -730,6 +739,8 @@ class Club
       final_hydra.setrighthyphenmin(hyphenmins.last)
     end
 
+    n = 0
+    p = 0
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
       Heracles.organ(pattern_length).each do |dot|
         lineno = 0
@@ -746,6 +757,7 @@ class Club
           word_end = hyph_end if word_end > hyph_end
           lemma.reset(word_start - dot)
           (word_start..word_end).each do |column|
+            knocked1 = knocked2 = false
             knocks = @knockouts[[lineno, lemma.cursor + dot]]
             if knocks
               knocks.each do |knock|
@@ -753,10 +765,19 @@ class Club
                 knocklen = knock.last
                 if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
                   # @output.puts "Position knocked out!"
+                  n += 1
+                  knocked1 = true
                   next
                 end
               end
             end
+            if knocked_out? lineno, lemma.cursor, dot, pattern_length
+               #byebug
+              @output.puts "Position knocked out!"
+              knocked2 = true
+            end
+            byebug unless knocked1 == knocked2
+            p += 1 if knocked2
             currword = lemma.word_to(pattern_length)
             count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
             count_hydra.ingest count_pattern
@@ -787,6 +808,7 @@ class Club
         @output.puts "#{good} good, #{hopeless} hopeless, #{unsure} unsure"
       end
     end
+    puts "Skipped #{n} locations, #{p} marked as knocked" # 963, 270 respectively for spec:1627
 
     final_hydra
   end
