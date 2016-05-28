@@ -715,7 +715,7 @@ class Club
 
   def knockout(locations)
     locations.each do |location|
-      @knockouts[[location[:line], location[:column]]] = [location[:dot], location[:length]]
+      @knockouts[[location[:line], location[:column] + location[:dot]]] = [location[:dot], location[:length]]
     end
   end
 
