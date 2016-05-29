@@ -1603,7 +1603,23 @@ describe Heracles do
   let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
   let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
   let(:output) { double("null output").as_null_object }
-  let(:heracles) { Heracles.new([1, 1, 2, 5, 1, 1, 1], output) }
+  let(:heracles) { Heracles.new(output) }
+
+  # TODO A standard_parameters method that yields on demand
+
+  describe '.new' do
+    it "creates an instance of Heracles" do
+      heracles = Heracles.new(output)
+      expect(heracles).to be_a Heracles
+    end
+
+    it "takes an optional device as argument" do
+      fd = IO.sysopen('/dev/null', 'w')
+      io = IO.new(fd)
+      expect(io).to receive(:puts).with("This is Hydra, a Ruby implementation of patgen")
+      heracles = Heracles.new(io)
+    end
+  end
 
   describe '#pass' # TODO
 
@@ -1663,20 +1679,6 @@ describe Heracles do
     it "says no when it is definitely not" do
       heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
       expect(heracles.knocked_out? 2, 0, 2, 3).to be_falsey
-    end
-  end
-
-  describe '.new' do
-    it "creates an instance of Heracles" do
-      heracles = Heracles.new([1, 1, 2, 5, 1, 1, 1], output)
-      expect(heracles).to be_a Heracles
-    end
-
-    it "takes an optional device as argument" do
-      fd = IO.sysopen('/dev/null', 'w')
-      io = IO.new(fd)
-      expect(io).to receive(:puts).with("This is Hydra, a Ruby implementation of patgen")
-      heracles = Heracles.new([1, 1, 2, 5, 1, 1, 1], io)
     end
   end
 

@@ -684,7 +684,7 @@ class Hydra
 end
 
 class Heracles
-  def initialize(parameters = [1, 1, 2, 5, 1, 1, 1], output = $stdout)
+  def initialize(output = $stdout)
     @output = output
     @output.puts "This is Hydra, a Ruby implementation of patgen"
 
@@ -693,13 +693,13 @@ class Heracles
     @knockouts = { }
   end
 
-  def set_parameters(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, hyphenmins = [2, 3], output = $stdout)
-    @hyphenation_level = hyph_level
-    @pattern_length_start = pat_lens.first
-    @pattern_length_end = pat_lens.last
-    @good_weight = good
-    @bad_weight = bad
-    @threshold = thresh
+  def set_parameters(hyphenmins = [2, 3], parameters = [1, 2, 5, 1, 1, 1], output = $stdout)
+    @hyphenation_level = parameters.shift
+    @pattern_length_start = parameters.shift
+    @pattern_length_end = parameters.shift
+    @good_weight = parameters.shift
+    @bad_weight = parameters.shift
+    @threshold = parameters.shift
   end
 
   def good
@@ -756,14 +756,8 @@ class Heracles
     @output.puts "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
   end
 
-  def pass(dictionary, final_hydra = Hydra.new, hyphenmins = [2, 3])
+  def pass(dictionary)
     @output.puts "Generating one pass ..."
-    @final_hydra = final_hydra
-    unless @final_hydra # TODO Document that
-      @final_hydra = Hydra.new
-      @final_hydra.setlefthyphenmin(hyphenmins.first)
-      @final_hydra.setrighthyphenmin(hyphenmins.last)
-    end
 
     @knockouts = { }
 
@@ -805,8 +799,6 @@ class Heracles
         collect_patterns
       end
     end
-
-    @final_hydra
   end
 
   def run_file(filename, parameters = [], hyphenmins = [2, 3])
@@ -814,6 +806,9 @@ class Heracles
   end
 
   def run(array, parameters = [], hyphenmins = [2, 3])
+    @final_hydra = Hydra.new
+    @final_hydra.setlefthyphenmin(hyphenmins.first)
+    @final_hydra.setrighthyphenmin(hyphenmins.last)
     hyphenation_level_start = parameters.shift
     hyphenation_level_end = parameters.shift
 
@@ -824,8 +819,8 @@ class Heracles
       bad_weight = parameters.shift
       threshold = parameters.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
-      set_parameters(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, hyphenmins, @output)
-      @final_hydra = pass(array, @final_hydra, hyphenmins)
+      set_parameters(hyphenmins, [hyphenation_level, pattern_length_start, pattern_length_end, good_weight, bad_weight, threshold])
+      pass(array)
     end
 
     @final_hydra
@@ -865,7 +860,7 @@ class Labour
     hyphenmins = parse_translate(@translate)
     @lefthyphenmin = hyphenmins.first
     @righthyphenmin = hyphenmins.last
-    @heracles = Heracles.new(parameters, @device)
+    @heracles = Heracles.new(@device)
     @hydra = @heracles.run_file(@dictionary, parameters, hyphenmins)
     output = File.open(@output_patterns, 'w')
     output.write(@hydra.digest.join "\n")
