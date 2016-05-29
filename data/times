@@ -1,6 +1,6 @@
-Full suite: 2.87s with commit 3c88f41
+Full suite: 3.2s with commit be27ac3
 pattern.ruby.1,2: About 8 minutes to generate
 pattern.ruby.1: 1 hours 1 minute (full level 1)
-10k.patterns (ruby_spec:1726): 2 minutes 9.9 seconds with commit 3c88f41 (1.49s with patgen)
-100.pattern.ruby.9 (spec/hydra_spec.rb:1738): Exactly 6.53 seconds with commit 3c88f41 (as low as 6.3s oft)
-10k.pattern.ruby.9 (ruby_spec:1750): 29 minutes 27 seconds with commit aac5765.  Lots of printout!
+10k.patterns (ruby_spec:1726): 2 minutes 9.3 seconds with commit be27ac3 (1.49s with patgen)
+100.pattern.ruby.9 (spec/hydra_spec.rb:1738): 6.44 seconds with commit be27ac3
+10k.pattern.ruby.9 (ruby_spec:1750): 22 minutes 54 seconds with commit be27ac3.
