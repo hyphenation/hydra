@@ -1,6 +1,6 @@
-Full suite: 1.91s with commit 92af07e
-100.pattern.ruby.9 (spec/hydra_spec.rb:1702): .753 seconds with commit 92af07e
-10k.patterns (ruby_spec:1714): 1 minutes 42.96 seconds with commit 92af07e (1.49s with patgen)
-pattern.ruby.1,2 (hydra_spec:1726): 15 minutes 22 seconds with commit 92af07e (6.82s with patgen)
-10k.pattern.ruby.9 (ruby_spec:1735): 4 minutes 41.9 seconds with commit 92af07e (4.84s with patgen)
+Full suite: 1.42s with commit 371bbfc
+100.pattern.ruby.9 (spec/hydra_spec.rb:1702): .523 seconds with commit 371bbfc
+10k.patterns (ruby_spec:1714): 1 minutes 19.63 seconds with commit 371bbfc (1.49s with patgen)
+pattern.ruby.1,2 (hydra_spec:1726): 134 minutes 32 seconds with commit 371bbfc, but there was interference! (6.82s with patgen)
+10k.pattern.ruby.9 (ruby_spec:1735): 3 minutes 56.9 seconds with commit 371bbfc (4.84s with patgen)
 pattern.ruby.1 (spec/hydra_spec.rb:1747): 1 hours 1 minute (full level 1)
