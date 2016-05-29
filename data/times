@@ -1,5 +1,6 @@
+Full suite: 3.23s with aac5765
 pattern.ruby.1,2: About 8 minutes to generate
 pattern.ruby.1: 1 hours 1 minute (full level 1)
 10k.patterns (ruby_spec:1709): 3 minutes 26 seconds with commit 5b0d228
-100.pattern.ruby.9 (spec/hydra_spec.rb:1721): Just over 12.50 seconds with commit 5b0d228
-10k.pattern.ruby.9 (ruby_spec:1727): 45 minutes 53
+100.pattern.ruby.9 (spec/hydra_spec.rb:1738): Exactly 8.59 seconds with commit aac5765
+10k.pattern.ruby.9 (ruby_spec:1750): 29 minutes 27 seconds with commit aac5765.  Lots of printout!

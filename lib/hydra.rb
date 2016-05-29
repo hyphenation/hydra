@@ -773,7 +773,7 @@ class Club
             end
             if knocked_out? lineno, lemma.cursor, dot, pattern_length
                #byebug
-              @output.puts "Position knocked out!"
+              # @output.puts "Position knocked out!"
               knocked2 = true
             end
             byebug unless knocked1 == knocked2
