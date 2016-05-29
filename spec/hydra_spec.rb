@@ -1606,26 +1606,9 @@ describe Heracles do
   let(:heracles) { Heracles.new(output) }
   let(:club) { heracles.new(output) }
 
-  describe '#new' do
-    it "creates a Heracles" do
-      club = heracles.new(1, [2, 5], 1, 1, 1, [2, 2], output)
-      expect(club).to be_a Heracles
-    end
-
-    it "takes an optional device as argument" do
-      fd = IO.sysopen('/dev/null', 'w')
-      output = IO.new(fd)
-      expect(output).to receive(:puts).with("Generating one pass ...")
-      heracles.new(1, [2, 5], 1, 1, 1, [2, 2], output)
-    end
-  end
-
   describe '#pass' do
     it "runs through a dictionary" do
       hydra = Hydra.new(output)
-      final = club.pass(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], hydra)
-      expect(final).to be_a Hydra
-      expect(final.digest).to eq ['b1c', '1bcx', '1de', 'd1f', 'g1h']
     end
   end
 
@@ -1771,6 +1754,12 @@ describe Heracles do
       dictionary.map! { |word| word = 'xx' + word + 'xxx' } # TODO Helper function for that
       hydra = heracles.run(dictionary, [1, 1, 2, 2, 1, 1, 1])
       expect(hydra.digest).to be == ['b1c', 'd1d', 'e1f', 'g1h']
+    end
+
+    it "runs another array" do
+      final = heracles.run(['xxa-b-cxxx', 'xxabc-defxxx', 'xxab-cd-fg-hixxx'], [1, 1, 2, 5, 1, 1, 1])
+      expect(final).to be_a Hydra
+      expect(final.digest).to eq ['b1c', '1bcx', '1de', 'd1f', 'g1h']
     end
 
     it "correctly ignores commments" do

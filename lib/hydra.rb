@@ -693,7 +693,6 @@ class Heracles
     @threshold = thresh
 
     @output = output
-    @output.puts "Generating one pass ..."
 
     @count_hydra = Hydra.new
 
@@ -757,6 +756,7 @@ class Heracles
   end
 
   def pass(dictionary, final_hydra = Hydra.new, hyphenmins = [2, 3])
+    @output.puts "Generating one pass ..."
     @final_hydra = final_hydra
     unless @final_hydra # TODO Document that
       @final_hydra = Hydra.new
