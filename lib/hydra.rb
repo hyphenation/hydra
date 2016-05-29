@@ -736,7 +736,7 @@ class Heracles
     end
   end
 
-  def collect_patterns # TODO Document / spec out
+  def collect_patterns(dot) # TODO Document / spec out
     hopeless = good = unsure = 0
     @count_hydra.each do |hydra|
       if hydra.good_count * @good_weight < @threshold
@@ -753,16 +753,21 @@ class Heracles
         hydra.clear_good_and_bad_counts
       end
     end
-    @output.puts "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
+    @dots_knocked_out << dot if good + hopeless + unsure == 0
+    @output.write "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
+    @output.write ", dot position #{dot} knocked out"
+    @output.puts ''
   end
 
   def pass(dictionary)
     @output.puts "Generating one pass ..."
 
     @knockouts = { }
+    @dots_knocked_out = []
 
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
       Heracles.organ(pattern_length).each do |dot|
+        next if @dots_knocked_out.include? dot
         @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}"
         lineno = 0
         knocked_out = 0
@@ -796,7 +801,7 @@ class Heracles
         end
 
         @output.puts "  #{@count_hydra.count} patterns in count trie, #{knocked_out} skipped" # TODO Specify that
-        collect_patterns
+        collect_patterns(dot)
       end
     end
   end
