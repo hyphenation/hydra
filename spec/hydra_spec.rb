@@ -1723,6 +1723,18 @@ describe Heracles do
       expect(hydra.count).to eq 83
     end
 
+    it "runs a full set of hyphenation levels on a small file", slow: true do
+      heracles = Heracles.new
+      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1], [2, 2])
+      expect(hydra).to be_a Hydra
+      pattfile = File.open(File.expand_path('../../files/100.pattern.ruby.9' ,__FILE__), 'w')
+      hydra.digest.each do |pattern|
+        pattfile.puts(pattern)
+      end
+      pattfile.close
+      expect(hydra.count).to eq 83
+    end
+
     it "runs a large file", slow: true do
       heracles = Heracles.new
       hydra = heracles.run_file(File.expand_path('../../files/10k.dic.utf8', __FILE__), [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
@@ -1735,16 +1747,13 @@ describe Heracles do
       expect(hydra.count).to eq 1619
     end
 
-    it "runs a full set of hyphenation levels on a small file", slow: true do # Works with knockouts now!
+    it "runs the full file with one level and one length", slow: true do
       heracles = Heracles.new
-      hydra = heracles.run_file(File.expand_path('../../files/100.dic.utf8', __FILE__), [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1], [2, 2])
-      expect(hydra).to be_a Hydra
-      pattfile = File.open(File.expand_path('../../files/100.pattern.ruby.9' ,__FILE__), 'w')
-      hydra.digest.each do |pattern|
-        pattfile.puts(pattern)
-      end
+      hydra = heracles.run_file(File.expand_path('../../files/words.hyphenated.refo', __FILE__), [1, 1, 2, 2, 1, 1, 1], [2, 2])
+      pattfile = File.open(File.expand_path('../../files/pattern.ruby.1,2', __FILE__), 'w')
+      pattfile.puts hydra.digest.join "\n"
       pattfile.close
-      expect(hydra.count).to eq 83
+      expect(hydra.count).to eq 576
     end
 
     it "runs a full set of hyphenation levels on a large file", slow: true do
