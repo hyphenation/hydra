@@ -828,6 +828,7 @@ class Heracles
     (hyphenation_level_start..hyphenation_level_end).each do |hyphenation_level|
       if knocked_out_levels.include? hyphenation_level - 2
         knocked_out_levels << hyphenation_level
+        @output.puts "Hyphenation level #{hyphenation_level} knocked out"
         next
       end
       pattern_length_start = parameters.shift
@@ -839,7 +840,10 @@ class Heracles
       set_parameters(hyphenmins, [hyphenation_level, pattern_length_start, pattern_length_end, good_weight, bad_weight, threshold])
       final_hydra_count = @final_hydra.count
       pass(array)
-      knocked_out_levels << hyphenation_level if final_hydra_count == @final_hydra.count && @count_hydra.count == 0
+      if final_hydra_count == @final_hydra.count && @count_hydra.count == 0
+        knocked_out_levels << hyphenation_level
+        @output.puts "Hyphenation level #{hyphenation_level} didn’t yield any new patterns, knocked out"
+      end
     end
 
     @final_hydra

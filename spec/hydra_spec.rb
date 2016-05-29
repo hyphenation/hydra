@@ -1743,6 +1743,15 @@ describe Heracles do
       pattfile.close
       expect(hydra.count).to eq 1778
     end
+
+    it "runs level 1 on the full German dictionary", slow: true do
+      heracles = Heracles.new
+      hydra = heracles.run_file(File.expand_path('../../files/words.hyphenated.refo', __FILE__), [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1], [2, 2])
+      pattfile = File.open(File.expand_path('../../files/pattern.ruby.1', __FILE__), 'w')
+      pattfile.puts hydra.digest.join "\n"
+      pattfile.close
+      expect(hydra.count).to eq 5130
+    end
   end
 
   describe '#run' do
