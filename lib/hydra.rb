@@ -753,9 +753,11 @@ class Heracles
         hydra.clear_good_and_bad_counts
       end
     end
-    @dots_knocked_out << dot if good + hopeless + unsure == 0
     @output.write "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
-    @output.write ", dot position #{dot} knocked out"
+    if good + unsure == 0
+      @dots_knocked_out << dot
+      @output.write ", dot position #{dot} knocked out"
+    end
     @output.puts ''
   end
 
@@ -767,8 +769,12 @@ class Heracles
 
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
       Heracles.organ(pattern_length).each do |dot|
-        next if @dots_knocked_out.include? dot
-        @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}"
+        @output.write "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}"
+        if @dots_knocked_out.include? dot
+          @output.puts  " – knocked out"
+          next
+        end
+        @output.puts ''
         lineno = 0
         knocked_out = 0
         dictionary.each do |line|
