@@ -1599,21 +1599,24 @@ describe Hydra do
   end
 end
 
-describe Club do
-  let(:output) { double("output device").as_null_object }
-  let(:club) { Club.new(1, [2, 5], 1, 1, 1, [2, 2], output) }
+describe Heracles do
+  let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
+  let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
+  let(:output) { double("null output").as_null_object }
+  let(:heracles) { Heracles.new(output) }
+  let(:club) { heracles.new(output) }
 
-  describe '.initialize' do
-    it "creates a Club" do
-      club = Club.new(1, [2, 5], 1, 1, 1, [2, 2], output)
-      expect(club).to be_a Club
+  describe '#new' do
+    it "creates a Heracles" do
+      club = heracles.new(1, [2, 5], 1, 1, 1, [2, 2], output)
+      expect(club).to be_a Heracles
     end
 
     it "takes an optional device as argument" do
       fd = IO.sysopen('/dev/null', 'w')
       output = IO.new(fd)
       expect(output).to receive(:puts).with("Generating one pass ...")
-      Club.new(1, [2, 5], 1, 1, 1, [2, 2], output)
+      heracles.new(1, [2, 5], 1, 1, 1, [2, 2], output)
     end
   end
 
@@ -1684,13 +1687,6 @@ describe Club do
       expect(club.knocked_out? 2, 0, 2, 3).to be_falsey
     end
   end
-end
-
-describe Heracles do
-  let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
-  let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
-  let(:output) { double("null output").as_null_object }
-  let(:heracles) { Heracles.new(output) }
 
   describe '.new' do
     it "creates an instance of Heracles" do

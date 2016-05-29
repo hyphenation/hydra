@@ -683,8 +683,8 @@ class Hydra
   end
 end
 
-class Club
-  def initialize(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, hyphenmins = [2, 3], output = $stdout)
+class Heracles
+  def new(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, hyphenmins = [2, 3], output = $stdout)
     @hyphenation_level = hyph_level
     @pattern_length_start = pat_lens.first
     @pattern_length_end = pat_lens.last
@@ -698,6 +698,8 @@ class Club
     @count_hydra = Hydra.new
 
     @knockouts = { }
+
+    self
   end
 
   def good
@@ -803,9 +805,7 @@ class Club
 
     @final_hydra
   end
-end
 
-class Heracles
   def initialize(output = $stdout)
     @output = output
     @output.puts "This is Hydra, a Ruby implementation of patgen"
@@ -826,8 +826,8 @@ class Heracles
       bad_weight = parameters.shift
       threshold = parameters.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
-      club = Club.new(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, hyphenmins, @output)
-      @final_hydra = club.pass(array, @final_hydra, hyphenmins)
+      new(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, hyphenmins, @output)
+      @final_hydra = pass(array, @final_hydra, hyphenmins)
     end
 
     @final_hydra
