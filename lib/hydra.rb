@@ -732,92 +732,77 @@ class Club
     end
   end
 
+  def collect_patterns # TODO Document / spec out
+    hopeless = good = unsure = 0
+    @count_hydra.each do |hydra|
+      if hydra.good_count * @good_weight < @threshold
+        hopeless += 1
+        knockout(hydra.sources)
+        hydra.chophead
+      elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
+        good += 1
+        knockout(hydra.sources)
+        @final_hydra.transplant hydra
+      else
+        unsure += 1
+        hydra.chophead
+        hydra.clear_good_and_bad_counts
+      end
+    end
+    @output.puts "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
+  end
+
   def pass(dictionary, count_hydra, final_hydra = Hydra.new, hyphenmins = [2, 3])
-    unless final_hydra # TODO Document that
-      final_hydra = Hydra.new
-      final_hydra.setlefthyphenmin(hyphenmins.first)
-      final_hydra.setrighthyphenmin(hyphenmins.last)
+    @count_hydra = count_hydra
+    @final_hydra = final_hydra
+    unless @final_hydra # TODO Document that
+      @final_hydra = Hydra.new
+      @final_hydra.setlefthyphenmin(hyphenmins.first)
+      @final_hydra.setrighthyphenmin(hyphenmins.last)
     end
 
-    n = 0
-    p = 0
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
       Heracles.organ(pattern_length).each do |dot|
+        @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}"
         lineno = 0
+        knocked_out = 0
         dictionary.each do |line|
           lineno += 1
           lemma = Lemma.new(UnicodeUtils.downcase(line.gsub(/%.*$/, '').strip))
           next unless lemma.length >= pattern_length
-          final_hydra.prehyphenate(lemma)
+          @final_hydra.prehyphenate(lemma)
           word_start = dot - 1
           word_end = lemma.length - (pattern_length - dot) + 1
-          hyph_start = final_hydra.lefthyphenmin
-          hyph_end = lemma.length - final_hydra.righthyphenmin
+          hyph_start = @final_hydra.lefthyphenmin
+          hyph_end = lemma.length - @final_hydra.righthyphenmin
           word_start = hyph_start if word_start < hyph_start
           word_end = hyph_end if word_end > hyph_end
           lemma.reset(word_start - dot)
           (word_start..word_end).each do |column|
             knocked1 = knocked2 = false
             knocks = @knockouts[[lineno, lemma.cursor + dot]]
-            if knocks
-              knocks.each do |knock|
-                knockcol = knock.first
-                knocklen = knock.last
-                if lemma.cursor <= knockcol && knockcol + knocklen <= lemma.cursor + pattern_length
-                  # @output.puts "Position knocked out!"
-                  n += 1
-                  knocked1 = true
-                  break
-                end
-              end
-            end
             if knocked_out? lineno, lemma.cursor, dot, pattern_length
-               #byebug
-              # @output.puts "Position knocked out!"
               knocked2 = true
-            end
-            byebug unless knocked1 == knocked2
-            p += 1 if knocked2
-            # byebug if n == 1
-            # byebug if n != p
-            currword = lemma.word_to(pattern_length)
-            count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
-            # byebug if count_pattern.to_s == "1bcdex"
-            if knocked2
+              knocked_out += 1
               lemma.shift
               next
             end
-            count_hydra.ingest count_pattern
-            hydra = count_hydra.read(currword)
+            currword = lemma.word_to(pattern_length)
+            count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
+            @count_hydra.ingest count_pattern
+            hydra = @count_hydra.read(currword)
             hydra.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
             if lemma.break(dot) == good then hydra.inc_good_count elsif lemma.break(dot) == bad then hydra.inc_bad_count end
             lemma.shift
           end
         end
 
-        hopeless = good = unsure = 0
-        @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}, #{count_hydra.count} patterns in count trie" # TODO Specify that
-        count_hydra.each do |hydra|
-          if hydra.good_count * @good_weight < @threshold
-            hopeless += 1
-            knockout(hydra.sources)
-            hydra.chophead
-          elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
-            good += 1
-            knockout(hydra.sources)
-            final_hydra.transplant hydra
-          else
-            unsure += 1
-            hydra.chophead
-            hydra.clear_good_and_bad_counts
-          end
-        end
-        @output.puts "#{good} good, #{hopeless} hopeless, #{unsure} unsure"
+        @output.puts "  #{@count_hydra.count} patterns in count trie, #{knocked_out} skipped" # TODO Specify that
+        collect_patterns
       end
     end
-    puts "Skipped #{n} locations, #{p} marked as knocked" # 963, 270 respectively for spec:1627
 
-    final_hydra
+    @final_hydra
   end
 end
 
