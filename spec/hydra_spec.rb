@@ -1603,77 +1603,72 @@ describe Heracles do
   let(:complex_dictionary_bare) { ['a-b', 'a-b-c', 'ab-cd', 'a-b-c-d-e', 'abc-def', 'ab-cd-ef-gh', 'abc-def-ghi'] }
   let(:complex_dictionary) { complex_dictionary_bare.map { |word| word = 'xx' + word + 'xxx' } }
   let(:output) { double("null output").as_null_object }
-  let(:heracles) { Heracles.new(output) }
-  let(:club) { heracles.new(output) }
+  let(:heracles) { Heracles.new([1, 1, 2, 5, 1, 1, 1], output) }
 
-  describe '#pass' do
-    it "runs through a dictionary" do
-      hydra = Hydra.new(output)
-    end
-  end
+  describe '#pass' # TODO
 
   describe '#good' do
     it "returns :is when hyphenation level is odd" do
-      club.instance_variable_set :@hyphenation_level, 1
-      expect(club.good).to be == :is
+      heracles.instance_variable_set :@hyphenation_level, 1
+      expect(heracles.good).to be == :is
     end
 
     it "returns :err when hyphenation level is even" do
-      club.instance_variable_set :@hyphenation_level, 2
-      expect(club.good).to be == :err
+      heracles.instance_variable_set :@hyphenation_level, 2
+      expect(heracles.good).to be == :err
     end
   end
 
   describe '#bad' do
     it "returns :no when hyphenation level is odd" do
-      club.instance_variable_set :@hyphenation_level, 1
-      expect(club.bad).to be == :no
+      heracles.instance_variable_set :@hyphenation_level, 1
+      expect(heracles.bad).to be == :no
     end
 
     it "returns :hyph when hyphenation level is even" do
-      club.instance_variable_set :@hyphenation_level, 2
-      expect(club.bad).to be == :found
+      heracles.instance_variable_set :@hyphenation_level, 2
+      expect(heracles.bad).to be == :found
     end
   end
 
   describe '#knockout' do
     it "knocks out a position" do
-      club.knockout([{ line: 12, column: 3, dot: 2, length: 5 }])
-      expect(club.instance_variable_get :@knockouts).to eq([12, 5] => [[3, 5]])
+      heracles.knockout([{ line: 12, column: 3, dot: 2, length: 5 }])
+      expect(heracles.instance_variable_get :@knockouts).to eq([12, 5] => [[3, 5]])
     end
 
     it "can knock out several locations at once"  do
-      club.knockout([{ line: 5, column: 7, dot: 1, length: 2 }, { line: 12, column: 3, dot: 2, length: 5 }])
-      expect(club.instance_variable_get :@knockouts).to eq([5, 8] => [[7, 2]], [12, 5] => [[3, 5]])
+      heracles.knockout([{ line: 5, column: 7, dot: 1, length: 2 }, { line: 12, column: 3, dot: 2, length: 5 }])
+      expect(heracles.instance_variable_get :@knockouts).to eq([5, 8] => [[7, 2]], [12, 5] => [[3, 5]])
     end
 
     it "stores reference to several sources" do
-      club.knockout([{ line: 1, column: 1, dot: 1, length: 2 }, { line: 1, column: 0, dot: 2, length: 2 }])
-      positions = club.instance_variable_get :@knockouts
+      heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }, { line: 1, column: 0, dot: 2, length: 2 }])
+      positions = heracles.instance_variable_get :@knockouts
       expect(positions).to eq([1, 2] => [[1, 2], [0, 2]])
     end
   end
 
   describe '#knocked_out?' do
     it "tells whether a position is knocked out or not" do
-      club.knockout([{ line: 6, column: 1, dot: 1, length: 2 }])
-      expect(club.knocked_out? 6, 1, 1, 3).to be_truthy
+      heracles.knockout([{ line: 6, column: 1, dot: 1, length: 2 }])
+      expect(heracles.knocked_out? 6, 1, 1, 3).to be_truthy
     end
 
     it "says no when it is not" do
-      club.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
-      expect(club.knocked_out? 1, 2, 0, 3).to be_falsey
+      heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
+      expect(heracles.knocked_out? 1, 2, 0, 3).to be_falsey
     end
 
     it "says no when it is definitely not" do
-      club.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
-      expect(club.knocked_out? 2, 0, 2, 3).to be_falsey
+      heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
+      expect(heracles.knocked_out? 2, 0, 2, 3).to be_falsey
     end
   end
 
   describe '.new' do
     it "creates an instance of Heracles" do
-      heracles = Heracles.new(output)
+      heracles = Heracles.new([1, 1, 2, 5, 1, 1, 1], output)
       expect(heracles).to be_a Heracles
     end
 
@@ -1681,7 +1676,7 @@ describe Heracles do
       fd = IO.sysopen('/dev/null', 'w')
       io = IO.new(fd)
       expect(io).to receive(:puts).with("This is Hydra, a Ruby implementation of patgen")
-      heracles = Heracles.new(io)
+      heracles = Heracles.new([1, 1, 2, 5, 1, 1, 1], io)
     end
   end
 

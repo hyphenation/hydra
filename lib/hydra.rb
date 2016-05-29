@@ -684,21 +684,22 @@ class Hydra
 end
 
 class Heracles
-  def new(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, hyphenmins = [2, 3], output = $stdout)
+  def initialize(parameters = [1, 1, 2, 5, 1, 1, 1], output = $stdout)
+    @output = output
+    @output.puts "This is Hydra, a Ruby implementation of patgen"
+
+    @count_hydra = Hydra.new
+
+    @knockouts = { }
+  end
+
+  def set_parameters(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, hyphenmins = [2, 3], output = $stdout)
     @hyphenation_level = hyph_level
     @pattern_length_start = pat_lens.first
     @pattern_length_end = pat_lens.last
     @good_weight = good
     @bad_weight = bad
     @threshold = thresh
-
-    @output = output
-
-    @count_hydra = Hydra.new
-
-    @knockouts = { }
-
-    self
   end
 
   def good
@@ -764,6 +765,8 @@ class Heracles
       @final_hydra.setrighthyphenmin(hyphenmins.last)
     end
 
+    @knockouts = { }
+
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
       Heracles.organ(pattern_length).each do |dot|
         @output.puts "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}"
@@ -806,11 +809,6 @@ class Heracles
     @final_hydra
   end
 
-  def initialize(output = $stdout)
-    @output = output
-    @output.puts "This is Hydra, a Ruby implementation of patgen"
-  end
-
   def run_file(filename, parameters = [], hyphenmins = [2, 3])
     run(File.read(filename).split("\n"), parameters, hyphenmins)
   end
@@ -826,7 +824,7 @@ class Heracles
       bad_weight = parameters.shift
       threshold = parameters.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
-      new(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, hyphenmins, @output)
+      set_parameters(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, hyphenmins, @output)
       @final_hydra = pass(array, @final_hydra, hyphenmins)
     end
 
@@ -867,7 +865,7 @@ class Labour
     hyphenmins = parse_translate(@translate)
     @lefthyphenmin = hyphenmins.first
     @righthyphenmin = hyphenmins.last
-    @heracles = Heracles.new(@device)
+    @heracles = Heracles.new(parameters, @device)
     @hydra = @heracles.run_file(@dictionary, parameters, hyphenmins)
     output = File.open(@output_patterns, 'w')
     output.write(@hydra.digest.join "\n")
