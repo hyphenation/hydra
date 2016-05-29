@@ -1601,11 +1601,11 @@ end
 
 describe Club do
   let(:output) { double("output device").as_null_object }
-  let(:club) { Club.new(1, [2, 5], 1, 1, 1, output) }
+  let(:club) { Club.new(1, [2, 5], 1, 1, 1, [2, 2], output) }
 
   describe '.initialize' do
     it "creates a Club" do
-      club = Club.new(1, [2, 5], 1, 1, 1, output)
+      club = Club.new(1, [2, 5], 1, 1, 1, [2, 2], output)
       expect(club).to be_a Club
     end
 
@@ -1613,7 +1613,7 @@ describe Club do
       fd = IO.sysopen('/dev/null', 'w')
       output = IO.new(fd)
       expect(output).to receive(:puts).with("Generating one pass ...")
-      Club.new(1, [2, 5], 1, 1, 1, output)
+      Club.new(1, [2, 5], 1, 1, 1, [2, 2], output)
     end
   end
 
@@ -1801,7 +1801,6 @@ describe Heracles do
     end
 
     it "generates level 2" do
-      heracles = Heracles.new
       hydra = heracles.run(complex_dictionary, [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1])
       expect(hydra.digest).to be == ['b1c', '1bcdex', '1bcx', '1bx', 'c1d', '2cdefx', '2dx', '1efghx', '1ex', 'f1g']
     end
@@ -1851,7 +1850,6 @@ describe Heracles do
     end
 
     it "runs yet another example" do
-      heracles = Heracles.new
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Ab-bag-ge-rung'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
       expect(hydra.digest).to eq ['b1b', 'b1n', '1er', 'g1g2', 'l1f', 'r1g', '1ru', 's1s'] # Works now!
     end

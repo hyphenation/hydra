@@ -684,7 +684,7 @@ class Hydra
 end
 
 class Club
-  def initialize(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, output = $stdout)
+  def initialize(hyph_level = 1, pat_lens = [2, 5], good = 1, bad = 1, thresh = 1, hyphenmins = [2, 3], output = $stdout)
     @hyphenation_level = hyph_level
     @pattern_length_start = pat_lens.first
     @pattern_length_end = pat_lens.last
@@ -694,6 +694,8 @@ class Club
 
     @output = output
     @output.puts "Generating one pass ..."
+
+    @count_hydra = Hydra.new
 
     @knockouts = { }
   end
@@ -752,8 +754,7 @@ class Club
     @output.puts "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
   end
 
-  def pass(dictionary, count_hydra, final_hydra = Hydra.new, hyphenmins = [2, 3])
-    @count_hydra = count_hydra
+  def pass(dictionary, final_hydra = Hydra.new, hyphenmins = [2, 3])
     @final_hydra = final_hydra
     unless @final_hydra # TODO Document that
       @final_hydra = Hydra.new
@@ -778,11 +779,9 @@ class Club
           word_start = hyph_start if word_start < hyph_start
           word_end = hyph_end if word_end > hyph_end
           lemma.reset(word_start - dot)
-          (word_start..word_end).each do |column|
-            knocked1 = knocked2 = false
+          (word_start..word_end).each do
             knocks = @knockouts[[lineno, lemma.cursor + dot]]
             if knocked_out? lineno, lemma.cursor, dot, pattern_length
-              knocked2 = true
               knocked_out += 1
               lemma.shift
               next
@@ -819,7 +818,6 @@ class Heracles
   def run(array, parameters = [], hyphenmins = [2, 3])
     hyphenation_level_start = parameters.shift
     hyphenation_level_end = parameters.shift
-    count_hydra = Hydra.new
 
     (hyphenation_level_start..hyphenation_level_end).each do |hyphenation_level|
       pattern_length_start = parameters.shift
@@ -828,8 +826,8 @@ class Heracles
       bad_weight = parameters.shift
       threshold = parameters.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
-      club = Club.new(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, @output)
-      @final_hydra = club.pass(array, count_hydra, @final_hydra, hyphenmins)
+      club = Club.new(hyphenation_level, pattern_lengths, good_weight, bad_weight, threshold, hyphenmins, @output)
+      @final_hydra = club.pass(array, @final_hydra, hyphenmins)
     end
 
     @final_hydra
