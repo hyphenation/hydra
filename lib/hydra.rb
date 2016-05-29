@@ -756,7 +756,7 @@ class Heracles
     @output.write "  #{good} good, #{hopeless} hopeless, #{unsure} unsure"
     if good + unsure == 0
       @dots_knocked_out << dot
-      @output.write ", dot position #{dot} knocked out"
+      @output.write ": dot position knocked out"
     end
     @output.puts ''
   end
@@ -823,7 +823,13 @@ class Heracles
     hyphenation_level_start = parameters.shift
     hyphenation_level_end = parameters.shift
 
+    knocked_out_levels = []
+
     (hyphenation_level_start..hyphenation_level_end).each do |hyphenation_level|
+      if knocked_out_levels.include? hyphenation_level - 2
+        knocked_out_levels << hyphenation_level
+        next
+      end
       pattern_length_start = parameters.shift
       pattern_length_end = parameters.shift
       good_weight = parameters.shift
@@ -831,7 +837,9 @@ class Heracles
       threshold = parameters.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
       set_parameters(hyphenmins, [hyphenation_level, pattern_length_start, pattern_length_end, good_weight, bad_weight, threshold])
+      final_hydra_count = @final_hydra.count
       pass(array)
+      knocked_out_levels << hyphenation_level if final_hydra_count == @final_hydra.count && @count_hydra.count == 0
     end
 
     @final_hydra
