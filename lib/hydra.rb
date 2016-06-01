@@ -664,8 +664,7 @@ class Hydra
   end
 
   def add_pattern(pattern, length, dot, level)
-    word = pattern.word_to(length)
-    ingest Pattern.simple(word, dot, level)
+    ingest Pattern.simple(pattern.word_to(length), dot, level)
   end
 
   # Debug methods
