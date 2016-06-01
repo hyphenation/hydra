@@ -770,13 +770,9 @@ class Heracles
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
       Heracles.organ(pattern_length).each do |dot|
         @output.write "hyph_level = #{@hyphenation_level}, pat_len = #{pattern_length}, pat_dot = #{dot}"
-        if @dots_knocked_out.include? dot
-          @output.puts  " – knocked out"
-          next
-        end
+        @output.puts " – knocked out" if @dots_knocked_out.include?(dot) && next
         @output.puts ''
-        lineno = 0
-        knocked_out = 0
+        lineno = knocked_out = 0
         dictionary.each do |line|
           lineno += 1
           lemma = Lemma.new(UnicodeUtils.downcase(line.gsub(/%.*$/, '').strip))
@@ -791,11 +787,7 @@ class Heracles
           lemma.reset(word_start - dot - 1)
           (word_start..word_end).each do
             lemma.shift
-            knocks = @knockouts[[lineno, lemma.cursor + dot]]
-            if knocked_out? lineno, lemma.cursor, dot, pattern_length
-              knocked_out += 1
-              next
-            end
+            knocked_out += 1 if knocked_out?(lineno, lemma.cursor, dot, pattern_length) && next
             currword = lemma.word_to(pattern_length)
             count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
             @count_hydra.ingest count_pattern
