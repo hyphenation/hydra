@@ -788,12 +788,12 @@ class Heracles
           hyph_end = lemma.length - @final_hydra.righthyphenmin
           word_start = hyph_start if word_start < hyph_start
           word_end = hyph_end if word_end > hyph_end
-          lemma.reset(word_start - dot)
+          lemma.reset(word_start - dot - 1)
           (word_start..word_end).each do
+            lemma.shift
             knocks = @knockouts[[lineno, lemma.cursor + dot]]
             if knocked_out? lineno, lemma.cursor, dot, pattern_length
               knocked_out += 1
-              lemma.shift
               next
             end
             currword = lemma.word_to(pattern_length)
@@ -802,7 +802,6 @@ class Heracles
             hydra = @count_hydra.read(currword)
             hydra.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
             if lemma.break(dot) == good then hydra.inc_good_count elsif lemma.break(dot) == bad then hydra.inc_bad_count end
-            lemma.shift
           end
         end
 
