@@ -767,7 +767,7 @@ class Heracles
   end
 
   def pass(dictionary)
-    @output.puts "Generating one pass ..."
+    @output.puts "Generating one pass for hyphenation level #{@hyphenation_level} ..."
 
     @knockouts = { }
     @dots_knocked_out = []
@@ -791,7 +791,11 @@ class Heracles
             knocked_out += 1 if knocked_out?(lineno, lemma.cursor, dot, pattern_length) && next
             node = @count_hydra.add_pattern(lemma, pattern_length, dot, @hyphenation_level)
             node.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
-            if lemma.break(dot) == good then node.inc_good_count elsif lemma.break(dot) == bad then node.inc_bad_count end
+            if lemma.break(dot) == good
+              node.inc_good_count
+            elsif lemma.break(dot) == bad
+              node.inc_bad_count
+            end
           end
         end
 

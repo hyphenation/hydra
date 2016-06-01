@@ -1643,7 +1643,20 @@ describe Heracles do
     end
   end
 
-  describe '#pass' # TODO
+  describe '#pass' do
+    it "prints one line to the output" do
+      heracles.instance_variable_set(:@hyphenation_level, 1)
+      heracles.instance_variable_set(:@pattern_length_start, 2)
+      heracles.instance_variable_set(:@pattern_length_end, 5)
+      heracles.instance_variable_set(:@count_hydra, Hydra.new)
+      heracles.instance_variable_set(:@final_hydra, Hydra.new)
+      heracles.instance_variable_set(:@good_weight, 1)
+      heracles.instance_variable_set(:@bad_weight, 1)
+      heracles.instance_variable_set(:@threshold, 1)
+      expect(output).to receive(:puts).with("Generating one pass for hyphenation level 1 ...")
+      heracles.pass ['ba-ba', 'bla-ck', 'she-ep']
+    end
+  end
 
   describe '#good' do
     it "returns :is when hyphenation level is odd" do
