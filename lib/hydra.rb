@@ -779,7 +779,7 @@ class Heracles
           next unless lemma.length >= pattern_length
           @final_hydra.prehyphenate(lemma)
           word_start = [dot - 1, @final_hydra.lefthyphenmin].max
-          word_end = [lemma.length - (pattern_length - dot) + 1, lemma.length - @final_hydra.righthyphenmin].min
+          word_end = lemma.length - [pattern_length - dot - 1, @final_hydra.righthyphenmin].max
           lemma.reset(word_start - dot - 1)
           (word_start..word_end).each do
             lemma.shift
