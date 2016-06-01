@@ -1586,6 +1586,7 @@ describe Hydra do
     end
   end
 
+  # TODO Some kind of input validation?  “cand.mag.” :-)
   describe '#ingest_file' do # TODO Allow TeX-style comments?
     it "ingests a whole file of patterns" do
       hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))
