@@ -1159,6 +1159,12 @@ describe Hydra do
       hydra = Hydra.new 'zyx.'
       expect(hydra.read('zyx').letters).to eq ['.']
     end
+
+    it "returns the tip of the hydra just inserted" do
+      hydra = Hydra.new ['abc', 'def', 'ghij']
+      node = hydra.ingest 'klm'
+      expect(node.pattern.to_s).to eq 'klm'
+    end
   end
 
   describe '#digest' do
@@ -1515,6 +1521,15 @@ describe Hydra do
       graft = donor.read 'foo'
       patient.transplant graft
       expect(donor.digest).to eq ['bar']
+    end
+  end
+
+  describe '#add_pattern' do
+    it "adds a new pattern with the parameters provided" do
+      hydra = Hydra.new
+      pattern = Pattern.new 'fo2o3'
+      hydra.add_pattern(pattern, 2, 1, 3)
+      expect(hydra.digest).to eq ['f3o']
     end
   end
 

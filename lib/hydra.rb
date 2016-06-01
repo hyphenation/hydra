@@ -538,9 +538,9 @@ class Hydra
         end
       else
         if gethead
-          sethead(pattern.get_digits.mask(gethead))
+          sethead(pattern.get_digits.mask(gethead)) && self
         else
-          sethead(pattern.get_digits)
+          sethead(pattern.get_digits) && self
         end
       end
     end
@@ -661,6 +661,11 @@ class Hydra
   def transplant(other)
     ingest other.pattern.to_s
     other.chophead
+  end
+
+  def add_pattern(pattern, length, dot, level)
+    word = pattern.word_to(length)
+    ingest Pattern.simple(word, dot, level)
   end
 
   # Debug methods
@@ -784,12 +789,9 @@ class Heracles
           (word_start..word_end).each do
             lemma.shift
             knocked_out += 1 if knocked_out?(lineno, lemma.cursor, dot, pattern_length) && next
-            currword = lemma.word_to(pattern_length)
-            count_pattern = Pattern.simple(currword, dot, @hyphenation_level)
-            @count_hydra.ingest count_pattern
-            hydra = @count_hydra.read(currword)
-            hydra.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
-            if lemma.break(dot) == good then hydra.inc_good_count elsif lemma.break(dot) == bad then hydra.inc_bad_count end
+            node = @count_hydra.add_pattern(lemma, pattern_length, dot, @hyphenation_level)
+            node.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
+            if lemma.break(dot) == good then node.inc_good_count elsif lemma.break(dot) == bad then node.inc_bad_count end
           end
         end
 
