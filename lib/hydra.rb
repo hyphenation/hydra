@@ -746,13 +746,34 @@ class Heracles
     end
   end
 
+  def aux(hydra, word, digits)
+    hydra.match(word).any? do |pattern| # FIXME Allow Hydra#match to take a pattern?
+      # pattern.digit(dot - pattern.anchor) == value
+      pattern.get_word == digits[pattern.anchor..pattern.anchor+pattern.length]
+    end
+  end
+
+  def knocked_out_by_hydrae?(pattern, length, dot, value, k)
+    @rejected ||= Hydra.new
+    partial = Pattern.simple(pattern.word_to(length), dot, value)
+    w = partial.get_word
+    w = '.' + w if partial.initial?
+    digits = partial.get_digits
+    k2 = aux(@final_hydra, w, digits) || aux(@rejected, w, digits)
+    k2 = if k2 then true else false end
+    # byebug unless k == k2
+
+    k2
+  end
+
   def collect_patterns(dot) # TODO Document / spec out
     hopeless = good = unsure = 0
     @count_hydra.each do |hydra|
       if hydra.good_count * @good_weight < @threshold
+        @rejected ||= Hydra.new
         hopeless += 1
         knockout(hydra.sources)
-        hydra.chophead
+        @rejected.transplant hydra
       elsif hydra.good_count * @good_weight - hydra.bad_count * @bad_weight >= @threshold
         good += 1
         knockout(hydra.sources)
@@ -772,6 +793,7 @@ class Heracles
   end
 
   def pass(dictionary)
+    @rejected = Hydra.new
     @output.puts "Generating one pass for hyphenation level #{@hyphenation_level} ..."
 
     @knockouts = { }
@@ -793,7 +815,11 @@ class Heracles
           lemma.reset(word_start - dot - 1)
           (word_start..word_end).each do
             lemma.shift
-            knocked_out += 1 if knocked_out?(lineno, lemma.cursor, dot, pattern_length) && next
+            k = knocked_out?(lineno, lemma.cursor, dot, pattern_length)
+            k = if k then true else false end
+            k2 = knocked_out_by_hydrae?(lemma, pattern_length, dot, @hyphenation_level, k)
+            # byebug unless k2 == k
+            knocked_out += 1 if k2 && next
             node = @count_hydra.add_pattern(lemma, pattern_length, dot, @hyphenation_level)
             node.add_source(line: lineno, column: lemma.cursor, dot: dot, length: pattern_length)
             if lemma.break(dot) == good
