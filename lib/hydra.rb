@@ -753,8 +753,8 @@ class Heracles
 
   def aux(hydra, word, digits, dot, value)
     hydra.match(word).any? do |pattern| # FIXME Allow Hydra#match to take a pattern?
-      # pattern.digit(dot - pattern.anchor) == value
-      pattern.get_word == digits[pattern.anchor..pattern.anchor+pattern.length]
+      pattern.digit(dot - pattern.anchor) == value
+      # pattern.get_word == digits[pattern.anchor..pattern.anchor+pattern.length]
     end
   end
 
