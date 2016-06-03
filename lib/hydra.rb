@@ -715,8 +715,6 @@ class Heracles
     @output.puts "This is Hydra, a Ruby implementation of patgen"
 
     @count_hydra = Hydra.new
-
-    @knockouts = { }
   end
 
   def set_parameters(hyphenmins = [2, 3], parameters = [1, 2, 5, 1, 1, 1], output = $stdout)
@@ -775,7 +773,6 @@ class Heracles
     @rejected = Hydra.new
     @output.puts "Generating one pass for hyphenation level #{@hyphenation_level} ..."
 
-    @knockouts = { }
     @dots_knocked_out = []
 
     (@pattern_length_start..@pattern_length_end).each do |pattern_length|
