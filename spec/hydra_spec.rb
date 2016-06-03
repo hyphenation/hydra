@@ -80,9 +80,9 @@ describe Pattern do
     end
   end
 
-  describe '.simple' do # TODO Rename to .atom
+  describe '.atom' do # TODO Rename to .atom
     it "returns a simple pattern" do
-      pattern = Pattern.simple 'abc', 2, 1
+      pattern = Pattern.atom 'abc', 2, 1
       expect(pattern.get_word).to eq 'abc'
       expect(pattern.get_digits).to be == [0, 0, 1, 0]
     end
@@ -196,14 +196,14 @@ describe Pattern do
     end
   end
 
-  describe '#letter' do
+  describe '#letter' do # TODO See #digit :-)
     it "returns the nth letter" do
       pattern = Pattern.new('foo9bar')
       expect(pattern.letter(3)).to eq 'b'
     end
   end
 
-  describe '#digit' do
+  describe '#digit' do # TODO Merge with #currdigit!
     it "returns the nth digit" do
       pattern = Pattern.new('foo9bar')
       expect(pattern.digit(3)).to eq 9
@@ -218,6 +218,12 @@ describe Pattern do
     it "returns nil if n is negative" do
       pattern = Pattern.new('abc')
       expect(pattern.digit(-1)).to be_nil
+    end
+
+    it "returns the current digit by default" do
+      pattern = Pattern.new('zy5x')
+      pattern.shift(2)
+      expect(pattern.digit).to eq 5
     end
   end
 
@@ -1615,8 +1621,8 @@ describe Hydra do
     end
   end
 
-  describe '#knocked_out?' do
-    it "tells whether a pattern is knocked out or not" do # FIXME Add string
+  describe '#knocked_out?' do # TODO More test cases
+    it "tells whether a pattern is knocked out or not" do
       hydra = Hydra.new '1bc'
       pattern = Pattern.new 'a1bc'
       pattern.shift

@@ -79,7 +79,7 @@ class Pattern
     new word, [0] * (word.length + 1)
   end
 
-  def self.simple(word, position, value)
+  def self.atom(word, position, value)
     new word, (word.length + 1).times.map { |i| if i == position then value else 0 end }
   end
 
@@ -117,7 +117,7 @@ class Pattern
     @word[n]
   end
 
-  def digit(n)
+  def digit(n = 0)
     i = @cursor + n
     if i < 0
       nil
@@ -680,7 +680,7 @@ class Hydra
   end
 
   def add_pattern(pattern, length, dot, level)
-    ingest Pattern.simple(pattern.word_to(length), dot, level)
+    ingest Pattern.atom(pattern.word_to(length), dot, level)
   end
 
   # Debug methods # FIXME (the comment)
@@ -699,7 +699,7 @@ class Hydra
 
   def knocked_out? pattern
     match(pattern.get_word).any? do |pattern2| # FIXME Allow #match to take a pattern?
-      pattern2.digit(pattern.cursor - pattern2.anchor) == pattern.digit(0) # TODO digit()
+      pattern2.digit(pattern.cursor - pattern2.anchor) == pattern.digit
     end
   end
 
@@ -794,11 +794,9 @@ class Heracles
           lemma.reset(word_start - dot - 1)
           (word_start..word_end).each do
             lemma.shift
-            pattern = Pattern.simple lemma.word_to(pattern_length), dot, @hyphenation_level
-            pattern.shift(dot)
+            pattern = Pattern.atom(lemma.word_to(pattern_length), dot, @hyphenation_level).shift(dot)
             knocked_out += 1 if knocked_out?(pattern) && next
-            pattern.reset
-            node = @count_hydra.ingest pattern
+            node = @count_hydra.ingest pattern.reset
             if lemma.break(dot) == good
               node.inc_good_count
             elsif lemma.break(dot) == bad
