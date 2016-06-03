@@ -106,6 +106,11 @@ class Pattern
 
   def reset(n = 0)
     @cursor = n
+    self
+  end
+
+  def reset!(n = 0)
+    @cursor = n
   end
 
   def letter(n)
@@ -678,7 +683,7 @@ class Hydra
     ingest Pattern.simple(pattern.word_to(length), dot, level)
   end
 
-  # Debug methods
+  # Debug methods # FIXME (the comment)
   def pattern(neck = "", digits = nil)
     if digits
       if parent
@@ -689,6 +694,12 @@ class Hydra
     else
       digits = if gethead then gethead else [0] * (depth + 1) end
       pattern('', digits)
+    end
+  end
+
+  def knocked_out? pattern
+    match(pattern.get_word).any? do |pattern2| # FIXME Allow #match to take a pattern?
+      pattern2.digit(pattern.cursor - pattern2.anchor) == pattern.digit(0) # TODO digit()
     end
   end
 
@@ -733,14 +744,8 @@ class Heracles
     end
   end
 
-  def aux(hydra, pattern)
-    hydra.match(pattern.get_word).any? do |pattern2| # FIXME Allow Hydra#match to take a pattern?
-      pattern2.digit(pattern.cursor - pattern2.anchor) == pattern.digit(0) # TODO digit()
-    end
-  end
-
   def knocked_out?(w)
-    aux(@final_hydra, w) || aux(@rejected, w)
+    @final_hydra.knocked_out?(w) || @rejected.knocked_out?(w)
   end
 
   def collect_patterns(dot) # TODO Document / spec out

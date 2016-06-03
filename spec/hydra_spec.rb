@@ -179,6 +179,21 @@ describe Pattern do
       expect(pattern.cursor).to be == 2
       expect(pattern.cursor).to be == 2
     end
+
+    it "returns the current pattern" do
+      pattern = Pattern.new 'fo2o'
+      pattern.shift(2)
+      expect(pattern.reset).to eq pattern
+    end
+  end
+
+  describe '#reset!' do
+    it "just resets" do
+      pattern = Pattern.new 'ba2r'
+      pattern.shift
+      pattern.reset!
+      expect(pattern.cursor).to eq 0
+    end
   end
 
   describe '#letter' do
@@ -1597,6 +1612,29 @@ describe Hydra do
       hydra = Hydra.new 'abc'
       bhead = hydra.read 'ab'
       expect(bhead.pattern.to_s).to eq 'ab'
+    end
+  end
+
+  describe '#knocked_out?' do
+    it "tells whether a pattern is knocked out or not" do # FIXME Add string
+      hydra = Hydra.new '1bc'
+      pattern = Pattern.new 'a1bc'
+      pattern.shift
+      expect(hydra.knocked_out? pattern).to be_truthy
+    end
+
+    it "tells when a pattern is not" do
+      hydra = Hydra.new 'bc2'
+      pattern = Pattern.new 'ab2c'
+      pattern.shift(2)
+      expect(hydra.knocked_out? pattern).to be_falsey
+    end
+
+    it "says when it is really not" do
+      hydra = Hydra.new 'foo'
+      pattern = Pattern.new 'bar'
+      pattern.shift(3)
+      expect(hydra.knocked_out? pattern).to be_falsey
     end
   end
 
