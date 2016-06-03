@@ -80,7 +80,7 @@ describe Pattern do
     end
   end
 
-  describe '.simple' do
+  describe '.simple' do # TODO Rename to .atom
     it "returns a simple pattern" do
       pattern = Pattern.simple 'abc', 2, 1
       expect(pattern.get_word).to eq 'abc'
@@ -157,7 +157,7 @@ describe Pattern do
     end
   end
 
-  describe '#reset' do
+  describe '#reset' do # TODO Return pattern
     it "resets the cursor" do
       pattern = Pattern.new
       pattern.shift(2)
@@ -1696,40 +1696,7 @@ describe Heracles do
     end
   end
 
-  describe '#knockout' do
-    it "knocks out a position" do
-      heracles.knockout([{ line: 12, column: 3, dot: 2, length: 5 }])
-      expect(heracles.instance_variable_get :@knockouts).to eq([12, 5] => [[3, 5]])
-    end
-
-    it "can knock out several locations at once"  do
-      heracles.knockout([{ line: 5, column: 7, dot: 1, length: 2 }, { line: 12, column: 3, dot: 2, length: 5 }])
-      expect(heracles.instance_variable_get :@knockouts).to eq([5, 8] => [[7, 2]], [12, 5] => [[3, 5]])
-    end
-
-    it "stores reference to several sources" do
-      heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }, { line: 1, column: 0, dot: 2, length: 2 }])
-      positions = heracles.instance_variable_get :@knockouts
-      expect(positions).to eq([1, 2] => [[1, 2], [0, 2]])
-    end
-  end
-
-  describe '#knocked_out?' do
-    it "tells whether a position is knocked out or not" do
-      heracles.knockout([{ line: 6, column: 1, dot: 1, length: 2 }])
-      expect(heracles.knocked_out? 6, 1, 1, 3).to be_truthy
-    end
-
-    it "says no when it is not" do
-      heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
-      expect(heracles.knocked_out? 1, 2, 0, 3).to be_falsey
-    end
-
-    it "says no when it is definitely not" do
-      heracles.knockout([{ line: 1, column: 1, dot: 1, length: 2 }])
-      expect(heracles.knocked_out? 2, 0, 2, 3).to be_falsey
-    end
-  end
+  describe '#knocked_out?' # TODO
 
   describe '#run_file' do
     it "runs a file of hyphenated words" do
