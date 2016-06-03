@@ -113,7 +113,12 @@ class Pattern
   end
 
   def digit(n)
-    @digits[@cursor + n]
+    i = @cursor + n
+    if i < 0
+      nil
+    else
+      @digits[@cursor + n]
+    end
   end
 
   def last?
@@ -746,7 +751,7 @@ class Heracles
     end
   end
 
-  def aux(hydra, word, digits)
+  def aux(hydra, word, digits, dot, value)
     hydra.match(word).any? do |pattern| # FIXME Allow Hydra#match to take a pattern?
       # pattern.digit(dot - pattern.anchor) == value
       pattern.get_word == digits[pattern.anchor..pattern.anchor+pattern.length]
@@ -756,10 +761,11 @@ class Heracles
   def knocked_out_by_hydrae?(pattern, length, dot, value, k)
     @rejected ||= Hydra.new
     partial = Pattern.simple(pattern.word_to(length), dot, value)
+    # byebug if partial.to_s == "1ent"
     w = partial.get_word
     w = '.' + w if partial.initial?
     digits = partial.get_digits
-    k2 = aux(@final_hydra, w, digits) || aux(@rejected, w, digits)
+    k2 = aux(@final_hydra, w, digits, dot, value) || aux(@rejected, w, digits, dot, value)
     k2 = if k2 then true else false end
     # byebug unless k == k2
 

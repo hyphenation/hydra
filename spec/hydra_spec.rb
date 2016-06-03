@@ -199,6 +199,11 @@ describe Pattern do
       pattern.shift(3)
       expect(pattern.digit(2)).to eq 8
     end
+
+    it "returns nil if n is negative" do
+      pattern = Pattern.new('abc')
+      expect(pattern.digit(-1)).to be_nil
+    end
   end
 
   describe '#last?' do
