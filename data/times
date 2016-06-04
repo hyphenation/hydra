@@ -1,6 +1,6 @@
-Full suite: 1.41s with commit 9206fac
-100.pattern.ruby.9 (spec/hydra_spec.rb:1702): 0.52307 seconds with commit 9206fac
-10k.patterns (spec/hydra_spec:1714): 1 minutes 20.28 seconds with commit 9206fac (1.49s with patgen)
+Full suite: 6.1s with commit c8b5e10
+100.pattern.ruby.9 (spec/hydra_spec.rb:1753): 2.39 seconds with commit c8b5e10
+10k.patterns (spec/hydra_spec:1765): 6 minutes 46 seconds with commit c8b5e10 (1.49s with patgen) – and wrong patterns!
 pattern.ruby.1,2 (hydra_spec:1726): 12 minutes 33 seconds with commit 9206fac (6.82s with patgen)
 10k.pattern.ruby.9 (ruby_spec:1735): 3 minutes 57.3 seconds with commit 9206fac (4.84s with patgen)
 pattern.ruby.1 (spec/hydra_spec.rb:1747): approx. 54 min. with commit 9206fac
