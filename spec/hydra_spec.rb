@@ -749,6 +749,15 @@ describe Lemma do
       expect(lemma.break(1)).to be == :is
     end
   end
+
+  describe '#showhyphens' do
+    it "returns the actual hyphens" do
+      lemma = Lemma.new 'foo-bar'
+      expect(lemma.showhyphens).to be == 'foo-bar'
+    end
+
+    # TODO Figure out what to do with the other “dot” types
+  end
 end
 
 describe Hydra do

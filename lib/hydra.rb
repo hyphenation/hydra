@@ -290,7 +290,13 @@ class Pattern
   def showhyphens(lefthyphenmin = 0, righthyphenmin = 0)
     output = ''
     @digits.each_with_index do |digit, index|
-      output += '-' if digit % 2 == 1 && index > 0 && index >= lefthyphenmin && index <= length - [1, righthyphenmin].max
+      if index > 0 && index >= lefthyphenmin && index <= length - [1, righthyphenmin].max
+        if is_a? Lemma
+          output += '-' if self.break(index) == :is
+        elsif digit % 2 == 1
+          output += '-'
+        end
+      end
       output += @word[index] if index < length
     end
 
