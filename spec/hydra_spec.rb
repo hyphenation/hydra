@@ -1627,6 +1627,11 @@ describe Hydra do
       hydra.instance_variable_set(:@conflicts, [[Pattern.new('a1b'), Pattern.new('a2b')]])
       expect(hydra.conflicts).to eq [['a1b', 'a2b']]
     end
+
+    it "doesn’t get confused" do
+      hydra = Hydra.new ['1a2b', 'a3b']
+      expect(hydra.conflicts).to eq [['1a2b', 'a3b']]
+    end
   end
 
   describe '#disembowel' do
