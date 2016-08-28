@@ -1179,6 +1179,15 @@ describe Hydra do
       hydra = Hydra.new ['a1b', 'b1c'], :strict
       expect { hydra.ingest('a2b') }.to raise_error Hydra::ConflictingPattern
     end
+
+    it "gives a helpful message in case of conflicting patterns" do
+      hydra = Hydra.new ['a1b', 'b1c'], :strict
+      begin
+        hydra.ingest('a2b')
+      rescue Hydra::ConflictingPattern => error
+        expect(error.message).to eq "Pattern a2b conflicts with earlier pattern a1b"
+      end
+    end
   end
 
   describe '#digest' do
