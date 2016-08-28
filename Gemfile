@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
-gem 'rspec'
-gem 'byebug', group: [:development, :test]
 gem 'unicode_utils'
+gem 'rspec', group: [:development, :test]
+gem 'byebug', group: [:development, :test]
