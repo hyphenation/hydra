@@ -347,6 +347,7 @@ class Hydra
     @righthyphenmin = 3
     @good_count = @bad_count = 0
     @index = 0
+    @conflicts = []
     ingest words if words
     @atlas = atlas if atlas
   end
@@ -542,6 +543,7 @@ class Hydra
         if gethead
           message = "Pattern #{pattern.to_s} conflicts with earlier pattern #{self.pattern}"
           raise ConflictingPattern.new(message) if @mode == :strict
+          prominens.add_conflict(Pattern.new(self.pattern), pattern)
           sethead(pattern.get_digits.mask(gethead)) && self
         else
           sethead(pattern.get_digits) && self
@@ -669,6 +671,16 @@ class Hydra
 
   def add_pattern(pattern, length, dot, level)
     ingest Pattern.simple(pattern.word_to(length), dot, level)
+  end
+
+  def add_conflict(original, conflicting)
+    @conflicts << [original, conflicting]
+  end
+
+  def conflicts
+    @conflicts.map do |conflict|
+      [conflict.first.to_s, conflict.last.to_s]
+    end
   end
 
   # Debug methods

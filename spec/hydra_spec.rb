@@ -1188,6 +1188,12 @@ describe Hydra do
         expect(error.message).to eq "Pattern a2b conflicts with earlier pattern a1b"
       end
     end
+
+    it "stores the conflicting pattern together with the original one, just in ecase" do
+      hydra = Hydra.new ['a1b', 'b1c']
+      hydra.ingest 'a2b'
+      expect(hydra.conflicts).to eq [['a1b', 'a2b']]
+    end
   end
 
   describe '#digest' do
@@ -1606,6 +1612,20 @@ describe Hydra do
       hydra = Hydra.new 'abc'
       bhead = hydra.read 'ab'
       expect(bhead.pattern.to_s).to eq 'ab'
+    end
+  end
+
+  describe '#add_conflict' do
+    it "adds an element to the list of conflicting patterns" do
+      hydra.add_conflict(Pattern.new('fo1'), Pattern.new('fo2'))
+      expect(hydra.instance_variable_get(:@conflicts).count).to eq 1
+    end
+  end
+
+  describe '#conflicts' do
+    it "returns the list of conflicts" do
+      hydra.instance_variable_set(:@conflicts, [[Pattern.new('a1b'), Pattern.new('a2b')]])
+      expect(hydra.conflicts).to eq [['a1b', 'a2b']]
     end
   end
 
