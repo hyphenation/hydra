@@ -1174,6 +1174,11 @@ describe Hydra do
       node = hydra.ingest 'klm'
       expect(node.pattern.to_s).to eq 'klm'
     end
+
+    it "warns about conflicting patterns in strict mode" do
+      hydra = Hydra.new ['a1b', 'b1c'], :strict
+      expect { hydra.ingest('a2b') }.to raise_error Hydra::ConflictingPattern
+    end
   end
 
   describe '#digest' do

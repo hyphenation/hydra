@@ -540,6 +540,7 @@ class Hydra
         getneck(letter).ingest(pattern.shift) unless pattern.end?
       else
         if gethead
+          raise ConflictingPattern if @mode == :strict
           sethead(pattern.get_digits.mask(gethead)) && self
         else
           sethead(pattern.get_digits) && self
