@@ -537,11 +537,7 @@ class Hydra
       letter = pattern.currletter
       if letter
         ensure_neck(letter)
-        if pattern.end?
-          setatlas(letter, pattern.get_digits)
-        else
-          getneck(letter).ingest(pattern.shift)
-        end
+        getneck(letter).ingest(pattern.shift) unless pattern.end?
       else
         if gethead
           sethead(pattern.get_digits.mask(gethead)) && self
