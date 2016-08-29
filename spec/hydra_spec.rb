@@ -1673,7 +1673,7 @@ describe Hydra do
       Dir.mktmpdir 'hydra' do |dir|
         filename = File.join(dir, 'words')
         file = File.open(filename, 'w')
-        file.puts "fo-to\n% Reformed spelling\nfoo-bar% I think\nfool"
+        file.puts "% Here are some patterns\nfo1\nfo2o3% I like this one\n5bar7"
         file.close
         hydra.ingest_file(filename)
         expect(hydra.count).to eq 3
