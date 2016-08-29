@@ -1666,6 +1666,20 @@ describe Hydra do
       hydra.setrighthyphenmin 2
       expect(hydra.showhyphens('Zwangsvollstreckungsmaßnahme')).to eq 'zwangs-voll-stre-ckungs-maß-nah-me'
     end
+
+    it "accepts comments" do
+      require 'tmpdir'
+      require 'fileutils'
+      Dir.mktmpdir 'hydra' do |dir|
+        filename = File.join(dir, 'words')
+        file = File.open(filename, 'w')
+        file.puts "fo-to\n% Reformed spelling\nfoo-bar% I think\nfool"
+        file.close
+        hydra.ingest_file(filename)
+        expect(hydra.count).to eq 3
+        FileUtils.remove filename
+      end
+    end
   end
 end
 

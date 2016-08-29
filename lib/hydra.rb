@@ -555,7 +555,11 @@ class Hydra
   end
 
   def ingest_file(filename)
-    ingest(File.read(filename).split)
+    file = File.open(filename, 'r')
+    file.each_line do |line|
+      ingest(line.gsub(/%.*$/, '').strip.split)
+    end
+    file.close
   end
 
   def digest(pattern = Pattern.new)
