@@ -76,11 +76,13 @@ class Pattern
   end
 
   def self.dummy(word)
-    new word, [0] * (word.length + 1)
+    new(word, [0] * (word.length + 1))
   end
 
   def self.simple(word, position, value)
-    new word, (word.length + 1).times.map { |i| if i == position then value else 0 end }
+    new(word, (word.length + 1).times.map do |i|
+      if i == position then value else 0 end
+    end)
   end
 
   def get_digits
@@ -193,12 +195,12 @@ class Pattern
 
   def initial!
     @initial = true
-    @digits = @digits[1..@digits.length - 1] if @digits.length > @word.length + 1
+    @digits = @digits[1..-1] if @digits.length > @word.length + 1
   end
 
   def final!
     @final = true
-    @digits = @digits[0..@digits.length - 2] if @digits.length > @word.length + 1
+    @digits = @digits[0..-2] if @digits.length > @word.length + 1
   end
 
   def initial
@@ -510,16 +512,16 @@ class Hydra
   end
 
   def count
-    @necks.inject(0) do |sum, neck|
-      neck = neck.last
+    @necks.inject(0) do |sum, letter_and_neck|
+      neck = letter_and_neck.last
       sum += 1 if neck.gethead
       sum + if neck.is_a? Hydra then neck.count else 0 end
     end
   end
 
   def each(&block)
-    @necks.each do |neck|
-      neck = neck.last
+    @necks.each do |letter_and_neck|
+      neck = letter_and_neck.last
       block.call(neck) if neck.gethead
       neck.each(&block)
     end
@@ -557,7 +559,8 @@ class Hydra
   end
 
   def digest(pattern = Pattern.new)
-    if gethead then [pattern.freeze(gethead).to_s] else [] end + letters.sort.map do |letter|
+    if gethead then [pattern.freeze(gethead).to_s] else [] end +
+    letters.sort.map do |letter|
       getneck(letter).digest(pattern.fork(letter))
     end.flatten
   end
@@ -619,10 +622,9 @@ class Hydra
     getneck('.').regest(Pattern.dummy(word), :match, matches) if getneck('.')
     matches.each { |match| match.setanchor(0) }
     matches.each { |pattern| pattern.initial! }
-    l = word.length
-    l.times.each do |n|
+    word.length.times.each do |n|
       temp = []
-      regest(Pattern.dummy(word[n..l-1]), :match, temp)
+      regest(Pattern.dummy(word[n..-1]), :match, temp)
       temp.each { |match| match.setanchor(n) }
       matches += temp
     end
@@ -633,10 +635,8 @@ class Hydra
   def hydrae(word)
     matches = []
     getneck('.').regest(Pattern.dummy(word), :hydrae, matches) if getneck('.')
-    l = word.length
     pattern = Pattern.dummy(word)
-    l.times.each do |n|
-      # regest(Pattern.dummy(word[n..l-1]), :hydrae, matches)
+    word.length.times.each do |n|
       pattern.reset(n) # TODO Test that strategy thoroughly
       regest(pattern, :hydrae, matches)
     end
