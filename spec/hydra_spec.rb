@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-# Bug!  With TeX’s Slovak patterns: dotnadhydra = hydra.read '.nad'
-# hydra.digest then returns ["h54", "ne5s4.", "p54", "p544.", "ro5b4no.", "ŕ544."] 
-# That doesn’t look right at all ;-)
-
 describe Array do
   describe '#mask' do
     it "masks an array with another array of equal length" do
@@ -1229,6 +1225,24 @@ describe Hydra do
     it "works with both initial and final dots" do
       hydra = Hydra.new ['.abc', 'def', 'gijk', 'xyz.', '.klm.']
       expect(hydra.digest).to eq ['.abc', '.klm.', 'def', 'gijk', 'xyz.']
+    end
+
+    it "works with initial and final dots, and the cursor mid-way" do
+# Bug!  With TeX’s Slovak patterns: dotnadhydra = hydra.read '.nad'
+# .nad5h4
+# .na5d4nes.
+# .nad5p4
+# .na5d4p4.
+# .na5d4ŕ4.
+# .na5d4robno.
+# hydra.digest then returns ["h54", "ne5s4.", "p54", "p544.", "ro5b4no.", "ŕ544."] 
+# That doesn’t look right at all ;-)
+      hydra = Hydra.new ['.nad5h4', '.na5d4nes.', '.nad5p4', '.na5d4p4.', '.nad5d4ŕ4.', '.na5d4robno.']
+      dotnadhydra = hydra.read('.nad')
+      dig = ['5d4ŕ4.', '5h4', '4nes.', '5p4', '4p4.', '4robno.']
+      expect(hydra.digest.map { |s| s.gsub(/^\.na\d?d/, '') }).to eq dig
+      pending
+      expect(dotnadhydra.digest).to eq dig
     end
   end
 
