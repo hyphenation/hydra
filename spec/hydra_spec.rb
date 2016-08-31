@@ -427,6 +427,24 @@ describe Pattern do
       pattern.freeze [0, 1, 2, 3, 4, 5, 6]
       expect(pattern.instance_variable_get :@frozen).to be_truthy
     end
+
+    it "works with initial dots" do
+      pattern = Pattern.new('.foo')
+      pattern.freeze [4, 3, 2, 1]
+      expect(pattern.to_s).to eq ".4f3o2o1"
+    end
+
+    it "works with final dots" do
+      pattern = Pattern.new('bar.')
+      pattern.freeze [1, 2, 3, 4]
+      expect(pattern.to_s).to eq "1b2a3r4."
+    end
+
+    it "works with both initial and final dots" do
+      pattern = Pattern.new('.foobar.')
+      pattern.freeze([4, 3, 2, 1, 2, 3, 4])
+      expect(pattern.to_s).to eq ".4f3o2o1b2a3r4."
+    end
   end
 
   describe '#freeze!' do
@@ -1241,7 +1259,10 @@ describe Hydra do
       dotnadhydra = hydra.read('.nad')
       dig = ['5d4ŕ4.', '5h4', '4nes.', '5p4', '4p4.', '4robno.']
       expect(hydra.digest.map { |s| s.gsub(/^\.na\d?d/, '') }).to eq dig
+      dotnadhhydra = dotnadhydra.getneck('h')
       pending
+      byebug
+      expect(dotnadhhydra.digest).to eq ['4']
       expect(dotnadhydra.digest).to eq dig
     end
   end

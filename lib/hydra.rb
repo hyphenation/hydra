@@ -563,6 +563,7 @@ class Hydra
   end
 
   def digest(pattern = Pattern.new)
+    byebug if self.pattern == '.nad5h4'
     if gethead then [pattern.freeze(gethead).to_s] else [] end +
     letters.sort.map do |letter|
       getneck(letter).digest(pattern.fork(letter))
