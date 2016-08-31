@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+# Bug!  With TeX’s Slovak patterns: dotnadhydra = hydra.read '.nad'
+# hydra.digest then returns ["h54", "ne5s4.", "p54", "p544.", "ro5b4no.", "ŕ544."] 
+# That doesn’t look right at all ;-)
+
 describe Array do
   describe '#mask' do
     it "masks an array with another array of equal length" do
