@@ -1279,8 +1279,6 @@ describe Hydra do
       dig = ['5d4ŕ4.', '5h4', '4nes.', '5p4', '4p4.', '4robno.']
       expect(hydra.digest.map { |s| s.gsub(/^\.na\d?d/, '') }).to eq dig
       dotnadhhydra = dotnadhydra.getneck('h')
-      pending
-      byebug
       expect(dotnadhhydra.digest).to eq ['4']
       expect(dotnadhydra.digest).to eq dig
     end

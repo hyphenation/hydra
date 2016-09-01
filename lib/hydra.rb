@@ -563,7 +563,6 @@ class Hydra
   end
 
   def digest(pattern = Pattern.new, depth = nil)
-    byebug if self.pattern == '.nad5h4'
     unless depth
       depth = if self.pattern =~ /^\./ then self.depth - 1 else self.depth end
       depth = 0 if depth < 0
