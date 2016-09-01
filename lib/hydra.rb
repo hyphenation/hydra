@@ -568,7 +568,7 @@ class Hydra
 
   def digest(pattern = Pattern.new, depth = nil)
     unless depth
-      depth = if self.pattern =~ /^\./ then self.depth - 1 else self.depth end
+      depth = if prominens == '.' then self.depth - 1 else self.depth end
       depth = 0 if depth < 0
     end
     if gethead then [pattern.freeze(gethead, depth).to_s] else [] end +
@@ -586,7 +586,7 @@ class Hydra
         matches << Pattern.new(pattern.word_so_far, digits)
       when :hydrae
         @index = pattern.cursor - depth
-        @index += 1 if self.pattern.to_s =~ /^\./ # FIXME awful
+        @index += 1 if prominens == '.'
         matches << self
       when :hyphenate
         pattern.mask digits
@@ -608,7 +608,7 @@ class Hydra
             matches << Pattern.new(pattern.word_so_far, head).final
           elsif mode == :hydrae
             index = pattern.cursor - depth
-            index += 1 if self.pattern.to_s =~ /^\./ # FIXME See above
+            index += 1 if prominens == '.'
             index.times { dotneck.shift }
             matches << dotneck
           elsif mode == :hyphenate
