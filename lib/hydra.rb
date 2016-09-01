@@ -422,7 +422,7 @@ class Hydra
 
   def prominens(letter = nil)
     letter = @atlas unless letter
-    if parent then parent.prominens(letter) else letter end
+    if parent then parent.prominens(@atlas) else letter end
   end
 
   def ensure_neck(letter)
