@@ -440,6 +440,7 @@ class Hydra
 
   def sethead(digits)
     @head = digits
+    self
   end
 
   def gethead
@@ -550,9 +551,9 @@ class Hydra
           message = "Pattern #{pattern.to_s} conflicts with earlier pattern #{self.pattern}"
           raise ConflictingPattern.new(message) if @mode == :strict
           star.add_conflict(Pattern.new(self.pattern), pattern.copy)
-          sethead(pattern.get_digits.mask(gethead)) && self
+          sethead(pattern.get_digits.mask(gethead))
         else
-          sethead(pattern.get_digits) && self
+          sethead(pattern.get_digits)
         end
       end
     end

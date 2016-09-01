@@ -988,6 +988,10 @@ describe Hydra do
     it "sets the head" do
       hydra.sethead [1, 2, 3]
     end
+
+    it "returns the hydra" do
+      expect(hydra.sethead([1, 2, 3])).to eq hydra
+    end
   end
 
   describe '#gethead' do
