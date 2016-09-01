@@ -421,7 +421,6 @@ class Hydra
   end
 
   def prominens(letter = nil)
-    letter = @atlas unless letter
     if parent then parent.prominens(@atlas) else letter end
   end
 
