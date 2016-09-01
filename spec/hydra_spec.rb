@@ -445,6 +445,13 @@ describe Pattern do
       pattern.freeze([4, 3, 2, 1, 2, 3, 4])
       expect(pattern.to_s).to eq ".4f3o2o1b2a3r4."
     end
+
+    it "takes an optional depth argument" do
+      # Imagining a “fo1o2” with cursor = 2
+      pattern = Pattern.new('o')
+      pattern.freeze([0, 0, 1, 2], 2)
+      expect(pattern.to_s).to eq '1o2' # Will return ‘o12’ otherwise
+    end
   end
 
   describe '#freeze!' do
@@ -1243,6 +1250,12 @@ describe Hydra do
     it "works with both initial and final dots" do
       hydra = Hydra.new ['.abc', 'def', 'gijk', 'xyz.', '.klm.']
       expect(hydra.digest).to eq ['.abc', '.klm.', 'def', 'gijk', 'xyz.']
+    end
+
+    it "works from a hydra with a non-zero depth" do
+      hydra = Hydra.new ['1a2b3c4d5']
+      abcneck = hydra.read('abc')
+      expect(abcneck.digest).to eq ['4d5']
     end
 
     it "works with initial and final dots, and the cursor mid-way" do

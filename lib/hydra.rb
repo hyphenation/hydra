@@ -151,8 +151,8 @@ class Pattern
     Pattern.new(String.new(@word), digits)
   end
 
-  def freeze(digits)
-    @digits = digits
+  def freeze(digits, depth = 0)
+    @digits = digits[depth..-1]
     @frozen = true
     self
   end
@@ -562,11 +562,11 @@ class Hydra
     file.close
   end
 
-  def digest(pattern = Pattern.new)
+  def digest(pattern = Pattern.new, depth = depth)
     byebug if self.pattern == '.nad5h4'
-    if gethead then [pattern.freeze(gethead).to_s] else [] end +
+    if gethead then [pattern.freeze(gethead, depth).to_s] else [] end +
     letters.sort.map do |letter|
-      getneck(letter).digest(pattern.fork(letter))
+      getneck(letter).digest(pattern.fork(letter), depth)
     end.flatten
   end
 
