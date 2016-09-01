@@ -1265,15 +1265,6 @@ describe Hydra do
     end
 
     it "works on a more complex example" do
-# Bug!  With TeX’s Slovak patterns: dotnadhydra = hydra.read '.nad'
-# .nad5h4
-# .na5d4nes.
-# .nad5p4
-# .na5d4p4.
-# .na5d4ŕ4.
-# .na5d4robno.
-# hydra.digest then returns ["h54", "ne5s4.", "p54", "p544.", "ro5b4no.", "ŕ544."] 
-# That doesn’t look right at all ;-)
       hydra = Hydra.new ['.nad5h4', '.na5d4nes.', '.nad5p4', '.na5d4p4.', '.nad5d4ŕ4.', '.na5d4robno.']
       dotnadhydra = hydra.read('.nad')
       dig = ['5d4ŕ4.', '5h4', '4nes.', '5p4', '4p4.', '4robno.']
