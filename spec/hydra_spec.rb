@@ -1259,6 +1259,12 @@ describe Hydra do
     end
 
     it "works with initial and final dots, and the cursor mid-way" do
+      hydra = Hydra.new '.1a2b3c4d5'
+      dotabcneck = hydra.read('.abc')
+      expect(dotabcneck.digest).to eq ['4d5']
+    end
+
+    it "works on a more complex example" do
 # Bug!  With TeX’s Slovak patterns: dotnadhydra = hydra.read '.nad'
 # .nad5h4
 # .na5d4nes.

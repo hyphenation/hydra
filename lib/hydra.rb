@@ -562,8 +562,12 @@ class Hydra
     file.close
   end
 
-  def digest(pattern = Pattern.new, depth = depth)
+  def digest(pattern = Pattern.new, depth = nil)
     byebug if self.pattern == '.nad5h4'
+    unless depth
+      depth = if self.pattern =~ /^\./ then self.depth - 1 else self.depth end
+      depth = 0 if depth < 0
+    end
     if gethead then [pattern.freeze(gethead, depth).to_s] else [] end +
     letters.sort.map do |letter|
       getneck(letter).digest(pattern.fork(letter), depth)
