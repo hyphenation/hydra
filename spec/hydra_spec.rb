@@ -400,13 +400,21 @@ describe Pattern do
   describe '#copy' do
     it "returns a new pattern with the same word" do
       pattern = Pattern.new('fo2o')
-      expect(pattern.copy([1, 2, 3, 0])).to be_a Pattern
+      expect(pattern.copy).to be_a Pattern
     end
 
-    it "sets the digits" do
+    it "sets the same digits" do
       pattern = Pattern.new('ba2r')
-      new_pattern = pattern.copy [4, 5, 6, 0]
-      expect(new_pattern.get_digits).to eq [4, 5, 6, 0]
+      new_pattern = pattern.copy
+      expect(new_pattern.get_digits).to eq [0, 0, 2, 0]
+    end
+
+    it "creates a new array so it doesn’t overlap" do
+      pattern = Pattern.new('foo3')
+      new_pattern = pattern.copy
+      new_pattern.freeze([0, 0, 0, 5])
+      expect(pattern.to_s).to eq "foo3"
+      expect(new_pattern.to_s).to eq "foo5"
     end
   end
 

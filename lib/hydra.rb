@@ -147,8 +147,8 @@ class Pattern
     pattern
   end
 
-  def copy(digits)
-    Pattern.new(String.new(@word), digits)
+  def copy
+    Pattern.new(String.new(@word), Array.new(@digits))
   end
 
   def freeze(digits, depth = 0)
@@ -549,7 +549,7 @@ class Hydra
         if gethead
           message = "Pattern #{pattern.to_s} conflicts with earlier pattern #{self.pattern}"
           raise ConflictingPattern.new(message) if @mode == :strict
-          star.add_conflict(Pattern.new(self.pattern), pattern.copy(pattern.get_digits.map.to_a)) # TODO Something simpler # FIXME Probably #copy
+          star.add_conflict(Pattern.new(self.pattern), pattern.copy)
           sethead(pattern.get_digits.mask(gethead)) && self
         else
           sethead(pattern.get_digits) && self
