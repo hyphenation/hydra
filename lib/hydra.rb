@@ -292,7 +292,7 @@ class Pattern
   def showhyphens(lefthyphenmin = 0, righthyphenmin = 0)
     output = ''
     @digits.each_with_index do |digit, index|
-      if index > 0 && index >= lefthyphenmin && index <= length - [1, righthyphenmin].max
+      if index >= [1, lefthyphenmin].max && index <= length - [1, righthyphenmin].max
         if is_a? Lemma
           output += '-' if self.break(index) == :is
         elsif digit % 2 == 1
@@ -722,6 +722,7 @@ class Heracles
     @output.puts "This is Hydra, a Ruby implementation of patgen"
 
     @count_hydra = Hydra.new
+    @final_hydra = Hydra.new
 
     @knockouts = { }
   end
@@ -837,12 +838,11 @@ class Heracles
     run(File.read(filename).split("\n"), parameters, hyphenmins)
   end
 
-  def run(array, parameters = [], hyphenmins = [2, 3])
-    @final_hydra = Hydra.new
+  def run(array, params = [], hyphenmins = [2, 3])
     @final_hydra.setlefthyphenmin(hyphenmins.first)
     @final_hydra.setrighthyphenmin(hyphenmins.last)
-    hyphenation_level_start = parameters.shift
-    hyphenation_level_end = parameters.shift
+    hyphenation_level_start = params.shift
+    hyphenation_level_end = params.shift
 
     knocked_out_levels = []
 
@@ -852,16 +852,13 @@ class Heracles
         @output.puts "Hyphenation level #{hyphenation_level} knocked out"
         next
       end
-      pattern_length_start = parameters.shift
-      pattern_length_end = parameters.shift
-      good_weight = parameters.shift
-      bad_weight = parameters.shift
-      threshold = parameters.shift
+      pattern_length_start, pattern_length_end = params.shift, params.shift
+      good_weight, bad_weight, thresh = params.shift, params.shift, params.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
-      set_parameters(hyphenmins, [hyphenation_level, pattern_length_start, pattern_length_end, good_weight, bad_weight, threshold])
-      final_hydra_count = @final_hydra.count
+      set_parameters(hyphenmins, [hyphenation_level, pattern_length_start, pattern_length_end, good_weight, bad_weight, thresh])
+      old_count = @final_hydra.count
       pass(array)
-      if final_hydra_count == @final_hydra.count && @count_hydra.count == 0
+      if old_count == @final_hydra.count && @count_hydra.count == 0
         knocked_out_levels << hyphenation_level
         @output.puts "Hyphenation level #{hyphenation_level} didn’t yield any new patterns, knocked out"
       end
