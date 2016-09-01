@@ -926,11 +926,22 @@ describe Hydra do
     end
   end
 
-  describe '#prominens' do # Vertebra prominens is the base of the neck (C7)
+  # The star is the multiple spinous process at the base of the necks.
+  # This is a well-known fact of hydra anatomy.
+  describe '#star' do
     it "goes back to the base of the hydra" do
       hydra = Hydra.new 'foo'
       fooneck = hydra.read 'foo'
-      expect(fooneck.prominens).to eq hydra
+      expect(fooneck.star).to eq hydra
+    end
+  end
+
+  # Vertebra prominens is the base of the neck (C7)
+  describe '#prominens' do
+    it "returns the first letter of the current neck" do
+      hydra = Hydra.new ['abc', 'abd', 'abe', 'fgh', 'jklm']
+      abneck = hydra.read('abe')
+      expect(abneck.prominens).to eq 'a'
     end
   end
 

@@ -416,8 +416,13 @@ class Hydra
     end
   end
 
-  def prominens
-    if parent then parent.prominens else self end
+  def star
+    if parent then parent.star else self end
+  end
+
+  def prominens(letter = nil)
+    letter = @atlas unless letter
+    if parent then parent.prominens(letter) else letter end
   end
 
   def ensure_neck(letter)
@@ -545,7 +550,7 @@ class Hydra
         if gethead
           message = "Pattern #{pattern.to_s} conflicts with earlier pattern #{self.pattern}"
           raise ConflictingPattern.new(message) if @mode == :strict
-          prominens.add_conflict(Pattern.new(self.pattern), pattern.copy(pattern.get_digits.map.to_a)) # TODO Something simpler # FIXME Probably #copy
+          star.add_conflict(Pattern.new(self.pattern), pattern.copy(pattern.get_digits.map.to_a)) # TODO Something simpler # FIXME Probably #copy
           sethead(pattern.get_digits.mask(gethead)) && self
         else
           sethead(pattern.get_digits) && self
