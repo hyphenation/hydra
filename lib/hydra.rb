@@ -2,6 +2,7 @@ require 'byebug'
 require 'pp'
 require 'unicode_utils'
 
+# TODO ingest_tex_file
 class Array
   class MismatchedLength < StandardError
   end
