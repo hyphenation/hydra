@@ -1768,6 +1768,17 @@ describe Hydra do
         expect(hydra.digest).to eq ['foo', 'oo', 'o', 'bar', 'ar', 'r', 'bazquux', 'azquux', 'zquux', 'quux', 'uux', 'ux', 'x'].sort
       end
     end
+
+    it "ignores hyphen for the moment" do
+      Dir.mktmpdir 'hydra' do |dir|
+        filename = File.join(dir, 'hyphenated-words')
+        file = File.open(filename, 'w')
+        file.puts "foo-bar"
+        file.close
+        hydra.start_file(filename)
+        expect(hydra.digest).to eq ['foobar', 'oobar', 'obar', 'bar', 'ar', 'r'].sort
+      end
+    end
   end
 end
 

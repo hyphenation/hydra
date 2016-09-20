@@ -704,7 +704,7 @@ class Hydra
     end
   end
 
-  # Debug methods
+  # Debug methods # FIXME No longer relevant.  But rename method below!
   def pattern(neck = "", digits = nil)
     if digits
       if parent
@@ -725,7 +725,7 @@ class Hydra
 
   def start_file(filename)
     File.read(filename).each_line do |line|
-      word = line.strip.gsub(/%.*$/, '')
+      word = line.strip.gsub(/%.*$/, '').gsub(/-/, '')
       word.length.times do |i|
         ingest(word[i..-1])
       end
