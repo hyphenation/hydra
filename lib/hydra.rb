@@ -525,6 +525,13 @@ class Hydra
     end
   end
 
+  def knuckles
+    1 + @necks.inject(0) do |sum, letter_and_neck|
+      neck = letter_and_neck.last
+      sum + if neck.is_a? Hydra then neck.knuckles else 0 end
+    end
+  end
+
   def each(&block)
     @necks.each do |letter_and_neck|
       neck = letter_and_neck.last
@@ -714,6 +721,15 @@ class Hydra
   def disembowel(device = $stdout)
     PP.pp self, device
     count
+  end
+
+  def start_file(filename)
+    File.read(filename).each_line do |line|
+      word = line.strip.gsub(/%.*$/, '')
+      word.length.times do |i|
+        ingest(word[i..-1])
+      end
+    end
   end
 end
 

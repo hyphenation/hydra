@@ -1114,6 +1114,13 @@ describe Hydra do
     end
   end
 
+  describe '#knuckles' do
+    it "returns the node count" do
+      hydra.ingest(['abc', 'd', 'e', 'f'])
+      expect(hydra.knuckles).to eq 7
+    end
+  end
+
   describe '#each' do
     it "iterates over the hydra" do
       hydra = Hydra.new ['α', 'β', 'γ', 'δ']
@@ -1738,8 +1745,6 @@ describe Hydra do
     end
 
     it "accepts comments" do
-      require 'tmpdir'
-      require 'fileutils'
       Dir.mktmpdir 'hydra' do |dir|
         filename = File.join(dir, 'words')
         file = File.open(filename, 'w')
@@ -1748,6 +1753,19 @@ describe Hydra do
         hydra.ingest_file(filename)
         expect(hydra.count).to eq 3
         FileUtils.remove filename
+      end
+    end
+  end
+
+  describe '#start_file' do # FIXME Terrible method name
+    it "initialize the hydra with all strings and substrings in the file" do
+      Dir.mktmpdir 'hydra' do |dir|
+        filename = File.join(dir, 'words')
+        file = File.open(filename, 'w')
+        file.puts "% Here are some words\nfoo\nbar\nbazquux"
+        file.close
+        hydra.start_file(filename)
+        expect(hydra.digest).to eq ['foo', 'oo', 'o', 'bar', 'ar', 'r', 'bazquux', 'azquux', 'zquux', 'quux', 'uux', 'ux', 'x'].sort
       end
     end
   end
