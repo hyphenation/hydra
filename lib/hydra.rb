@@ -105,11 +105,11 @@ class Pattern
     @cursor = n
   end
 
-  def letter(n)
+  def letter(n) # FIXME  See #digit below: merge #currletter into this
     @word[n]
   end
 
-  def digit(n)
+  def digit(n) # FIXME  Integrate with #currdigit and
     @digits[@cursor + n]
   end
 
