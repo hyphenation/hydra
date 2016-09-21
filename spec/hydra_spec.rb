@@ -27,25 +27,22 @@ describe Pattern do
 
     it "handles initial dots correctly" do
       pattern = Pattern.new '.foo'
-      expect(pattern.initial?).to be_truthy
-      expect(pattern.length).to eq 3
+      expect(pattern).to be_initial # RSpec calls pattern.initial?
       expect(pattern.word).to eq 'foo'
       expect(pattern.digits).to eq [0] * 4
     end
 
     it "handles final dots correctly" do
       pattern = Pattern.new 'bar.'
-      expect(pattern.final?).to be_truthy
-      expect(pattern.length).to eq 3
+      expect(pattern).to be_final
       expect(pattern.word).to eq 'bar'
       expect(pattern.digits).to eq [0] * 4
     end
 
     it "handle simultaneous initial and final dots correctly" do
       pattern = Pattern.new '.foobar.'
-      expect(pattern.initial?).to be_truthy
-      expect(pattern.final?).to be_truthy
-      expect(pattern.length).to eq 6
+      expect(pattern).to be_initial
+      expect(pattern).to be_final
       expect(pattern.word).to eq 'foobar'
       expect(pattern.digits).to eq [0] * 7
     end
