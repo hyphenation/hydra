@@ -280,7 +280,7 @@ class Pattern
     end
     @digits << 0 if @digits.length == @word.length # Ensure explicit 0 after end of pattern
     @breakpoints << :no if @breakpoints
-    raise BadPattern unless @digits.length == @word.length + 1
+    raise Hydra::BadPattern unless @digits.length == @word.length + 1
     # FIXME Test for that
   end
 
