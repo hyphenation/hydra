@@ -16,6 +16,8 @@ class Array
 end
 
 class Pattern
+  attr_reader :digits, :word
+
   def initialize(word = nil, digits = nil)
     @cursor = 0
     @good_count = @bad_count = 0
@@ -84,14 +86,6 @@ class Pattern
     new(word, (word.length + 1).times.map do |i|
       if i == position then value else 0 end
     end)
-  end
-
-  def get_digits
-    @digits
-  end
-
-  def get_word
-    @word
   end
 
   def length
@@ -223,11 +217,11 @@ class Pattern
   end
 
   def <=>(other)
-    word_order = @word <=> other.get_word
+    word_order = @word <=> other.word
     if word_order != 0
       word_order
     else
-      @digits <=> other.get_digits
+      @digits <=> other.digits
     end
   end
 
@@ -559,9 +553,9 @@ class Hydra
           message = "Pattern #{pattern.to_s} conflicts with earlier pattern #{self.pattern}"
           raise ConflictingPattern.new(message) if @mode == :strict
           star.add_conflict(Pattern.new(self.pattern), pattern.copy)
-          sethead(pattern.get_digits.mask(gethead))
+          sethead(pattern.digits.mask(gethead))
         else
-          sethead(pattern.get_digits)
+          sethead(pattern.digits)
         end
       end
     end
@@ -602,8 +596,8 @@ class Hydra
       when :search, :delete
         if pattern.end?
           chophead if mode == :delete
-          raise ConflictingPattern if @mode == :strict && pattern.get_digits != digits
-          return Pattern.new(pattern.get_word, digits).to_s
+          raise ConflictingPattern if @mode == :strict && pattern.digits != digits
+          return Pattern.new(pattern.word, digits).to_s
         end
       end
     end

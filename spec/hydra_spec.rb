@@ -21,24 +21,24 @@ describe Pattern do
     it "works with patterns with trailing digits" do
       pattern = Pattern.new('ab2')
       expect(pattern).to be_a Pattern
-      expect(pattern.get_word).to eq 'ab'
-      expect(pattern.get_digits).to eq [0, 0, 2]
+      expect(pattern.word).to eq 'ab'
+      expect(pattern.digits).to eq [0, 0, 2]
     end
 
     it "handles initial dots correctly" do
       pattern = Pattern.new '.foo'
       expect(pattern.initial?).to be_truthy
       expect(pattern.length).to eq 3
-      expect(pattern.get_word).to eq 'foo'
-      expect(pattern.get_digits).to eq [0] * 4
+      expect(pattern.word).to eq 'foo'
+      expect(pattern.digits).to eq [0] * 4
     end
 
     it "handles final dots correctly" do
       pattern = Pattern.new 'bar.'
       expect(pattern.final?).to be_truthy
       expect(pattern.length).to eq 3
-      expect(pattern.get_word).to eq 'bar'
-      expect(pattern.get_digits).to eq [0] * 4
+      expect(pattern.word).to eq 'bar'
+      expect(pattern.digits).to eq [0] * 4
     end
 
     it "handle simultaneous initial and final dots correctly" do
@@ -46,45 +46,45 @@ describe Pattern do
       expect(pattern.initial?).to be_truthy
       expect(pattern.final?).to be_truthy
       expect(pattern.length).to eq 6
-      expect(pattern.get_word).to eq 'foobar'
-      expect(pattern.get_digits).to eq [0] * 7
+      expect(pattern.word).to eq 'foobar'
+      expect(pattern.digits).to eq [0] * 7
     end
 
     it "initialises the pattern with '', [0] by default" do
       pattern = Pattern.new
-      expect(pattern.get_word).to eq ''
-      expect(pattern.get_digits).to eq [0] # TODO Ensure digits.length = word.length + 1 always
+      expect(pattern.word).to eq ''
+      expect(pattern.digits).to eq [0] # TODO Ensure digits.length = word.length + 1 always
     end
 
     it "normalises everything to lowercase" do
       pattern = Pattern.new 'cA2b'
-      expect(pattern.get_word).to eq 'cab'
+      expect(pattern.word).to eq 'cab'
     end
 
     it "... even non-ASCII characters" do
       pattern = Pattern.new 'Öl', [1, 2, 3]
-      expect(pattern.get_word).to eq 'öl'
+      expect(pattern.word).to eq 'öl'
     end
 
     it "needs some work for Turkish" do
       pattern = Pattern.new 'İSTANBUL'
-      expect(pattern.get_word).to eq 'i̇stanbul' # FIXME That’s NFD!
+      expect(pattern.word).to eq 'i̇stanbul' # FIXME That’s NFD!
     end
   end
 
   describe '.dummy' do
     it "creates a dummy pattern from a word" do
       pattern = Pattern.dummy 'abc'
-      expect(pattern.get_word).to eq 'abc'
-      expect(pattern.get_digits).to eq [0, 0, 0, 0]
+      expect(pattern.word).to eq 'abc'
+      expect(pattern.digits).to eq [0, 0, 0, 0]
     end
   end
 
   describe '.simple' do
     it "returns a simple pattern" do
       pattern = Pattern.simple 'abc', 2, 1
-      expect(pattern.get_word).to eq 'abc'
-      expect(pattern.get_digits).to be == [0, 0, 1, 0]
+      expect(pattern.word).to eq 'abc'
+      expect(pattern.digits).to be == [0, 0, 1, 0]
     end
   end
 
@@ -324,17 +324,17 @@ describe Pattern do
     end
   end
 
-  describe '.get_digits' do
+  describe '#digits' do
     it "extracts the digits from a pattern" do
       pattern = Pattern.new('bac', [0, 2, 1, 0])
-      expect(pattern.get_digits).to eq [0, 2, 1, 0]
+      expect(pattern.digits).to eq [0, 2, 1, 0]
     end
   end
 
-  describe '.get_word' do # For completeness!
+  describe '#word' do # For completeness!
     it "extracts the word from a pattern" do
       pattern = Pattern.new('bac', [0, 2, 1, 0])
-      expect(pattern.get_word).to eq "bac"
+      expect(pattern.word).to eq "bac"
     end
   end
 
@@ -342,7 +342,7 @@ describe Pattern do
     it "grows a letter.  I know it doesn’t make much sense, just give me a break" do
       pattern = Pattern.new 'abc'
       pattern.grow('d')
-      expect(pattern.get_word).to eq 'abcd'
+      expect(pattern.word).to eq 'abcd'
     end
 
     it "returns the pattern" do
@@ -361,7 +361,7 @@ describe Pattern do
     it "just grows" do
       pattern = Pattern.new 'f'
       pattern.grow!('g')
-      expect(pattern.get_word.length).to eq 2
+      expect(pattern.word.length).to eq 2
     end
 
     it "raises and exception if pattern is frozen" do
@@ -375,7 +375,7 @@ describe Pattern do
     it "forks the pattern on a letter" do
       pattern = Pattern.new
       pattern.grow 'f'; pattern.grow 'o'; pattern.grow 'o'
-      expect(pattern.fork('b').get_word).to eq "foob"
+      expect(pattern.fork('b').word).to eq "foob"
     end
 
     it "returns a new pattern" do
@@ -406,7 +406,7 @@ describe Pattern do
     it "sets the same digits" do
       pattern = Pattern.new('ba2r')
       new_pattern = pattern.copy
-      expect(new_pattern.get_digits).to eq [0, 0, 2, 0]
+      expect(new_pattern.digits).to eq [0, 0, 2, 0]
     end
 
     it "creates a new array so it doesn’t overlap" do
@@ -422,7 +422,7 @@ describe Pattern do
     it "freezes the pattern and sets the digits" do
       pattern = Pattern.new('foo5bar')
       pattern.freeze [1, 2, 3, 4, 5, 6, 7]
-      expect(pattern.get_digits).to eq [1, 2, 3, 4, 5, 6, 7]
+      expect(pattern.digits).to eq [1, 2, 3, 4, 5, 6, 7]
     end
 
     it "returns the pattern" do
@@ -582,7 +582,7 @@ describe Pattern do
       pattern = Pattern.new('aaabbb')
       pattern.initial!
       expect(pattern.initial?).to be_truthy
-      expect(pattern.get_digits.length).to eq 7
+      expect(pattern.digits.length).to eq 7
     end
   end
 
@@ -591,7 +591,7 @@ describe Pattern do
       pattern = Pattern.new('cc')
       pattern.final!
       expect(pattern.final?).to be_truthy
-      expect(pattern.get_digits.length).to eq 3
+      expect(pattern.digits.length).to eq 3
     end
   end
 
@@ -600,7 +600,7 @@ describe Pattern do
       pattern = Pattern.new('foo3')
       pattern.initial
       expect(pattern.initial?).to be_truthy
-      expect(pattern.get_digits.length).to eq 4
+      expect(pattern.digits.length).to eq 4
     end
 
     it "returns the pattern" do
@@ -613,7 +613,7 @@ describe Pattern do
       pattern = Pattern.new('5bar')
       pattern.final
       expect(pattern.final?).to be_truthy
-      expect(pattern.get_digits.length).to eq 4
+      expect(pattern.digits.length).to eq 4
     end
     
     it "returns the pattern" do
@@ -756,7 +756,7 @@ describe Lemma do
 
     it "sets all digits to 0 initially" do
       lemma = Lemma.new 'foo-bar'
-      expect(lemma.get_digits).to be == [0] * 7 # FIXME Refactor rename digits
+      expect(lemma.digits).to be == [0] * 7 # FIXME Refactor rename digits
     end
 
     it "sets all breakpoints to :no initially" do
@@ -1464,15 +1464,15 @@ describe Hydra do
     it "... also with a final dot" do
       hydra.ingest ['fo1', 'o2o3', '5bar.']
       pattern = hydra.prehyphenate('foobar')
-      expect(pattern.get_word).to be == "foobar"
-      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 0, 0]
+      expect(pattern.word).to be == "foobar"
+      expect(pattern.digits).to be == [0, 0, 2, 5, 0, 0, 0]
     end
 
     it "and with an initial dot too, why not" do
       hydra.ingest ['.fo1', 'o2o3', '5ba4r']
       pattern = hydra.prehyphenate('foobar')
-      expect(pattern.get_word).to be == "foobar"
-      expect(pattern.get_digits).to be == [0, 0, 2, 5, 0, 4, 0]
+      expect(pattern.word).to be == "foobar"
+      expect(pattern.digits).to be == [0, 0, 2, 5, 0, 4, 0]
     end
 
     it "sets the anchor correctly" do
