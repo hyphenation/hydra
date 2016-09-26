@@ -720,8 +720,10 @@ class Hydra
   def start_file(filename)
     File.read(filename).each_line do |line|
       word = line.strip.gsub(/%.*$/, '').gsub(/-/, '')
+      pattern = Pattern.new(word)
       word.length.times do |i|
-        ingest(word[i..-1])
+        pattern.reset(i)
+        ingest(pattern)
       end
     end
   end
