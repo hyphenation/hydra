@@ -808,6 +808,10 @@ class Heracles
     @output.puts ''
   end
 
+  def set_input(filename)
+    @final_hydra.ingest_file(filename)
+  end
+
   def pass(dictionary)
     @output.puts "Generating one pass for hyphenation level #{@hyphenation_level} ..."
 

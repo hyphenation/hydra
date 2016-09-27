@@ -1801,6 +1801,19 @@ describe Heracles do
     end
   end
 
+  describe '#set_input' do
+    it "sets the input dictionary" do
+      Dir.mktmpdir 'hydra' do |dir|
+        filename = File.join(dir, 'simple.hydra')
+        file = File.open(filename, 'w')
+        file.puts "foo1\nbar2\nbaz3quux"
+        file.close
+        heracles.set_input(filename)
+      end
+      expect(heracles.instance_variable_get(:@final_hydra).count).to eq 3
+    end
+  end
+
   describe '#pass' do
     it "prints one line to the output" do
       heracles.instance_variable_set(:@hyphenation_level, 1)
