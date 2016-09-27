@@ -919,6 +919,7 @@ class Labour
     @lefthyphenmin = hyphenmins.first
     @righthyphenmin = hyphenmins.last
     @heracles = Heracles.new(@device)
+    @heracles.set_input(@input_patterns) # TODO Spec out
     @hydra = @heracles.run_file(@dictionary, parameters, hyphenmins)
     output = File.open(@output_patterns, 'w')
     output.write(@hydra.digest.join "\n")
