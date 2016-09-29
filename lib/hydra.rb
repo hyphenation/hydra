@@ -1,6 +1,3 @@
-require 'byebug'
-require 'pp'
-
 # TODO ingest_tex_file
 class Array
   class MismatchedLength < StandardError
