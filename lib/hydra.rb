@@ -1,6 +1,5 @@
 require 'byebug'
 require 'pp'
-require 'unicode_utils'
 
 # TODO ingest_tex_file
 class Array
@@ -23,7 +22,7 @@ class Pattern
     @good_count = @bad_count = 0
 
     if word
-      word = UnicodeUtils.downcase(word)
+      word = word.downcase
       if word =~ /^\./
         word.gsub!(/^\./, '')
         digits = digits[1..-1] if digits && digits.length > word.length + 1
@@ -826,7 +825,7 @@ class Heracles
         lineno = knocked_out = 0
         dictionary.each do |line|
           lineno += 1
-          lemma = Lemma.new(UnicodeUtils.downcase(line.gsub(/%.*$/, '').strip))
+          lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
           next unless lemma.length >= pattern_length
           @final_hydra.prehyphenate(lemma)
           word_start = [dot - 1, @final_hydra.lefthyphenmin].max
