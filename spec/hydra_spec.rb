@@ -813,7 +813,7 @@ describe Hydra do
 
     it "optionally ingests a word or list of words" do
       hydra = Hydra.new(['foo', 'bar', 'baz', 'quux'])
-      expect(hydra.count).to be == 4
+      expect(hydra.heads).to be == 4
     end
 
     it "optionally sets the atlas vertebra that supports the head" do
@@ -826,7 +826,7 @@ describe Hydra do
     it "clears the hydra" do
       hydra = Hydra.new ['a', 'b', 'c', 'd', 'e']
       hydra.clear
-      expect(hydra.count).to eq 0
+      expect(hydra.heads).to eq 0
     end
   end
 
@@ -960,7 +960,7 @@ describe Hydra do
   describe '#setatlas' do
     it "grows a neck with a head" do
       hydra.setatlas('a', [1])
-      expect(hydra.count).to eq 1
+      expect(hydra.heads).to eq 1
     end
 
     it "has a correctly labelled neck" do
@@ -1002,7 +1002,7 @@ describe Hydra do
     it "chops off the head" do
       hydra.ingest ['a', 'b', 'c']
       hydra.getneck('a').chophead
-      expect(hydra.count).to eq 2
+      expect(hydra.heads).to eq 2
     end
 
     it "resets the good and bad counts" do
@@ -1104,15 +1104,15 @@ describe Hydra do
     end
   end
 
-  describe '#count' do
-    it "counts" do
+  describe '#heads' do
+    it "returns the number of heads (digit arrays)" do
       hydra.ingest(['a', 'b', 'c'])
-      expect(hydra.count).to eq 3
+      expect(hydra.heads).to eq 3
     end
   end
 
   describe '#knuckles' do
-    it "returns the node count" do
+    it "returns the number of knuckles (nodes with or without heads)" do
       hydra.ingest(['abc', 'd', 'e', 'f'])
       expect(hydra.knuckles).to eq 7
     end
@@ -1178,17 +1178,17 @@ describe Hydra do
   describe '#ingest' do
     it "works with a single word" do
       hydra.ingest('bac')
-      expect(hydra.count).to eq 1
+      expect(hydra.heads).to eq 1
     end
 
     it "works with an array of words" do
       hydra.ingest(['democrat', 'democracy', 'democratic'])
-      expect(hydra.count).to eq 3
+      expect(hydra.heads).to eq 3
     end
 
     it "works with an actual pattern" do
       hydra.ingest('1a2b3c4')
-      expect(hydra.count).to eq 1
+      expect(hydra.heads).to eq 1
     end
 
     it "works with patterns that are prefix of each other" do
@@ -1324,13 +1324,13 @@ describe Hydra do
     it "deletes one digitless pattern" do
       hydra.ingest ['b2a1c']
       hydra.delete('bac')
-      expect(hydra.count).to eq 0
+      expect(hydra.heads).to eq 0
     end
 
     it "deletes one full-fledged pattern" do
       hydra.ingest ['b2a1c']
       hydra.delete('b2a1c')
-      expect(hydra.count).to eq 0
+      expect(hydra.heads).to eq 0
     end
 
     it "raises" do
@@ -1365,14 +1365,14 @@ describe Hydra do
       hydra.ingest ['foo9bar']
       pattern = Pattern.dummy 'foobar'
       hydra.regest(pattern)
-      expect(hydra.count).to eq 1
+      expect(hydra.heads).to eq 1
     end
 
     it "works as #delete" do
       hydra.ingest ['b2a1c']
       pattern = Pattern.dummy 'bac'
       hydra.regest pattern, :delete
-      expect(hydra.count).to eq 0
+      expect(hydra.heads).to eq 0
     end
   end
 
@@ -1717,7 +1717,7 @@ describe Hydra do
       hydra.disembowel(device)
     end
 
-    it "returns the count" do
+    it "returns the head count" do
       hydra.ingest(['a', 'b', 'c', 'd', 'e'])
       expect(hydra.disembowel(device)).to eq 5
     end
@@ -1727,12 +1727,12 @@ describe Hydra do
   describe '#ingest_file' do # TODO Allow TeX-style comments?
     it "ingests a whole file of patterns" do
       hydra.ingest_file(File.expand_path('../../files/hyph-bg.pat.txt', __FILE__))
-      expect(hydra.count).to eq 1660
+      expect(hydra.heads).to eq 1660
     end
 
     it "works with the original hyphen.tex" do
       hydra.ingest_file(File.expand_path('../../files/hyphen.txt', __FILE__))
-      expect(hydra.count).to eq 4447
+      expect(hydra.heads).to eq 4447
     end
 
     it "hyphenates a word" do
@@ -1748,7 +1748,7 @@ describe Hydra do
         file.puts "% Here are some patterns\nfo1\nfo2o3% I like this one\n5bar7"
         file.close
         hydra.ingest_file(filename)
-        expect(hydra.count).to eq 3
+        expect(hydra.heads).to eq 3
         FileUtils.remove filename
       end
     end
@@ -1810,7 +1810,7 @@ describe Heracles do
         file.close
         heracles.set_input(filename)
       end
-      expect(heracles.instance_variable_get(:@final_hydra).count).to eq 3
+      expect(heracles.instance_variable_get(:@final_hydra).heads).to eq 3
     end
   end
 
@@ -1902,7 +1902,7 @@ describe Heracles do
         out.puts(node.pattern.to_s)
       end
       out.close
-      expect(hydra.count).to eq 83
+      expect(hydra.heads).to eq 83
     end
 
     it "runs a full set of hyphenation levels on a small file", slow: true do
@@ -1914,7 +1914,7 @@ describe Heracles do
         pattfile.puts(pattern)
       end
       pattfile.close
-      expect(hydra.count).to eq 83
+      expect(hydra.heads).to eq 83
     end
 
     it "runs a large file", slow: true do
@@ -1926,7 +1926,7 @@ describe Heracles do
         pattfile.puts(node.pattern.to_s)
       end
       pattfile.close
-      expect(hydra.count).to eq 1619
+      expect(hydra.heads).to eq 1619
     end
 
     it "runs the full file with one level and one length", slow: true do
@@ -1935,7 +1935,7 @@ describe Heracles do
       pattfile = File.open(File.expand_path('../../files/pattern.ruby.1,2', __FILE__), 'w')
       pattfile.puts hydra.digest.join "\n"
       pattfile.close
-      expect(hydra.count).to eq 576
+      expect(hydra.heads).to eq 576
     end
 
     it "runs a full set of hyphenation levels on a large file", slow: true do
@@ -1947,7 +1947,7 @@ describe Heracles do
         pattfile.puts(pattern)
       end
       pattfile.close
-      expect(hydra.count).to eq 1778
+      expect(hydra.heads).to eq 1778
     end
 
     it "runs level 1 on the full German dictionary", slow: true do
@@ -1956,7 +1956,7 @@ describe Heracles do
       pattfile = File.open(File.expand_path('../../files/pattern.ruby.1', __FILE__), 'w')
       pattfile.puts hydra.digest.join "\n"
       pattfile.close
-      expect(hydra.count).to eq 5130
+      expect(hydra.heads).to eq 5130
     end
   end
 
@@ -2024,25 +2024,25 @@ describe Heracles do
 
     it "runs a very small extract of a real-life file" do
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
-      expect(hydra.count).to eq 12
+      expect(hydra.heads).to eq 12
       expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
     end
 
     it "runs a to level 3" do
       hydra = heracles.run(['Aal-fang-er-geb-nis', 'Aal-fang-er-geb-nis-se', 'Aal-fang-er-geb-nis-sen', 'Aal-fang-er-geb-nis-ses', 'Aal-fi-let', 'Aal-fi-scher', 'Aal-glät-te', 'Aal-haut', 'Aal-hof', 'Aal-kopf'], [1, 3, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1], [2, 2])
-      expect(hydra.count).to eq 12
+      expect(hydra.heads).to eq 12
       expect(hydra.digest).to eq ['b1n', '1er', 'h2e', 'i1l', 'l1f', 'l1g', 'l1h', 'l1k', 'r1g', '1sc', 's1s', 't1t']
     end
 
     it "runs a somewhat smarter extract" do
       hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 2, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1], [2, 2])
-      expect(hydra.count).to eq 16
+      expect(hydra.heads).to eq 16
       expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
     end
 
     it "runs to level 1 only" do # Level 1 now works, let’s check the rest
       hydra = heracles.run(['Aa-len', 'Aal-ent-nah-me', 'Aal-schok-ker', 'Aals-meer', 'Aalst', 'Aal-ste-cher', 'Aas-ban-de', 'Aa-see', 'Aba-kus', 'Ab-ar-bei-tens'], [1, 1, 2, 5, 1, 1, 1], [2, 2])
-      expect(hydra.count).to eq 16
+      expect(hydra.heads).to eq 16
       expect(hydra.digest).to eq ['a1k', '1ar', 'e1c', '1ent', 'h1m', 'i1t', 'k1k', '1len.', 'n1d', 'r1b', 's1b', '1sc', '1se', 's1m', '1ste', 't1n']
     end
 
@@ -2128,7 +2128,7 @@ describe Labour do
       labour = Labour.new('files/100.dic.utf8', 'files/empty', '/tmp/output', 'files/german.tr', output)
       hydra = labour.run([1, 1, 2, 5, 1, 1, 1])
       expect(hydra).to be_a Hydra
-      expect(hydra.count).to eq 71
+      expect(hydra.heads).to eq 71
       output = File.read('/tmp/output')
       expect(output).to eq hydra.digest.join "\n"
     end

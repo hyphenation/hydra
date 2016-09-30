@@ -1,3 +1,5 @@
+require 'pp'
+
 # TODO ingest_tex_file
 class Array
   class MismatchedLength < StandardError
@@ -507,11 +509,11 @@ class Hydra
     end
   end
 
-  def count
+  def heads
     @necks.inject(0) do |sum, letter_and_neck|
       neck = letter_and_neck.last
       sum += 1 if neck.gethead
-      sum + if neck.is_a? Hydra then neck.count else 0 end
+      sum + if neck.is_a? Hydra then neck.heads else 0 end
     end
   end
 
@@ -710,7 +712,7 @@ class Hydra
 
   def disembowel(device = $stdout)
     PP.pp self, device
-    count
+    heads
   end
 
   def start_file(filename)
@@ -841,7 +843,7 @@ class Heracles
           end
         end
 
-        @output.puts "  #{@count_hydra.count} patterns in count trie, #{knocked_out} skipped" # TODO Specify that
+        @output.puts "  #{@count_hydra.heads} patterns in count trie, #{knocked_out} skipped" # TODO Specify that
         collect_patterns(dot)
       end
     end
@@ -869,9 +871,9 @@ class Heracles
       good_weight, bad_weight, thresh = params.shift, params.shift, params.shift
       pattern_lengths = [pattern_length_start, pattern_length_end]
       set_parameters(hyphenmins, [hyphenation_level, pattern_length_start, pattern_length_end, good_weight, bad_weight, thresh])
-      old_count = @final_hydra.count
+      old_head_count = @final_hydra.heads
       pass(array)
-      if old_count == @final_hydra.count && @count_hydra.count == 0
+      if old_head_count == @final_hydra.heads && @count_hydra.heads == 0
         knocked_out_levels << hyphenation_level
         @output.puts "Hyphenation level #{hyphenation_level} didn’t yield any new patterns, knocked out"
       end
