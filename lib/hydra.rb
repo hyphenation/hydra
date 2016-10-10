@@ -731,7 +731,7 @@ class Hydra
   end
 
   def disembowel(device = $stdout)
-    PP.pp self, device
+    device.pp self, device
     heads
   end
 
