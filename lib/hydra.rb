@@ -1,7 +1,7 @@
 require 'pp'
 
-class CoreExt
-  def self.max2(a, b)
+module CoreExt
+  def max2(a, b)
     if a > b
       a
     else
@@ -9,7 +9,7 @@ class CoreExt
     end
   end
 
-  def self.min2(a, b)
+  def min2(a, b)
     if a < b
       a
     else
@@ -26,10 +26,12 @@ class Array
   def mask(other)
     raise MismatchedLength unless length == other.length
     each_with_index do |value, index|
-      self[index] = [value, other[index]].max
+      self[index] = max2(value, other[index])
     end
   end
 end
+
+include CoreExt
 
 class Pattern
   attr_reader :digits, :word
@@ -200,7 +202,7 @@ class Pattern
     offset = @cursor - a.length + 1
     a.length.times do |i|
       j = offset + i
-      @digits[j] = [a[i], @digits[j]].max
+      @digits[j] = max2(a[i], @digits[j])
     end
   end
 
@@ -303,7 +305,7 @@ class Pattern
   def showhyphens(lefthyphenmin = 0, righthyphenmin = 0)
     output = ''
     @digits.each_with_index do |digit, index|
-      if index >= [1, lefthyphenmin].max && index <= length - [1, righthyphenmin].max
+      if index >= max2(1, lefthyphenmin) && index <= length - max2(1, righthyphenmin)
         if is_a? Lemma
           output += '-' if self.break(index) == :is
         elsif digit % 2 == 1
@@ -845,8 +847,8 @@ class Heracles
           lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
           next unless lemma.length >= pattern_length
           @final_hydra.prehyphenate(lemma)
-          word_start = [dot - 1, @final_hydra.lefthyphenmin].max
-          word_end = lemma.length - [pattern_length - dot - 1, @final_hydra.righthyphenmin].max
+          word_start = max2(dot - 1, @final_hydra.lefthyphenmin)
+          word_end = lemma.length - max2(pattern_length - dot - 1, @final_hydra.righthyphenmin)
           lemma.reset(word_start - dot - 1)
           (word_start..word_end).each do
             lemma.shift
