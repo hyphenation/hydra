@@ -1736,7 +1736,7 @@ describe Hydra do
     end
 
     it "hyphenates a word" do
-      hydra.ingest_file(File.expand_path('../../../hyphenation/tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-de-1996.pat.txt', __FILE__))
+      hydra.ingest_file(File.expand_path('../../../tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-de-1996.pat.txt', __FILE__))
       hydra.setrighthyphenmin 2
       expect(hydra.showhyphens('Zwangsvollstreckungsmaßnahme')).to eq 'zwangs-voll-stre-ckungs-maß-nah-me'
     end
