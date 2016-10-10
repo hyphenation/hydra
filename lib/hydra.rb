@@ -1,5 +1,23 @@
 require 'pp'
 
+class CoreExt
+  def self.max2(a, b)
+    if a > b
+      a
+    else
+      b
+    end
+  end
+
+  def self.min2(a, b)
+    if a < b
+      a
+    else
+      b
+    end
+  end
+end
+
 # TODO ingest_tex_file
 class Array
   class MismatchedLength < StandardError

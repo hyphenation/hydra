@@ -1,5 +1,19 @@
 require 'spec_helper'
 
+describe CoreExt do
+  describe '.max2' do
+    it "returns the max of two elements" do
+      expect(CoreExt.max2(2, 1)).to eq 2
+    end
+  end
+
+  describe '.min2' do
+    it "returns the min of two elements" do
+      expect(CoreExt.min2(2, 3)).to eq 2
+    end
+  end
+end
+
 describe Array do
   describe '#mask' do
     it "masks an array with another array of equal length" do
