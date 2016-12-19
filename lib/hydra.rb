@@ -1,3 +1,4 @@
+require 'byebug'
 require 'pp'
 
 module CoreExt
@@ -730,8 +731,22 @@ class Hydra
     end
   end
 
-  def disembowel(device = $stdout)
-    device.pp self, device
+  def disembowel(device = $stdout, indent = 0)
+    if indent == 0
+      device.puts '.'
+      indent += 1
+    end
+    # device.pp self, device
+    @necks.each do |letter, neck|
+      begin
+        byebug if letter == 'a'
+        device.puts '  ' * indent + letter
+      rescue NoMethodError
+        byebug
+      end
+      neck.disembowel(device, indent + 1)
+    end
+
     heads
   end
 

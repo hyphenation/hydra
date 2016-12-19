@@ -1727,7 +1727,16 @@ describe Hydra do
 
     it "dumps a string" do
       hydra.ingest(['apple', 'orange', 'lemon'])
-      expect(device).to receive :pp # TODO specify arguments
+      expect(device).to receive(:puts).at_least(:once) # TODO specify arguments
+      hydra.disembowel(device)
+    end
+
+    it "prints nicely" do
+      hydra.ingest(['abc', 'abd', 'e', 'f'])
+      output = ['.', '  a', '    b', '      c', '      d', '  e', '  f']
+      output.each do |line|
+        expect(device).to receive(:puts).with(line)
+      end
       hydra.disembowel(device)
     end
 
