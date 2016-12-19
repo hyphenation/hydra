@@ -1733,8 +1733,7 @@ describe Hydra do
 
     it "prints nicely" do
       hydra.ingest(['abc', 'abd', 'e', 'f'])
-      output = ['.', '  a', '    b', '      c', '      d', '  e', '  f']
-      output.each do |line|
+      ['.', '  a', '    b', '      c', '      d', '  e', '  f'].each do |line|
         expect(device).to receive(:puts).with(line)
       end
       hydra.disembowel(device)
