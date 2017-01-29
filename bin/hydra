@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../lib/hydra', __FILE__)
-labour = Labour.new(ARGV.shift, ARGV.shift, ARGV.shift, ARGV.shift)
-labour.run(ARGV.map(&:to_i))
+labour = Labour.new
+labour.run(ARGV)

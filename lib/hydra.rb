@@ -921,16 +921,10 @@ class Labour
   class InvalidInput < StandardError
   end
 
-  def initialize(dictionary = '/dev/zero', input_patterns = '/dev/zero', output_patterns = '/dev/null', translate = '/dev/zero', device = $stdout)
-    @dictionary = dictionary
-    @input_patterns = input_patterns
-    @output_patterns = output_patterns
-    @translate = translate
+  BOUNDARIES_AND_WEIGHTS_DEFAULT = [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1, 2, 6, 1, 4, 1, 2, 7, 1, 1, 1, 2, 7, 1, 6, 1, 2, 13, 1, 4, 1, 2, 13, 1, 8, 1, 2, 13, 1, 16, 1]
+
+  def initialize(device = $stdout)
     @device = device
-    raise InvalidInput unless File.exists?(@dictionary)
-    raise InvalidInput unless File.exists?(@input_patterns)
-    raise InvalidInput unless Dir.exists?(File.dirname(@output_patterns))
-    raise InvalidInput unless File.exists?(@translate)
   end
 
   def parse_translate(filename)
@@ -939,12 +933,22 @@ class Labour
   end
 
   def run(parameters)
+    @dictionary = parameters.shift
+    raise InvalidInput unless File.exists?(@dictionary)
+    @input_patterns = parameters.shift
+    raise InvalidInput unless File.exists?(@input_patterns)
+    @output_patterns = parameters.shift
+    raise InvalidInput unless Dir.exists?(File.dirname(@output_patterns))
+    @translate = parameters.shift
+    raise InvalidInput unless File.exists?(@translate)
     hyphenmins = parse_translate(@translate)
+    @boundaries_and_weights = parameters.shift || BOUNDARIES_AND_WEIGHTS_DEFAULT
     @lefthyphenmin = hyphenmins.first
     @righthyphenmin = hyphenmins.last
     @heracles = Heracles.new(@device)
     @heracles.set_input(@input_patterns) # TODO Spec out
-    @hydra = @heracles.run_file(@dictionary, parameters, hyphenmins)
+    # FIXME Array copy shouldn’t be necessary (put that just to make “default parameter array” test work)
+    @hydra = @heracles.run_file(@dictionary, Array.new(@boundaries_and_weights), hyphenmins)
     output = File.open(@output_patterns, 'w')
     output.write(@hydra.digest.join "\n")
     output.close

@@ -2111,29 +2111,22 @@ end
 
 describe Labour do
   let(:output) { double("output device").as_null_object }
-  let(:dictionary) { File.expand_path('../../files/words.hyphenated.refo', __FILE__) }
+  let(:dictionary) { File.expand_path('../../files/100.dic.utf8', __FILE__) }
   let(:empty_file) { File.expand_path('../../files/empty', __FILE__) }
-  let(:output_patterns) { '/tmp/output' }
+  let(:output_patterns) { '/tmp/output' } # TODO Use Dir.mktmpdir
   let(:translate) { File.expand_path('../../files/german.tr', __FILE__) }
 
   describe '.initialize' do
-    it "sets the four command-line parameters" do
-      labour = Labour.new(dictionary, empty_file, output_patterns, translate)
-    end
-
-    it "can optionally be called without any argument" do
+    it "is initialised without any argument by default" do
       labour = Labour.new
       expect(labour).to be_a Labour
     end
 
-    it "can also be called with a fifth argument to redirect the output" do
+    it "can optionally be called with a device as an argument" do
       fd = IO.sysopen('/dev/null', 'w')
       device = IO.new(fd)
-      labour = Labour.new(dictionary, empty_file, output_patterns, translate, device)
-    end
-
-    it "raises an exception if called to operate on an inexistent file" do
-      expect { labour = Labour.new('/some/file/that/does/not/exist') }.to raise_exception Labour::InvalidInput
+      labour = Labour.new(device)
+      expect(labour.instance_variable_get(:@device)).to eq device
     end
   end
 
@@ -2146,13 +2139,41 @@ describe Labour do
   end
 
   describe '#run' do
+    it "sets the four command-line parameters" do
+      labour = Labour.new(output)
+      labour.run([dictionary, empty_file, output_patterns, translate])
+      expect(labour.instance_variable_get(:@dictionary)).to eq dictionary
+      expect(labour.instance_variable_get(:@input_patterns)).to eq empty_file
+      expect(labour.instance_variable_get(:@output_patterns)).to eq output_patterns
+      expect(labour.instance_variable_get(:@translate)).to eq translate
+    end
+
+    it "raises an exception if called to operate on an inexistent file" do
+      labour = Labour.new(output)
+      expect { labour = labour.run(['/some/file/that/does/not/exist']) }.to raise_exception Labour::InvalidInput
+    end
+
+    it "sets a default parameter array" do
+      labour = Labour.new(output)
+      labour.run([dictionary, empty_file, output_patterns, translate])
+      bounds_weights = labour.instance_variable_get(:@boundaries_and_weights)
+      expect(bounds_weights).to be_an Array
+      expect(bounds_weights[0..16]).to eq [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1]
+    end
+
     it "runs the pattern generator" do
-      labour = Labour.new('files/100.dic.utf8', 'files/empty', '/tmp/output', 'files/german.tr', output)
-      hydra = labour.run([1, 1, 2, 5, 1, 1, 1])
+      labour = Labour.new(output)
+      hydra = labour.run(['files/100.dic.utf8', 'files/empty', '/tmp/output', 'files/german.tr', [1, 1, 2, 5, 1, 1, 1]])
       expect(hydra).to be_a Hydra
       expect(hydra.heads).to eq 71
       output = File.read('/tmp/output')
       expect(output).to eq hydra.digest.join "\n"
+    end
+
+    it "returns a hydra" do
+      labour = Labour.new(output)
+      hydra = labour.run([dictionary, empty_file, output_patterns, translate])
+      expect(hydra).to be_a Hydra
     end
 
     # FIXME Actually use the input patterns!
