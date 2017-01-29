@@ -951,6 +951,6 @@ class Labour
     output.write(@hydra.digest.join "\n")
     output.close
 
-    @hydra
+    @hydra # TODO Print patterns if called from the command line and no output file is given.
   end
 end
