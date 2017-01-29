@@ -2161,6 +2161,12 @@ describe Labour do
       expect(bounds_weights[0..16]).to eq [1, 9, 2, 5, 1, 1, 1, 2, 5, 1, 2, 1, 2, 6, 1, 1, 1]
     end
 
+    it "works with a single argument" do
+      labour = Labour.new(output)
+      hydra = labour.run([dictionary])
+      expect(hydra.count).to eq 83
+    end
+
     it "runs the pattern generator" do
       labour = Labour.new(output)
       hydra = labour.run(['files/100.dic.utf8', 'files/empty', '/tmp/output', 'files/german.tr', [1, 1, 2, 5, 1, 1, 1]])

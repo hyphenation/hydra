@@ -935,12 +935,10 @@ class Labour
   def run(parameters)
     @dictionary = parameters.shift
     raise InvalidInput unless File.exists?(@dictionary)
-    @input_patterns = parameters.shift
-    raise InvalidInput unless File.exists?(@input_patterns)
-    @output_patterns = parameters.shift
-    raise InvalidInput unless Dir.exists?(File.dirname(@output_patterns))
-    @translate = parameters.shift
-    raise InvalidInput unless File.exists?(@translate)
+    # FIXME Find something else for default values
+    @input_patterns = parameters.shift || File.join('files', 'empty')
+    @output_patterns = parameters.shift || File.join('/tmp', 'output')
+    @translate = parameters.shift || File.join('files', 'german.tr')
     hyphenmins = parse_translate(@translate)
     @boundaries_and_weights = parameters.shift || BOUNDARIES_AND_WEIGHTS_DEFAULT
     @lefthyphenmin = hyphenmins.first
