@@ -1803,10 +1803,10 @@ describe Hydra do
       Dir.mktmpdir 'hydra' do |dir|
         filename = File.join(dir, 'really-hyphenated-words')
         file = File.open(filename, 'w')
-        file.puts 'Here-by are whole-some long-words\nfoo\nbar\nbaz-quux'
+        file.puts "Here-by are whole-some long-words\nfoo\nbar\nbaz-quux"
         file.close
         hydra.start_file(filename)
-        expect(hydra.count).to eq 46
+        expect(hydra.count).to eq 40
       end
     end
   end
