@@ -1798,6 +1798,17 @@ describe Hydra do
         expect(hydra.digest).to eq ['foobar', 'oobar', 'obar', 'bar', 'ar', 'r'].sort
       end
     end
+
+    it "really ignores hyphens" do
+      Dir.mktmpdir 'hydra' do |dir|
+        filename = File.join(dir, 'really-hyphenated-words')
+        file = File.open(filename, 'w')
+        file.puts 'Here-by are whole-some long-words\nfoo\nbar\nbaz-quux'
+        file.close
+        hydra.start_file(filename)
+        expect(hydra.count).to eq 49
+      end
+    end
   end
 end
 
