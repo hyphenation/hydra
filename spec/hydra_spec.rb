@@ -1801,12 +1801,13 @@ describe Hydra do
 
     it "ignores whitespace too" do
       Dir.mktmpdir 'hydra' do |dir|
+        hydra = Hydra.new(nil, true)
         filename = File.join(dir, 'really-hyphenated-words')
         file = File.open(filename, 'w')
         file.puts "Here-by are whole-some long-words\nfoo\nbar\nbaz-quux"
         file.close
         hydra.start_file(filename)
-        expect(hydra.count).to eq 40
+        expect(hydra.count).to eq 39
       end
     end
   end

@@ -38,6 +38,7 @@ class Pattern
   attr_reader :digits, :word
 
   def initialize(word = nil, digits = nil)
+    puts "Called Pattern.new(#{word}, #{digits.inspect})"
     @cursor = 0
     @good_count = @bad_count = 0
 
@@ -59,8 +60,14 @@ class Pattern
       if digits
         @word = word
         @digits = digits
+        # puts "[digits] word = #{word}, digits = #{digits}"
+        # byebug
+        # byebug if @word =~ /me$/
+        # byebug unless @digits.count == @word.length + 1
         raise Hydra::BadPattern unless @digits.count == @word.length + 1
       else
+        # puts "[no digits] word = #{word}"
+        # byebug
         breakup(word)
       end
     else
@@ -430,7 +437,7 @@ class Hydra
     end
   end
 
-  def star
+  def star # TODO Spec out
     if parent then parent.star else self end
   end
 
@@ -554,6 +561,8 @@ class Hydra
   end
 
   def ingest(words)
+    # byebug if words.to_s == 'e'
+    puts words.inspect
     if words.is_a? Enumerable
       words.each do |word|
         ingest(word)
@@ -574,6 +583,7 @@ class Hydra
           star.add_conflict(Pattern.new(self.pattern), pattern.copy)
           sethead(pattern.digits.mask(gethead))
         else
+          puts "Setting head #{pattern.digits} at depth #{depth}"
           sethead(pattern.digits)
         end
       end
@@ -719,14 +729,21 @@ class Hydra
 
   # Debug methods # FIXME No longer relevant.  But rename method below!
   def pattern(neck = "", digits = nil)
+    # byebug
     if digits
       if parent
+        # byebug
+        puts "Calling parent.pattern(#{@atlas + neck}, #{digits.inspect})"
         parent.pattern(@atlas + neck, digits)
       else
+        # byebug
+        puts "Calling Pattern.new(#{neck}, #{digits})"
         Pattern.new(neck, digits).to_s
       end
     else
       digits = if gethead then gethead else [0] * (depth + 1) end
+      # byebug
+      puts "Calling pattern('', #{digits.inspect})"
       pattern('', digits)
     end
   end
@@ -743,11 +760,18 @@ class Hydra
 
   def start_file(filename)
     File.read(filename).each_line do |line|
-      word = line.strip.gsub(/%.*$/, '').gsub(/-/, '').gsub(/\s/, '')
-      pattern = Pattern.new(word)
-      word.length.times do |i|
-        pattern.reset(i)
-        ingest(pattern)
+      words = line.strip.gsub(/%.*$/, '').gsub(/-/, '').split
+      # byebug
+      words.each do |word|
+        puts word
+        # pattern = Pattern.new(word)
+        word.length.times do |i|
+          # pattern.reset(i)
+          # puts pattern.inspect
+          # ingest(pattern)
+          ingest(word[i..-1])
+          # puts digest.join ' '
+        end
       end
     end
   end
