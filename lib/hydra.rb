@@ -1,4 +1,4 @@
-require 'byebug'
+require 'byebug' unless ENV['RACK_ENV'] == "production"
 require 'pp'
 
 module CoreExt
