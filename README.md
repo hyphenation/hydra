@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/hyphenation/hydra.svg?branch=master)](https://travis-ci.com/hyphenation/hydra)
+
 This is Hydra, a Ruby library for hyphenation patterns.  Supports UTF-8 input
 (actually, only UTF-8 at the moment).
 
