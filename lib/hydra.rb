@@ -356,7 +356,7 @@ class Hydra
   class FrozenPattern < StandardError
   end
 
-  def initialize(words = nil, mode = :lax, atlas = nil)
+  def initialize(words = nil, mode = :lax, atlas = nil, params = { })
     @necks = { }
     @mode = mode
     @lefthyphenmin = 2
@@ -366,6 +366,10 @@ class Hydra
     @conflicts = []
     ingest words if words
     @atlas = atlas if atlas
+    if params && hyphenmins = params.dig('hyphenmins', 'typesetting')
+      setlefthyphenmin hyphenmins['left']
+      setrighthyphenmin hyphenmins['right']
+    end
   end
 
   def clear

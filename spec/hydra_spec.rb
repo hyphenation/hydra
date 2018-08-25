@@ -834,6 +834,12 @@ describe Hydra do
       hydra = Hydra.new([], :lax, 'a')
       expect(hydra.instance_variable_get :@atlas).to be == 'a'
     end
+
+    it "optionally takes a parameter hash" do
+      hydra = Hydra.new([], :lax, 'a', 'hyphenmins' => { 'typesetting' => { 'left' => 1, 'right' => 2 } })
+      expect(hydra.lefthyphenmin).to eq 1
+      expect(hydra.righthyphenmin).to eq 2
+    end
   end
 
   describe '#clear' do
