@@ -366,7 +366,7 @@ class Hydra
     @conflicts = []
     ingest words if words
     @atlas = atlas if atlas
-    if params && hyphenmins = params.dig('hyphenmins', 'typesetting')
+    if (params.is_a? Hash) && hyphenmins = params.dig('hyphenmins', 'typesetting')
       setlefthyphenmin hyphenmins['left']
       setrighthyphenmin hyphenmins['right']
     end

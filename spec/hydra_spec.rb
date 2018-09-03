@@ -840,6 +840,10 @@ describe Hydra do
       expect(hydra.lefthyphenmin).to eq 1
       expect(hydra.righthyphenmin).to eq 2
     end
+
+    it "doesn’t crash if the parameter argument is not a hash" do
+      expect { Hydra.new [], :lax, 'z', "useless metadata" }.not_to raise_exception
+    end
   end
 
   describe '#clear' do
