@@ -570,6 +570,7 @@ class Hydra
       letter = pattern.currletter
       if letter
         ensure_neck(letter)
+        # FIXME Prevent infinite loops if input is a space-separated *list* of words
         getneck(letter).ingest(pattern.shift) unless pattern.end?
       else
         if gethead
