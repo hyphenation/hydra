@@ -668,7 +668,7 @@ class Hydra
       matches += temp
     end
 
-    matches.flatten.compact.sort
+    matches.flatten.compact.sort # TODO Option to sort by order in the word?
   end
 
   def hydrae(word)
