@@ -1,4 +1,14 @@
 #!/usr/bin/env ruby
-require File.expand_path('../../lib/hydra', __FILE__)
+# TODO Use File.symblink? and maybe File.absolute_path -- ?
+savedtarget = target = File.expand_path(__FILE__)
+begin
+  while target = File.expand_path(File.readlink(target), File.dirname(target)) do
+    savedtarget = target
+  end
+rescue Errno::EINVAL
+  target = savedtarget
+end
+
+require File.expand_path('../../lib/hydra', target)
 labour = Labour.new
 labour.run(ARGV)
