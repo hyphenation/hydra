@@ -333,6 +333,12 @@ describe Pattern do
       expect(pattern.length).to eq 6
       expect(pattern.to_s).to eq '.foobar.'
     end
+
+    it "takes an optional argument for monospaced representaion" do
+      pending
+      pattern = Pattern.new 'on1a'
+      expect(pattern.to_s(true)).to eq 'o n1a'
+    end
   end
 
   describe '#digits' do
@@ -1536,6 +1542,22 @@ describe Hydra do
       hydra = Hydra.new povsod_patterns
       pattern = hydra.prehyphenate('povsod')
       expect(pattern.to_s).to eq 'po4v5so1d'
+    end
+  end
+
+  describe '#patterns' do
+    it "returns the matching patterns" do
+      pending
+      hydra = Hydra.new ["2a2r", "2c1t", "3dict", "foobar"]
+      expect(hydra.patterns('dictionary')).to eq ["2a2r", "2c1t", "3dict"]
+    end
+  end
+
+  describe '#patterns_aligned' do
+    it "prints an ASCII art of the matching patterns" do
+      pending
+      hydra = Hydra.new ["2a2r", "2c1t", "3dict"]
+      expect(hydra.patterns_aligned('dictionary')).to eq "3d i c t\n    2c1t\n              2a2r"
     end
   end
 
