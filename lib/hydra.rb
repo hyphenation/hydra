@@ -856,6 +856,11 @@ class Heracles
         @output.puts ''
         lineno = knocked_out = 0
         dictionary.each do |line|
+          saneline = line.gsub /\.+/, '.'
+          if saneline != line
+            @output.puts "Sanitised “#{line}” to “#{saneline}”"
+            line = saneline
+          end
           lineno += 1
           lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
           next unless lemma.length >= pattern_length

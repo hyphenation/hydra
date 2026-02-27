@@ -1881,7 +1881,7 @@ describe Heracles do
   end
 
   describe '#pass' do
-    it "prints one line to the output" do
+    before(:each) do
       heracles.instance_variable_set(:@hyphenation_level, 1)
       heracles.instance_variable_set(:@pattern_length_start, 2)
       heracles.instance_variable_set(:@pattern_length_end, 5)
@@ -1890,8 +1890,16 @@ describe Heracles do
       heracles.instance_variable_set(:@good_weight, 1)
       heracles.instance_variable_set(:@bad_weight, 1)
       heracles.instance_variable_set(:@threshold, 1)
+    end
+
+    it "prints one line to the output" do
       expect(output).to receive(:puts).with("Generating one pass for hyphenation level 1 ...")
       heracles.pass ['ba-ba', 'bla-ck', 'she-ep']
+    end
+
+    it "sanitises the input" do
+      expect(output).to receive(:puts).with("Sanitised “.a-man...” to “.a-man.”")
+      heracles.pass ['.a-man...']
     end
   end
 
