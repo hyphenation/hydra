@@ -1901,6 +1901,8 @@ describe Heracles do
       expect(output).to receive(:puts).with("Sanitised “.a-man...” to “.a-man.”")
       heracles.pass ['.a-man...']
     end
+    
+    it "sanitises better than that"
   end
 
   describe '#good' do
