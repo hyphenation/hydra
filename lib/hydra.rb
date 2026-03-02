@@ -856,7 +856,7 @@ class Heracles
         @output.puts ''
         lineno = knocked_out = 0
         dictionary.each do |line|
-          saneline = line.gsub /\.+/, '.'
+          saneline = line.gsub(/\.+/, '.').gsub(/^-/, '').gsub(/-$/, '')
           if saneline != line
             @output.puts "Sanitised “#{line}” to “#{saneline}”"
             line = saneline

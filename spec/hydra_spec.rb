@@ -1902,7 +1902,17 @@ describe Heracles do
       heracles.pass ['.a-man...']
     end
     
-    it "sanitises better than that"
+    it "sanitises better than that" do
+      expect(output).to receive(:puts).with("Sanitised “-ba” to “ba”")
+      heracles.pass ['-ba']
+    end
+
+    it "strips final hyphens" do
+      expect(output).to receive(:puts).with("Sanitised “ba-já-” to “ba-já”")
+      heracles.pass ['ba-já-']
+    end
+
+    it "sanitises even better"
   end
 
   describe '#good' do
