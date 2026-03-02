@@ -929,7 +929,7 @@ class Heracles
   end
 
   def self.sanitise(word)
-    word.gsub(/\.+/, '.').gsub(/^-/, '').gsub(/-$/, '')
+    word.gsub(/\.+/, '.').gsub(/^-/, '').gsub(/-$/, '').gsub(/[0-9]/, '')
   end
 end
 

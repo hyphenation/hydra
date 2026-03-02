@@ -2168,6 +2168,10 @@ describe Heracles do
       expect(Heracles.sanitise('ba-já-')).to eq 'ba-já'
     end
 
+    it "strips all digits" do
+      expect(Heracles.sanitise('43 5.1-ma-ŋá-')).to eq ' .-ma-ŋá'
+    end
+
     it "sanitises even better"
   end
 end
