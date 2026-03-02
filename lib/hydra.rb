@@ -856,11 +856,11 @@ class Heracles
         @output.puts ''
         lineno = knocked_out = 0
         dictionary.each do |line|
-          saneline = line.gsub(/\.+/, '.').gsub(/^-/, '').gsub(/-$/, '')
+          saneline = Heracles.sanitise(line)
           if saneline != line
-            @output.puts "Sanitised “#{line}” to “#{saneline}”"
             line = saneline
           end
+          next if line =~ /.\../ # TODO Spec out
           lineno += 1
           lemma = Lemma.new(line.gsub(/%.*$/, '').strip.downcase)
           next unless lemma.length >= pattern_length
@@ -926,6 +926,10 @@ class Heracles
     (n + 1).times.map do
       (dot, dot1 = dot1 - dot, 2 * n - dot1 - 1).first
     end
+  end
+
+  def self.sanitise(word)
+    word.gsub(/\.+/, '.').gsub(/^-/, '').gsub(/-$/, '')
   end
 end
 

@@ -1896,23 +1896,6 @@ describe Heracles do
       expect(output).to receive(:puts).with("Generating one pass for hyphenation level 1 ...")
       heracles.pass ['ba-ba', 'bla-ck', 'she-ep']
     end
-
-    it "sanitises the input" do
-      expect(output).to receive(:puts).with("Sanitised “.a-man...” to “.a-man.”")
-      heracles.pass ['.a-man...']
-    end
-    
-    it "sanitises better than that" do
-      expect(output).to receive(:puts).with("Sanitised “-ba” to “ba”")
-      heracles.pass ['-ba']
-    end
-
-    it "strips final hyphens" do
-      expect(output).to receive(:puts).with("Sanitised “ba-já-” to “ba-já”")
-      heracles.pass ['ba-já-']
-    end
-
-    it "sanitises even better"
   end
 
   describe '#good' do
@@ -2170,6 +2153,22 @@ describe Heracles do
     it "works for n = 13" do
       expect(Heracles.organ(13)).to be == [6, 7, 5, 8, 4, 9, 3, 10, 2, 11, 1, 12, 0, 13]
     end
+  end
+
+  describe '.sanitise' do
+    it "sanitises the input" do
+      expect(Heracles.sanitise('.a-man...')).to eq '.a-man.'
+    end
+
+    it "sanitises better than that" do
+      expect(Heracles.sanitise('-ba')).to eq 'ba'
+    end
+
+    it "strips final hyphens" do
+      expect(Heracles.sanitise('ba-já-')).to eq 'ba-já'
+    end
+
+    it "sanitises even better"
   end
 end
 
