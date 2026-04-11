@@ -950,7 +950,7 @@ class Labour
 
   def run(parameters)
     @dictionary = parameters.shift
-    raise InvalidInput unless File.exists?(@dictionary)
+    raise InvalidInput unless File.exist?(@dictionary)
     # FIXME Find something else for default values
     @input_patterns = parameters.shift || File.join('files', 'empty')
     @output_patterns = parameters.shift || File.join('/tmp', 'output')
